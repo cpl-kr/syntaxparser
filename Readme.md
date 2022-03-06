@@ -26,7 +26,7 @@ oder die Form <Symbolbezeichnung> "<" <Regulärer Ausdruck> ">"
 Bei Regeln mit Symbolen darf dasselbe Symbol mehrmals auf der linken Seiute der Regel vorkommen.  
 Dies bedeuetet eine Auswahl an Alternativen.  
 Die erste vokommende Symbolregel wird als Startregel gwertet.  
-Hier bei darf das Startsymbol nur einmal auf der linken Seite einer Regel vorkommen.  
+Hierbei darf das Startsymbol nur einmal auf der linken Seite einer Regel vorkommen.  
 Beispiel für Regel mit Symbolen:  
 S { S1 S2 S3 S4 S5 }  
 S5 { S6 S7 }  
@@ -35,7 +35,7 @@ Beispiel für Regeln mit Wortvorgaben:
 S1 "Symbol"  
 S2 [az]  
 S3 (.,)  
-S4 [a-zA-Z]  
+S4 <[a-zA-Z]>  
 Dasselbe Symbol darf sowohl Regeln für Zeichenbereiche als auch für Zeichenmengen verwendet werden.  
 Dies bedeutet, dass für das entsprechende Symbol sowohl die angegebenen Zeichenbereiche als auch die angegebenen Zeichenmengen erlaubt sind.  
 Beispiel:  
@@ -126,7 +126,7 @@ Example for rules with word specifications:
 S1 "symbol"  
 S2 [az]  
 S3 (.,)  
-S4 [a-zA-Z]  
+S4 <[a-zA-Z]>  
 The same symbol may be used both rules for character ranges and for character sets.  
 This means that both the specified character ranges and the specified character sets are allowed for the corresponding symbol.  
 Example:  
