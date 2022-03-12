@@ -1,6 +1,8 @@
 package de.platen.syntaxparser.grammatik.elemente;
 
-public enum Kardinalitaet {
+import java.io.Serializable;
+
+public enum Kardinalitaet implements Serializable {
 
     GENAU_EINMAL, MINDESTENS_EINMAL;
 }

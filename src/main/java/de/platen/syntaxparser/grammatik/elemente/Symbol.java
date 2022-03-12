@@ -1,11 +1,14 @@
 package de.platen.syntaxparser.grammatik.elemente;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import de.platen.syntaxparser.grammatik.GrammatikException;
 
-public class Symbol
+public class Symbol implements Serializable
 {
+
+    private static final long serialVersionUID = 1L;
 
     private final Symbolkennung symbolkennung;
     private final Kardinalitaet kardinalitaet;

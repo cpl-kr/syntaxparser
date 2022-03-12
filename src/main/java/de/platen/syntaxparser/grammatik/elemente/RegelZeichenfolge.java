@@ -1,11 +1,14 @@
 package de.platen.syntaxparser.grammatik.elemente;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import de.platen.syntaxparser.grammatik.GrammatikException;
 
-public class RegelZeichenfolge extends Regel
+public class RegelZeichenfolge extends Regel implements Serializable
 {
+
+    private static final long serialVersionUID = 1L;
 
     private final Zeichenfolge zeichenfolge;
 
@@ -24,7 +27,7 @@ public class RegelZeichenfolge extends Regel
     @Override
     public int hashCode() {
         final int prime = 31;
-        int result = super.hashCode();
+        final int result = super.hashCode();
         return (prime * result) + Objects.hash(zeichenfolge);
     }
 

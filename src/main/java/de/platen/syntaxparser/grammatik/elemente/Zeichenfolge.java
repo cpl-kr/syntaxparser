@@ -1,12 +1,14 @@
 package de.platen.syntaxparser.grammatik.elemente;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import de.platen.syntaxparser.grammatik.GrammatikException;
 
-public class Zeichenfolge
+public class Zeichenfolge implements Serializable
 {
 
+    private static final long serialVersionUID = 1L;
     private final String zeichenfolge;
 
     public Zeichenfolge(final String zeichenfolge) {

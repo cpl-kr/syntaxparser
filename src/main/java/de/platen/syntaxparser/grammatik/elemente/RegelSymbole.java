@@ -1,13 +1,16 @@
 package de.platen.syntaxparser.grammatik.elemente;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 import de.platen.syntaxparser.grammatik.GrammatikException;
 
-public class RegelSymbole extends Regel
+public class RegelSymbole extends Regel implements Serializable
 {
+
+    private static final long serialVersionUID = 1L;
 
     private final List<Symbol> symbole;
 
@@ -59,7 +62,7 @@ public class RegelSymbole extends Regel
     @Override
     public int hashCode() {
         final int prime = 31;
-        int result = super.hashCode();
+        final int result = super.hashCode();
         return (prime * result) + Objects.hash(symbole);
     }
 

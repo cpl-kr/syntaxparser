@@ -1,13 +1,16 @@
 package de.platen.syntaxparser.grammatik.elemente;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 
 import de.platen.syntaxparser.grammatik.GrammatikException;
 
-public class Zeichenmenge
+public class Zeichenmenge implements Serializable
 {
+
+    private static final long serialVersionUID = 1L;
 
     private final Set<Character> zeichenmenge;
 

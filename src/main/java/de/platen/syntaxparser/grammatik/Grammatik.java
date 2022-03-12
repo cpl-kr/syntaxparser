@@ -1,5 +1,6 @@
 package de.platen.syntaxparser.grammatik;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,8 +19,10 @@ import de.platen.syntaxparser.grammatik.elemente.Zeichenfolgeregeln;
 import de.platen.syntaxparser.grammatik.elemente.Zeichenmenge;
 import de.platen.syntaxparser.grammatik.elemente.Zeichenmengeregeln;
 
-public abstract class Grammatik
+public abstract class Grammatik implements Serializable
 {
+
+    private static final long serialVersionUID = 1L;
 
     protected RegelSymbole startregel;
     protected final Map<Symbolbezeichnung, Set<List<Symbol>>> symbolregeln = new HashMap<>();

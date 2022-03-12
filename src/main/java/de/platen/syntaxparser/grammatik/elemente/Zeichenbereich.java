@@ -1,12 +1,14 @@
 package de.platen.syntaxparser.grammatik.elemente;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import de.platen.syntaxparser.grammatik.GrammatikException;
 
-public class Zeichenbereich
+public class Zeichenbereich implements Serializable
 {
 
+    private static final long serialVersionUID = 1L;
     private final Character von;
     private final Character bis;
 
