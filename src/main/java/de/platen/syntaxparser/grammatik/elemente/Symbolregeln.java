@@ -1,5 +1,6 @@
 package de.platen.syntaxparser.grammatik.elemente;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -8,8 +9,10 @@ import java.util.Set;
 
 import de.platen.syntaxparser.grammatik.GrammatikException;
 
-public class Symbolregeln
+public class Symbolregeln implements Serializable
 {
+
+    private static final long serialVersionUID = 1L;
 
     private final Map<Symbolbezeichnung, Set<List<Symbol>>> symbolregeln;
     private final Map<Symbolkennung, List<Symbol>> zuordnungen = new HashMap<>();

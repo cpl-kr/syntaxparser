@@ -1,11 +1,14 @@
 package de.platen.syntaxparser.grammatik.elemente;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import de.platen.syntaxparser.grammatik.GrammatikException;
 
-public class RegelRegEx extends Regel
+public class RegelRegEx extends Regel implements Serializable
 {
+
+    private static final long serialVersionUID = 1L;
 
     private final RegEx regEx;
 
@@ -24,7 +27,7 @@ public class RegelRegEx extends Regel
     @Override
     public int hashCode() {
         final int prime = 31;
-        int result = super.hashCode();
+        final int result = super.hashCode();
         return (prime * result) + Objects.hash(regEx);
     }
 

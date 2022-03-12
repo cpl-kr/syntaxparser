@@ -1,11 +1,14 @@
 package de.platen.syntaxparser.grammatik.elemente;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import de.platen.syntaxparser.grammatik.GrammatikException;
 
-public class Symbolkennung
+public class Symbolkennung implements Serializable
 {
+
+    private static final long serialVersionUID = 1L;
 
     private final Symbolbezeichnung symbolbezeichnung;
     private final Symbolidentifizierung symbolidentifizierung;

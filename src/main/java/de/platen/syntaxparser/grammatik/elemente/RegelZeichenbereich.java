@@ -1,11 +1,14 @@
 package de.platen.syntaxparser.grammatik.elemente;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import de.platen.syntaxparser.grammatik.GrammatikException;
 
-public class RegelZeichenbereich extends Regel
+public class RegelZeichenbereich extends Regel implements Serializable
 {
+
+    private static final long serialVersionUID = 1L;
 
     private final Zeichenbereich zeichenbereich;
 
@@ -24,7 +27,7 @@ public class RegelZeichenbereich extends Regel
     @Override
     public int hashCode() {
         final int prime = 31;
-        int result = super.hashCode();
+        final int result = super.hashCode();
         return (prime * result) + Objects.hash(zeichenbereich);
     }
 

@@ -1,11 +1,14 @@
 package de.platen.syntaxparser.grammatik.elemente;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import de.platen.syntaxparser.grammatik.GrammatikException;
 
-public class RegEx
+public class RegEx implements Serializable
 {
+
+    private static final long serialVersionUID = 1L;
 
     private final String regex;
 
