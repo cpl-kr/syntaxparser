@@ -19,6 +19,8 @@ import de.platen.syntaxparser.grammatik.elemente.Zeichenmenge;
 public class GrammatikAufbau extends Grammatik
 {
 
+    private static final long serialVersionUID = 1L;
+
     public void setStartregel(final RegelSymbole regelSymbole) {
         if ((startregel != null) || (regelSymbole == null)) {
             throw new GrammatikException();

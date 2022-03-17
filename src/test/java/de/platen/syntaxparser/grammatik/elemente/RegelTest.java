@@ -25,6 +25,8 @@ public class RegelTest
     private static class TestRegel extends Regel
     {
 
+        private static final long serialVersionUID = 1L;
+
         public TestRegel(final Symbolbezeichnung symbolbezeichnung) {
             super(symbolbezeichnung);
         }

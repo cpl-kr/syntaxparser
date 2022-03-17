@@ -65,6 +65,7 @@ Die Grammatik wird Zeichen für Zeichen eingelesen.
 Als Whitespaces werden " ", "\n", "\r" und "\t" gewertet.  
 Das Zeichen "\" wird als Steuerzeichen gewertet, wobei das nachfolgende Zeichen als Zeichen zur weiteren Verarbeitung gewertet wird.  
 So können sowohl die Whitespaces als auch die Steuerzeichen """, ")", "]", ">" und "\" als Zeichen zur weiteren Verarbeitung gewertet werden.  
+Die KLasse Grammatik ist serialisierbar.  
 
 
 ## Der Parser
@@ -85,7 +86,7 @@ Zur Methode verarbeiteZeichen():
 Als Whitespaces werden " ", "\n", "\r" und "\t" gewertet.  
 Das Zeichen "\" wird als Steuerzeichen gewertet, wobei das nachfolgende Zeichen als Zeichen zur weiteren Verarbeitung gewertet wird.  
 So können die Whitespaces und das Steuerzeichen "\" als Zeichen zur weiteren Verarbeitung gewertet werden.  
-Bei dieser Version des Syntaxparsers muss nach jedem und auch nach dem letzten Wort eines zu parsenden Textes zusätzlich ein weiterer Aufruf von verarbeiteZeichen() mit einem Whitespace (ohne vorangestelltes "\") erfolgen,
+Nach jedem und auch nach dem letzten Wort eines zu parsenden Textes muss zusätzlich ein weiterer Aufruf von verarbeiteZeichen() mit einem Whitespace (ohne vorangestelltes "\") erfolgen,
 da die syntaktische Prüfung wortweise stattfindet.  
 Das Ergebnis kann mit der Methode gebeSyntaxpfadeMitWort() abgeholt werden.  
 Man erhält eine Liste von "SyntaxpfadMitWort" mit den Methoden getSyntaxpfad() und getWort().  
@@ -142,20 +143,21 @@ Operator (+-*/)
 A valid input is "111 + 222 - 333 * 444 / 555 "  
 Example of how to build a grammar:  
 <pre>
-    GrammarConstruction grammarConstruction = new GrammarConstruction();  
-    GrammarRead grammarRead = new GrammarRead(grammarConstruction);  
+    GrammatikAufbau grammatikAufbau = new GrammatikAufbau();  
+    GrammatikLesen grammatikLesen = new GrammatikLesen(grammatikAufbau);  
     String grammatikText = "...";  
     for (int index = 0; index < grammatik.length(); index++) {  
-        grammatikRead.ProcessChar(grammatikText.charAt(index));  
+        grammatikLesen.verarbeiteZeichen(grammatikText.charAt(index));  
     }  
-    grammarRead.checkGrammar();  
-    grammar grammar = grammarRead.getGrammar();  
+    grammatikLesen.checkGrammatik();  
+    Grammatik grammatik = grammatikLesen.getGrammatik();  
 </pre>
-To the processcharacters() method:  
+To the verarbeiteZeichen() method:  
 The grammar is read in character by character.  
 " ", "\n", "\r" and "\t" are evaluated as whitespaces.  
 The character "\" is evaluated as a control character, whereas the following character is evaluated as a character for further processing.  
 Thus, both the whitespaces and the control characters """, ")", "]", ">", and "\" can be evaluated as characters for further processing.  
+The class Grammatik ist serializable.  
 
 
 ## The parser
@@ -164,19 +166,19 @@ The parser is to read in a text character by character.
 The syntactic check happens after the recognition of a word.  
 Example of the use of the parser:  
 <pre>
-    grammar grammar = ....;  
-    Parser parser = new Parser(grammar);  
+    Grammatik grammatik = ....;  
+    Parser parser = new Parser(grammatik);  
     String text = "...";  
     for (int index = 0; index < grammatik.length(); index++) {  
-        parser.processchar(text.charAt(index);  
+        parser.verarbeiteZeichen(text.charAt(index);  
     }  
-    List<SyntaxpathWithWord> syntaxpathWithWord = parser.giveSyntaxpathWithWord();  
+    List<SyntaxpfadMitWort> syntaxpfadeMitWort = parser.gebeSyntaxpfadeMitWort();  
 </pre>
-To the processcharacters() method:  
+To the verarbeiteZeichen() method:  
 " ", "\n", "\r" and "\t" are evaluated as whitespaces.  
 The character "\" is evaluated as a control character, whereas the following character is evaluated as a character for further processing.  
 Thus, the whitespaces and the control character "\" can be evaluated as characters for further processing.  
-With this version of the syntax parser, after each and also after the last word of a text to be parsed there must be an additional call to processcharacter() with a whitespace (without preceding "\"),
+After each and also after the last word of a text to be parsed there must be an additional call to processcharacter() with a whitespace (without preceding "\"),
 because the syntactic check is done word by word.  
 The result can be fetched with the method giveSyntaxpathsWithWord().  
 One gets a list of "SyntaxpathWithWord" with the methods getSyntaxpath() and getWord().  
