@@ -28,7 +28,7 @@ public class Syntaxpfadbehandlung
         this.grammatik = grammatik;
     }
 
-    public Set<Syntaxpfad> findePassendeSytaxpfade(final Set<Syntaxpfad> syntaxpfade, final String wort) {
+    public Set<Syntaxpfad> findePassendeSyntaxpfade(final Set<Syntaxpfad> syntaxpfade, final String wort) {
         if ((syntaxpfade == null) || (wort == null)) {
             throw new SyntaxparserException();
         }

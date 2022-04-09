@@ -47,14 +47,14 @@ public class SyntaxpfadbehandlungTest
     @Test(expected = SyntaxparserException.class)
     public void testFindePassendeSytaxpfadeParameterSyntaxpfadeNull() {
         final Grammatik grammatik = Mockito.mock(Grammatik.class);
-        new Syntaxpfadbehandlung(grammatik).findePassendeSytaxpfade(null, "wort");
+        new Syntaxpfadbehandlung(grammatik).findePassendeSyntaxpfade(null, "wort");
         fail();
     }
 
     @Test(expected = SyntaxparserException.class)
     public void testFindePassendeSytaxpfadeParameterWortNull() {
         final Grammatik grammatik = Mockito.mock(Grammatik.class);
-        new Syntaxpfadbehandlung(grammatik).findePassendeSytaxpfade(new HashSet<>(), null);
+        new Syntaxpfadbehandlung(grammatik).findePassendeSyntaxpfade(new HashSet<>(), null);
         fail();
     }
 
@@ -67,7 +67,7 @@ public class SyntaxpfadbehandlungTest
         final Set<Syntaxpfad> syntaxpfade = new HashSet<>();
         syntaxpfade.add(syntaxpfad);
         final Syntaxpfadbehandlung syntaxpfadbehandlung = new Syntaxpfadbehandlung(grammatik);
-        assertTrue(syntaxpfadbehandlung.findePassendeSytaxpfade(syntaxpfade, "wort").isEmpty());
+        assertTrue(syntaxpfadbehandlung.findePassendeSyntaxpfade(syntaxpfade, "wort").isEmpty());
     }
 
     @Test
@@ -84,7 +84,7 @@ public class SyntaxpfadbehandlungTest
         final Set<Syntaxpfad> syntaxpfade = new HashSet<>();
         syntaxpfade.add(syntaxpfad);
         final Syntaxpfadbehandlung syntaxpfadbehandlung = new Syntaxpfadbehandlung(grammatik);
-        assertEquals(syntaxpfade, syntaxpfadbehandlung.findePassendeSytaxpfade(syntaxpfade, "zeichenfolge"));
+        assertEquals(syntaxpfade, syntaxpfadbehandlung.findePassendeSyntaxpfade(syntaxpfade, "zeichenfolge"));
     }
 
     @Test
@@ -101,7 +101,7 @@ public class SyntaxpfadbehandlungTest
         final Set<Syntaxpfad> syntaxpfade = new HashSet<>();
         syntaxpfade.add(syntaxpfad);
         final Syntaxpfadbehandlung syntaxpfadbehandlung = new Syntaxpfadbehandlung(grammatik);
-        assertEquals(syntaxpfade, syntaxpfadbehandlung.findePassendeSytaxpfade(syntaxpfade, "regEx"));
+        assertEquals(syntaxpfade, syntaxpfadbehandlung.findePassendeSyntaxpfade(syntaxpfade, "regEx"));
     }
 
     @Test
@@ -119,7 +119,7 @@ public class SyntaxpfadbehandlungTest
         final Set<Syntaxpfad> syntaxpfade = new HashSet<>();
         syntaxpfade.add(syntaxpfad);
         final Syntaxpfadbehandlung syntaxpfadbehandlung = new Syntaxpfadbehandlung(grammatik);
-        assertEquals(syntaxpfade, syntaxpfadbehandlung.findePassendeSytaxpfade(syntaxpfade, "abc"));
+        assertEquals(syntaxpfade, syntaxpfadbehandlung.findePassendeSyntaxpfade(syntaxpfade, "abc"));
     }
 
     @Test
@@ -139,7 +139,7 @@ public class SyntaxpfadbehandlungTest
         final Set<Syntaxpfad> syntaxpfade = new HashSet<>();
         syntaxpfade.add(syntaxpfad);
         final Syntaxpfadbehandlung syntaxpfadbehandlung = new Syntaxpfadbehandlung(grammatik);
-        assertEquals(syntaxpfade, syntaxpfadbehandlung.findePassendeSytaxpfade(syntaxpfade, ",..,"));
+        assertEquals(syntaxpfade, syntaxpfadbehandlung.findePassendeSyntaxpfade(syntaxpfade, ",..,"));
     }
 
     @Test
@@ -165,7 +165,7 @@ public class SyntaxpfadbehandlungTest
         final Set<Syntaxpfad> syntaxpfade = new HashSet<>();
         syntaxpfade.add(syntaxpfad);
         final Syntaxpfadbehandlung syntaxpfadbehandlung = new Syntaxpfadbehandlung(grammatik);
-        assertEquals(syntaxpfade, syntaxpfadbehandlung.findePassendeSytaxpfade(syntaxpfade, ",.b"));
+        assertEquals(syntaxpfade, syntaxpfadbehandlung.findePassendeSyntaxpfade(syntaxpfade, ",.b"));
     }
 
     @Test(expected = SyntaxparserException.class)

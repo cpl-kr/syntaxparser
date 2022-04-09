@@ -91,7 +91,7 @@ public class Parser
             if (syntaxpfad != null) {
                 final Set<Syntaxpfad> syntaxpfade = new HashSet<>();
                 syntaxpfade.add(syntaxpfad);
-                final Set<Syntaxpfad> syntaxpfadePassend = syntaxpfadbehandlung.findePassendeSytaxpfade(syntaxpfade,
+                final Set<Syntaxpfad> syntaxpfadePassend = syntaxpfadbehandlung.findePassendeSyntaxpfade(syntaxpfade,
                         wort);
                 if (!syntaxpfadePassend.isEmpty()) {
                     for (final Syntaxpfad syntaxpfadPassend : syntaxpfadePassend) {
