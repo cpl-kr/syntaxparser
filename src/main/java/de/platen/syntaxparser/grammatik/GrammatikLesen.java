@@ -83,10 +83,6 @@ public class GrammatikLesen
         }
     }
 
-    public boolean istFertig() {
-        return regel == REGEL.ENDE;
-    }
-
     public void checkGrammatik() {
         grammatikAufbau.checkGrammatik();
     }
