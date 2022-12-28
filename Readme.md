@@ -119,10 +119,10 @@ Hex [af]\
 Hex [AF]\
 Hex [09]\
 Beispiel einer Grammatikregel für Base64:\
-Base64 [AZ]
-Base64 [az]
-Base64 [09]
-Base64 (+=)
+Base64 [AZ]\
+Base64 [az]\
+Base64 [09]\
+Base64 (+=)\
 Beispiel einer Grammatikregel für eine Referenz (hier UUID):\
 Referenz <[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}>
 
@@ -253,10 +253,10 @@ Hex [af]\
 Hex [AF]\
 Hex [09]\
 Example of a grammar rule for Base64:\
-Base64 [AZ]
-Base64 [az]
-Base64 [09]
-Base64 (+=)
+Base64 [AZ]\
+Base64 [az]\
+Base64 [09]\
+Base64 (+=)\
 Example of a grammar rule for a reference (here UUID):\
 Reference <[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}>
 
