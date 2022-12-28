@@ -13,7 +13,7 @@ public class Syntaxpfad
 
     private final List<Symbolkennung> knoten;
     private Symbolkennung blatt;
-    private boolean istFertig = false;
+    private boolean istFertig;
 
     private Syntaxpfad(final List<Symbolkennung> knoten, final Symbolkennung blatt, final boolean istFertig) {
         this.knoten = knoten;
@@ -54,7 +54,6 @@ public class Syntaxpfad
         }
         blatt = symbolkennung;
         istFertig = true;
-        istFertig = true;
     }
 
     public List<Symbolkennung> gebeKnotenfolge() {
@@ -70,6 +69,11 @@ public class Syntaxpfad
 
     public boolean istFertig() {
         return istFertig;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     @Override

@@ -6,91 +6,133 @@ English version see below
 
 # Ein universeller Syntaxparser für Domain spezifische Sprachen
 
-Mit der vorliegenden Version 1.0.0 des universellen Syntaxparsers für Domain spezifische Sprachen können anhand einer definierbaren Grammatik Texte geparst werden.  
-So ist man unabhängig von einer Trägersyntax (z.B. XML, JSON), um menschenlesbaren Maschinekode zu handhaben.  
-Um den Parser zu verwenden, muss eine Grammatik in einem vorgegebenen Format erstellt werden.  
-Mit dieser Grammatik kann ein Text syntaktisch geprüft werden.  
-Bei erfolgreicher Prüfung erhält man eine Folge der eingegebenen Worte des Textes zusammen mit den zugehörigen Symbolen der Grammatik (von der Wurzel des Syntaxbaumes aus).  
-  
+Mit der vorliegenden Version 2.0.0 des universellen Syntaxparsers für Domain spezifische Sprachen können anhand einer definierbaren Grammatik Texte geparst werden.
+So ist man unabhängig von einer Trägersyntax (z.B. XML, JSON), um menschenlesbaren Maschinekode zu handhaben.
+Um den Parser zu verwenden, muss eine Grammatik in einem vorgegebenen Format erstellt werden.
+Mit dieser Grammatik kann ein Text syntaktisch geprüft werden.
+Bei erfolgreicher Prüfung erhält man eine Folge der eingegebenen Worte des Textes zusammen mit den zugehörigen Symbolen der Grammatik (von der Wurzel des Syntaxbaumes aus).
+
 
 ## Die Grammatik
 
-Die Grammatik besteht aus Regeln mit Symbolen und Regeln mit Vorgaben für Worte:  
-Regeln mit Symbolen haben die Form <Symbolbezeichnung> "{" <Folge von Symbolbezeichnungen> "}"  
+Die Grammatik besteht aus Regeln mit Symbolen und Regeln mit Vorgaben für Worte:
+Regeln mit Symbolen haben die Form <Symbolbezeichnung> "{" <Folge von Symbolbezeichnungen> "}"
 Regeln mit Wortvorgaben sind für die Spezifizierung von Schlüsselworten,
-Zeichenbereichen, Zeichenmengen und regulären Ausdrücken vorgesehen (d.h. Blätter eines Syntaxbaumes).  
-Regeln mit Wortvorgaben haben die Form <Symbolbezeichnung> """ <Schlüsselwort> """  
-oder die Form <Symbolbenzeichnung> "[" <2 Zeichen für Zeichenbereich> "\]"  
-oder die Form <Symbolbezeichnung> "(" <Folge von einzelnen Zeichen> ")"  
-oder die Form <Symbolbezeichnung> "<" <Regulärer Ausdruck> ">"  
-Bei Regeln mit Symbolen darf dasselbe Symbol mehrmals auf der linken Seiute der Regel vorkommen.  
-Dies bedeuetet eine Auswahl an Alternativen.  
-Die erste vokommende Symbolregel wird als Startregel gwertet.  
-Hierbei darf das Startsymbol nur einmal auf der linken Seite einer Regel vorkommen.  
-Beispiel für Regel mit Symbolen:  
-S { S1 S2 S3 S4 S5 }  
-S5 { S6 S7 }  
-S5 { S8 S9 }  
-Beispiel für Regeln mit Wortvorgaben:  
-S1 "Symbol"  
-S2 [az]  
-S3 (.,)  
-S4 <[a-zA-Z]>  
-Dasselbe Symbol darf sowohl Regeln für Zeichenbereiche als auch für Zeichenmengen verwendet werden.  
-Dies bedeutet, dass für das entsprechende Symbol sowohl die angegebenen Zeichenbereiche als auch die angegebenen Zeichenmengen erlaubt sind.  
-Beispiel:  
-S1 [az]  
-S1 [AZ]  
-S1 (.,)   
-Beispiel einer Grammatik für einfache mathematische Formeln:  
-S { Operand Operationsteil }  
-Operationsteil { Operator Operand }  
-Operationsteil { Operator Operand Operationsteil }  
-Operand [09]  
-Operator (+-*/)  
-Eine valide Eingabe ist "111 + 222 - 333 * 444 / 555 "  
-Beispiel für den Aufbau einer Grammatik:  
+Zeichenbereichen, Zeichenmengen und regulären Ausdrücken vorgesehen (d.h. Blätter eines Syntaxbaumes).
+Regeln mit Wortvorgaben haben die Form <Symbolbezeichnung> """ <Schlüsselwort> """
+oder die Form <Symbolbenzeichnung> "[" <2 Zeichen für Zeichenbereich> "\]"
+oder die Form <Symbolbezeichnung> "(" <Folge von einzelnen Zeichen> ")"
+oder die Form <Symbolbezeichnung> "<" <Regulärer Ausdruck> ">"
+Bei Regeln mit Symbolen darf dasselbe Symbol mehrmals auf der linken Seiute der Regel vorkommen.
+Dies bedeuetet eine Auswahl an Alternativen.
+Die erste vokommende Symbolregel wird als Startregel gwertet.
+Hierbei darf das Startsymbol nur einmal auf der linken Seite einer Regel vorkommen.
+Beispiel für Regel mit Symbolen:\
+S { S1 S2 S3 S4 S5 }\
+S5 { S6 S7 }\
+S5 { S8 S9 }\
+Beispiel für Regeln mit Wortvorgaben:\
+S1 "Symbol"\
+S2 [az]\
+S3 (.,)\
+S4 <[a-zA-Z]>\
+Dasselbe Symbol darf sowohl Regeln für Zeichenbereiche als auch für Zeichenmengen verwendet werden.
+Dies bedeutet, dass für das entsprechende Symbol sowohl die angegebenen Zeichenbereiche als auch die angegebenen Zeichenmengen erlaubt sind.
+Beispiel:\
+S1 [az]\
+S1 [AZ]\
+S1 (.,)\
+Beispiel einer Grammatik für einfache mathematische Formeln:\
+S { Operand Operationsteil }\
+Operationsteil { Operator Operand }\
+Operationsteil { Operator Operand Operationsteil }\
+Operand [09]\
+Operator "+"\
+Operator "-"\
+Operator "*"\
+Operator "/"\
+Eine valide Eingabe ist "111 + 222 - 333 * 444 / 555".\
+Beispiel für den Aufbau einer Grammatik:
 <pre>
-    GrammatikAufbau grammatikAufbau = new GrammatikAufbau();  
-    GrammatikLesen grammatikLesen = new GrammatikLesen(grammatikAufbau);  
-    String grammatikText = "...";  
-    for (int index = 0; index < grammatik.length(); index++) {  
-        grammatikLesen.verarbeiteZeichen(grammatikText.charAt(index));  
-    }  
-    grammatikLesen.checkGrammatik();  
-    Grammatik grammatik = grammatikLesen.getGrammatik();  
+    GrammatikAufbau grammatikAufbau = new GrammatikAufbau();
+    GrammatikLesen grammatikLesen = new GrammatikLesen(grammatikAufbau);
+    String grammatikText = "...";
+    for (int index = 0; index < grammatik.length(); index++) {
+        grammatikLesen.verarbeiteZeichen(grammatikText.charAt(index));
+    }
+    grammatikLesen.checkGrammatik();
+    Grammatik grammatik = grammatikLesen.getGrammatik();
 </pre>
-Zur Methode verarbeiteZeichen():  
-Die Grammatik wird Zeichen für Zeichen eingelesen.  
-Als Whitespaces werden " ", "\n", "\r" und "\t" gewertet.  
-Das Zeichen "\" wird als Steuerzeichen gewertet, wobei das nachfolgende Zeichen als Zeichen zur weiteren Verarbeitung gewertet wird.  
-So können sowohl die Whitespaces als auch die Steuerzeichen """, ")", "]", ">" und "\" als Zeichen zur weiteren Verarbeitung gewertet werden.  
-Die KLasse Grammatik ist serialisierbar.  
+Zur Methode verarbeiteZeichen():
+Die Grammatik wird Zeichen für Zeichen eingelesen.
+Als Whitespaces werden " ", "\n", "\r" und "\t" gewertet.
+Das Zeichen "\" wird als Steuerzeichen gewertet, wobei das nachfolgende Zeichen als Zeichen zur weiteren Verarbeitung gewertet wird.
+So können sowohl die Whitespaces als auch die Steuerzeichen """, ")", "]", ">" und "\" als Zeichen zur weiteren Verarbeitung gewertet werden.
+Die KLasse Grammatik ist serialisierbar.
 
 
 ## Der Parser
 
-Der Parser ist ein Text zeichenweise einzulesen.  
-Die Syntaktische Prüfung geschieht nach dem Erkennen eines Wortes.  
-Beispiel für die Verwendung des Parsers:  
+Der Parser ist ein Text zeichenweise einzulesen.
+Beispiel für die Verwendung des Parsers:
 <pre>
-    Grammatik grammatik = ....;  
-    Parser parser = new Parser(grammatik);  
-    String text = "...";  
-    for (int index = 0; index < grammatik.length(); index++) {  
-        parser.verarbeiteZeichen(text.charAt(index);  
-    }  
-    List<SyntaxpfadMitWort> syntaxpfadeMitWort = parser.gebeSyntaxpfadeMitWort();  
+    Grammatik grammatik = ....;
+    Parser parser = new Parser(grammatik);
+    String text = "...";
+    for (int index = 0; index < grammatik.length(); index++) {
+        parser.verarbeiteZeichen(text.charAt(index);
+    }
+    List<SyntaxpfadMitWort> syntaxpfadeMitWort = parser.ermittleSyntaxpfadeMitWort(true);
 </pre>
-Zur Methode verarbeiteZeichen():  
-Als Whitespaces werden " ", "\n", "\r" und "\t" gewertet.  
-Das Zeichen "\" wird als Steuerzeichen gewertet, wobei das nachfolgende Zeichen als Zeichen zur weiteren Verarbeitung gewertet wird.  
-So können die Whitespaces und das Steuerzeichen "\" als Zeichen zur weiteren Verarbeitung gewertet werden.  
-Nach jedem und auch nach dem letzten Wort eines zu parsenden Textes muss zusätzlich ein weiterer Aufruf von verarbeiteZeichen() mit einem Whitespace (ohne vorangestelltes "\") erfolgen,
-da die syntaktische Prüfung wortweise stattfindet.  
-Das Ergebnis kann mit der Methode gebeSyntaxpfadeMitWort() abgeholt werden.  
-Man erhält eine Liste von "SyntaxpfadMitWort" mit den Methoden getSyntaxpfad() und getWort().  
-Die Methode getSyntaxpfad() liefert einen Syntaxpfad mit einer Knotenfolge  und einem Blatt (also Symbolen eines Syntaxbaumes).  
+Zur Methode verarbeiteZeichen():
+Als Whitespaces werden " ", "\n", "\r" und "\t" gewertet.
+Das Zeichen "\" wird als Steuerzeichen gewertet, wobei das nachfolgende Zeichen als Zeichen zur weiteren Verarbeitung gewertet wird.
+So können die Whitespaces und das Steuerzeichen "\" als Zeichen zur weiteren Verarbeitung gewertet werden.
+Das Ergebnis kann mit der Methode ermittleSyntaxpfadeMitWort(boolean alsAbschluss) abgeholt werden.
+Das boolsche Flag "alsAbschluss" dient zur Unterscheidung, ob die Methode zum Schluss des Parsens oder als Zwischenstand aufgerufen wird.
+Wird diese Methode als Zwischenstand aufgerufen, so muss vorher die Methode "verarbeiteZeichen" mit einem Whitespace aufgerufen worden sein.
+Man erhält eine Liste von "SyntaxpfadMitWort" mit den Methoden getSyntaxpfad() und getWort().
+Die Methode getSyntaxpfad() liefert einen Syntaxpfad mit einer Knotenfolge und einem Blatt (also Symbolen eines Syntaxbaumes).
+
+
+## Behandlung unterschiedlicher Versionen einer Grammatik
+
+Wenn mit der Zeit die Grammatik geändert werden soll und
+die sich daraus ergebene neue Version der Grammatik nicht abwärtskompatibel sein soll,
+dann kann als Vereinbarung die erste Zeile des zu parsenden Textes die Versionsnummer darstellen.
+Alternativ kann die Versionsnummer über alle Versionen der Grammatik den immer gleichen Bestandteil zu Beginn der Grammatik sein.\
+Beispiel:\
+S {Version Restgrammatik}\
+Version [09]\
+Restgrammatik ....
+
+
+## Behandlung von Binärdaten
+
+Um bei diversen Schnittstellen Binärdaten zu übertragen und
+diese Binärdaten Bestandteil der Grammatik sein sollen,
+kann man diese im Hex-Format oder als Base64 übertragen.
+Alternativ kann man Referenzen angeben und
+über eine weitere Schnittstellenmethode mit der Referenz als Parameter direkt erhalten.\
+Beispiel einer Grammatikregel für das Hex-Format:\
+Hex [af]\
+Hex [AF]\
+Hex [09]\
+Beispiel einer Grammatikregel für Base64:\
+Base64 [AZ]
+Base64 [az]
+Base64 [09]
+Base64 (+=)
+Beispiel einer Grammatikregel für eine Referenz (hier UUID):\
+Referenz <[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}>
+
+
+## Anwendungsbereiche des Parsers
+
+Der Parser kann allgemein für Schnittstellen verwendet werden,
+bei denen Daten in menschenlesbarer Form vorliegen sollen.
+Auch kann er für Non-SQL Datenbanken verwendet werden.
+Hierbei kann jede Datenentität durch eine Menge von Grammatikregeln dargestellt werden.
 
 
 --------------------------------------------------
@@ -98,88 +140,130 @@ Die Methode getSyntaxpfad() liefert einen Syntaxpfad mit einer Knotenfolge  und 
 
 # A universal syntax parser for domain specific languages
 
-With the present version 1.0.0 of the universal syntax parser for domain specific languages texts can be parsed based on a definable grammar.  
-Thus one is independent of a carrier syntax (e.g. XML, JSON) to handle human readable machine code.  
-To use the parser, a grammar must be created in a given format.  
-This grammar can be used to syntactically check a text.  
-If the check is successful, a sequence of the entered words of the text is obtained together with the corresponding symbols of the grammar (from the root of the syntax tree).  
-  
+With the present version 2.0.0 of the universal syntax parser for domain specific languages texts can be parsed based on a definable grammar.
+Thus one is independent of a carrier syntax (e.g. XML, JSON) to handle human readable machine code.
+To use the parser, a grammar must be created in a given format.
+This grammar can be used to syntactically check a text.
+If the check is successful, a sequence of the entered words of the text is obtained together with the corresponding symbols of the grammar (from the root of the syntax tree).
+
 
 ## The grammar
 
-The grammar consists of rules with symbols and rules with specifications for words:  
-Rules with symbols are of the form <symbol name> "{" <sequence of symbol names> "}"  
+The grammar consists of rules with symbols and rules with specifications for words:
+Rules with symbols are of the form <symbol name> "{" <sequence of symbol names> "}"
 Rules with word defaults are for specifying keywords,
-character ranges, character sets, and regular expressions (i.e., leaves of a syntax tree).  
-Rules with word defaults have the form <symbol name> """ <keyword> """  
-or the form <symbol designation> "[" <2 characters for character range> "\]"  
-or the form <symbol designation> "(" <sequence of single characters> ")"  
-or the form <symbol name> "<" <regular expression> ">".  
-For rules with symbols, the same symbol may appear more than once on the left-hand side of the rule.  
-This means a choice of alternatives.  
-The first appearing symbol rule is evaluated as start rule.  
-Here the start symbol may occur only once on the left side of a rule.  
-Example for rule with symbols:  
-S { S1 S2 S3 S4 S5 }  
-S5 { S6 S7 }  
-S5 { S8 S9 }  
-Example for rules with word specifications:  
-S1 "symbol"  
-S2 [az]  
-S3 (.,)  
-S4 <[a-zA-Z]>  
-The same symbol may be used both rules for character ranges and for character sets.  
-This means that both the specified character ranges and the specified character sets are allowed for the corresponding symbol.  
-Example:  
-S1 [az]  
-S1 [AZ]  
-S1 (.,)   
-Example of a grammar for simple mathematical formulas:  
-S { operand operand part }  
-operation part { operator operand }  
-Operand part { Operator Operand Operand part }  
-Operand [09]  
-Operator (+-*/)  
-A valid input is "111 + 222 - 333 * 444 / 555 "  
-Example of how to build a grammar:  
+character ranges, character sets, and regular expressions (i.e., leaves of a syntax tree).
+Rules with word defaults have the form <symbol name> """ <keyword> """
+or the form <symbol designation> "[" <2 characters for character range> "\]"
+or the form <symbol designation> "(" <sequence of single characters> ")"
+or the form <symbol name> "<" <regular expression> ">".
+For rules with symbols, the same symbol may appear more than once on the left-hand side of the rule.
+This means a choice of alternatives.
+The first appearing symbol rule is evaluated as start rule.
+Here the start symbol may occur only once on the left side of a rule.
+Example for rule with symbols:\
+S { S1 S2 S3 S4 S5 }\
+S5 { S6 S7 }\
+S5 { S8 S9 }\
+Example for rules with word specifications:\
+S1 "symbol"\
+S2 [az]\
+S3 (.,)\
+S4 <[a-zA-Z]>\
+The same symbol may be used both rules for character ranges and for character sets.
+This means that both the specified character ranges and the specified character sets are allowed for the corresponding symbol.
+Example:\
+S1 [az]\
+S1 [AZ]\
+S1 (.,)\
+Example of a grammar for simple mathematical formulas:\
+S { Operand Operandpart }\
+operationpart { Operator Operand }\
+Operandpart { Operator Operand Operandpart }\
+Operand [09]\
+Operator "+"\
+Operator "-"\
+Operator "*"\
+Operator "/"\
+A valid input is "111 + 222 - 333 * 444 / 555".\
+Example of how to build a grammar:\
 <pre>
-    GrammatikAufbau grammatikAufbau = new GrammatikAufbau();  
-    GrammatikLesen grammatikLesen = new GrammatikLesen(grammatikAufbau);  
-    String grammatikText = "...";  
-    for (int index = 0; index < grammatik.length(); index++) {  
-        grammatikLesen.verarbeiteZeichen(grammatikText.charAt(index));  
-    }  
-    grammatikLesen.checkGrammatik();  
-    Grammatik grammatik = grammatikLesen.getGrammatik();  
+    GrammatikAufbau grammatikAufbau = new GrammatikAufbau();
+    GrammatikLesen grammatikLesen = new GrammatikLesen(grammatikAufbau);
+    String grammatikText = "...";
+    for (int index = 0; index < grammatik.length(); index++) {
+        grammatikLesen.verarbeiteZeichen(grammatikText.charAt(index));
+    }
+    grammatikLesen.checkGrammatik();
+    Grammatik grammatik = grammatikLesen.getGrammatik();
 </pre>
-To the verarbeiteZeichen() method:  
-The grammar is read in character by character.  
-" ", "\n", "\r" and "\t" are evaluated as whitespaces.  
-The character "\" is evaluated as a control character, whereas the following character is evaluated as a character for further processing.  
-Thus, both the whitespaces and the control characters """, ")", "]", ">", and "\" can be evaluated as characters for further processing.  
-The class Grammatik ist serializable.  
+To the verarbeiteZeichen() method:
+The grammar is read in character by character.
+" ", "\n", "\r" and "\t" are evaluated as whitespaces.
+The character "\" is evaluated as a control character, whereas the following character is evaluated as a character for further processing.
+Thus, both the whitespaces and the control characters """, ")", "]", ">", and "\" can be evaluated as characters for further processing.
+The class Grammatik ist serializable.
 
 
 ## The parser
 
-The parser is to read in a text character by character.  
-The syntactic check happens after the recognition of a word.  
-Example of the use of the parser:  
+The parser is to read in a text character by character.
+Example of the use of the parser:
 <pre>
-    Grammatik grammatik = ....;  
-    Parser parser = new Parser(grammatik);  
-    String text = "...";  
-    for (int index = 0; index < grammatik.length(); index++) {  
-        parser.verarbeiteZeichen(text.charAt(index);  
-    }  
-    List<SyntaxpfadMitWort> syntaxpfadeMitWort = parser.gebeSyntaxpfadeMitWort();  
+    Grammatik grammatik = ....;
+    Parser parser = new Parser(grammatik);
+    String text = "...";
+    for (int index = 0; index < grammatik.length(); index++) {
+        parser.verarbeiteZeichen(text.charAt(index);
+    }
+    List<SyntaxpfadMitWort> syntaxpfadeMitWort = parser.ermittleSyntaxpfadeMitWort(true);
 </pre>
-To the verarbeiteZeichen() method:  
-" ", "\n", "\r" and "\t" are evaluated as whitespaces.  
-The character "\" is evaluated as a control character, whereas the following character is evaluated as a character for further processing.  
-Thus, the whitespaces and the control character "\" can be evaluated as characters for further processing.  
-After each and also after the last word of a text to be parsed there must be an additional call to processcharacter() with a whitespace (without preceding "\"),
-because the syntactic check is done word by word.  
-The result can be fetched with the method giveSyntaxpathsWithWord().  
-One gets a list of "SyntaxpathWithWord" with the methods getSyntaxpath() and getWord().  
-The getSyntaxpath() method returns a syntax path with a node sequence and a leaf (i.e. symbols of a syntax tree).  
+To the verarbeiteZeichen() method:
+" ", "\n", "\r" and "\t" are evaluated as whitespaces.
+The character "\" is evaluated as a control character, whereas the following character is evaluated as a character for further processing.
+Thus, the whitespaces and the control character "\" can be evaluated as characters for further processing.
+The result can be fetched with the method ermittleSyntaxpfadeMitWort(boolean asTerminationOfParsing).
+The boolean flag "alsAbschluss" serves to distinguish whether the method is called at the end of the parsing or as an intermediate state.
+If this method is called as an intermediate state, the method "processcharacters" must have been called with a whitespace beforehand.
+One gets a list of "SyntaxpathWithWord" with the methods getSyntaxpath() and getWord().
+The getSyntaxpath() method returns a syntax path with a node sequence and a leaf (i.e. symbols of a syntax tree).
+
+
+## Handling different versions of a grammar
+
+If, over time, the grammar is to be changed and
+the resulting new version of the grammar should not be downward compatible,
+then the first line of the text to be parsed can represent the version number as an agreement.
+Alternatively, the version number can always be the same component at the beginning of the grammar across all versions of the grammar.\
+Example:\
+S {Version Restgrammatik}\
+Version [09]\
+Restgrammatik ....
+
+
+## Handling binary data
+
+In order to transmit binary data with various interfaces and
+this binary data should be part of the grammar,
+you can transmit them in hex format or as Base64.
+Alternatively, one can specify references and
+directly via another interface method with the reference as a parameter.\
+Example of a grammar rule for the hex format:\
+Hex [af]\
+Hex [AF]\
+Hex [09]\
+Example of a grammar rule for Base64:\
+Base64 [AZ]
+Base64 [az]
+Base64 [09]
+Base64 (+=)
+Example of a grammar rule for a reference (here UUID):\
+Reference <[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}>
+
+
+## Applications of the parser
+
+The parser can be used generally for interfaces,
+where data should be available in human-readable form.
+It can also be used for non-SQL databases.
+Here, each data entity can be represented by a set of grammar rules.

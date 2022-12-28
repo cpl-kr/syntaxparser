@@ -22,16 +22,12 @@ public class SyntaxpfadfolgeTest
         new Syntaxpfadfolge(null);
     }
 
-    @Test(expected = SyntaxparserException.class)
-    public void testKonstruktorParameterLeer() {
-        new Syntaxpfadfolge(new ArrayList<>());
-    }
-
     @Test
     public void testKonstruktor() {
         final List<SyntaxpfadMitWort> syntaxpfade = erzeugeSyntaxpfadeMitWort();
         final Syntaxpfadfolge syntaxpfadfolge = new Syntaxpfadfolge(syntaxpfade);
         assertEquals(syntaxpfade, syntaxpfadfolge.getSyntaxpfadeMitWort());
+        assertEquals("wort".length(), syntaxpfadfolge.getGesamtlaenge());
     }
 
     @Test(expected = SyntaxparserException.class)
@@ -45,8 +41,10 @@ public class SyntaxpfadfolgeTest
         final Syntaxpfadfolge syntaxpfadfolge = new Syntaxpfadfolge(erzeugeSyntaxpfadeMitWort());
         final Syntaxpfad syntaxpfad1 = Mockito.mock(Syntaxpfad.class);
         Mockito.when(syntaxpfad1.istFertig()).thenReturn(true);
+        Mockito.when(syntaxpfad1.kopiere()).thenReturn(new Syntaxpfad());
         final Syntaxpfad syntaxpfad2 = Mockito.mock(Syntaxpfad.class);
         Mockito.when(syntaxpfad2.istFertig()).thenReturn(true);
+        Mockito.when(syntaxpfad2.kopiere()).thenReturn(new Syntaxpfad());
         syntaxpfadfolge.setzeAktuellenSyntaxpfad(syntaxpfad1);
         syntaxpfadfolge.setzeAktuellenSyntaxpfad(syntaxpfad2);
     }
@@ -94,21 +92,43 @@ public class SyntaxpfadfolgeTest
         final Syntaxpfadfolge syntaxpfadfolge = new Syntaxpfadfolge();
         final Syntaxpfad syntaxpfad1 = new Syntaxpfad();
         syntaxpfad1.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("symbol1"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("symbol1"), new Symbolidentifizierung(1)));
         syntaxpfad1.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("symbol2"), new Symbolidentifizierung(Integer.valueOf(2))));
+                new Symbolkennung(new Symbolbezeichnung("symbol2"), new Symbolidentifizierung(2)));
         syntaxpfadfolge.setzeAktuellenSyntaxpfad(syntaxpfad1);
         syntaxpfadfolge.uebernehmeAktuellenSyntaxpfad("wort");
         assertNull(syntaxpfadfolge.getAktuell());
+        assertEquals("wort".length(), syntaxpfadfolge.getGesamtlaenge());
         final List<SyntaxpfadMitWort> syntaxpfadeMitWort = new ArrayList<>();
         final Syntaxpfad syntaxpfad2 = new Syntaxpfad();
         syntaxpfad2.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("symbol1"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("symbol1"), new Symbolidentifizierung(1)));
         syntaxpfad2.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("symbol2"), new Symbolidentifizierung(Integer.valueOf(2))));
+                new Symbolkennung(new Symbolbezeichnung("symbol2"), new Symbolidentifizierung(2)));
         final SyntaxpfadMitWort syntaxpfadMitWort = new SyntaxpfadMitWort(syntaxpfad2, "wort");
         syntaxpfadeMitWort.add(syntaxpfadMitWort);
         assertEquals(syntaxpfadeMitWort, syntaxpfadfolge.getSyntaxpfadeMitWort());
+    }
+
+    @Test
+    public void testUebernehmeAktuellenSyntaxpfadZweimal() {
+        final Syntaxpfadfolge syntaxpfadfolge = new Syntaxpfadfolge();
+        final Syntaxpfad syntaxpfad1 = new Syntaxpfad();
+        syntaxpfad1.zufuegenKnoten(
+                new Symbolkennung(new Symbolbezeichnung("symbol1"), new Symbolidentifizierung(1)));
+        syntaxpfad1.zufuegenBlatt(
+                new Symbolkennung(new Symbolbezeichnung("symbol2"), new Symbolidentifizierung(2)));
+        syntaxpfadfolge.setzeAktuellenSyntaxpfad(syntaxpfad1);
+        syntaxpfadfolge.uebernehmeAktuellenSyntaxpfad("wort1");
+        assertEquals("wort1".length(), syntaxpfadfolge.getGesamtlaenge());
+        final Syntaxpfad syntaxpfad2 = new Syntaxpfad();
+        syntaxpfad2.zufuegenKnoten(
+                new Symbolkennung(new Symbolbezeichnung("symbol3"), new Symbolidentifizierung(3)));
+        syntaxpfad2.zufuegenBlatt(
+                new Symbolkennung(new Symbolbezeichnung("symbol4"), new Symbolidentifizierung(4)));
+        syntaxpfadfolge.setzeAktuellenSyntaxpfad(syntaxpfad2);
+        syntaxpfadfolge.uebernehmeAktuellenSyntaxpfad("wort2");
+        assertEquals("wort1".length() + "wort2".length(), syntaxpfadfolge.getGesamtlaenge());
     }
 
     private List<SyntaxpfadMitWort> erzeugeSyntaxpfadeMitWort() {

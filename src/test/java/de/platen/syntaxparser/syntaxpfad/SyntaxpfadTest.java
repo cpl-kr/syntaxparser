@@ -22,9 +22,9 @@ public class SyntaxpfadTest
     public void testKopiere() {
         final Syntaxpfad syntaxpfad = new Syntaxpfad();
         syntaxpfad.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("Knoten"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("Knoten"), new Symbolidentifizierung(1)));
         syntaxpfad.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("Blatt"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("Blatt"), new Symbolidentifizierung(1)));
         assertEquals(syntaxpfad, syntaxpfad.kopiere());
     }
 
@@ -32,27 +32,27 @@ public class SyntaxpfadTest
     public void testKopiereMitNeuerWurzel() {
         final Syntaxpfad syntaxpfad1 = new Syntaxpfad();
         syntaxpfad1.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("Knoten"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("Knoten"), new Symbolidentifizierung(1)));
         syntaxpfad1.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("Blatt"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("Blatt"), new Symbolidentifizierung(1)));
         final Syntaxpfad syntaxpfad2 = new Syntaxpfad();
         syntaxpfad2.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("Wurzel"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("Wurzel"), new Symbolidentifizierung(1)));
         syntaxpfad2.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("Knoten"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("Knoten"), new Symbolidentifizierung(1)));
         syntaxpfad2.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("Blatt"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("Blatt"), new Symbolidentifizierung(1)));
         assertEquals(syntaxpfad2, syntaxpfad1.kopiereMitNeuerWurzel(
-                new Symbolkennung(new Symbolbezeichnung("Wurzel"), new Symbolidentifizierung(Integer.valueOf(1)))));
+                new Symbolkennung(new Symbolbezeichnung("Wurzel"), new Symbolidentifizierung(1))));
     }
 
     @Test(expected = SyntaxparserException.class)
     public void testKopiereMitNeuerWurzelParameterNull() {
         final Syntaxpfad syntaxpfad = new Syntaxpfad();
         syntaxpfad.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("Knoten"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("Knoten"), new Symbolidentifizierung(1)));
         syntaxpfad.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("Blatt"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("Blatt"), new Symbolidentifizierung(1)));
         syntaxpfad.kopiereMitNeuerWurzel(null);
     }
 
@@ -60,16 +60,16 @@ public class SyntaxpfadTest
     public void testKopiereMitNeuerWurzelNichtFertig() {
         final Syntaxpfad syntaxpfad = new Syntaxpfad();
         syntaxpfad.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("Knoten"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("Knoten"), new Symbolidentifizierung(1)));
         syntaxpfad.kopiereMitNeuerWurzel(
-                new Symbolkennung(new Symbolbezeichnung("Wurzel"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("Wurzel"), new Symbolidentifizierung(1)));
     }
 
     @Test
     public void testZufuegenKnoten() {
         final Syntaxpfad syntaxpfad = new Syntaxpfad();
         syntaxpfad.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("Knoten"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("Knoten"), new Symbolidentifizierung(1)));
     }
 
     @Test(expected = SyntaxparserException.class)
@@ -83,11 +83,11 @@ public class SyntaxpfadTest
     public void testZufuegenKnotenParameterFertig() {
         final Syntaxpfad syntaxpfad = new Syntaxpfad();
         syntaxpfad.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("Knoten1"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("Knoten1"), new Symbolidentifizierung(1)));
         syntaxpfad.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("Blatt"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("Blatt"), new Symbolidentifizierung(1)));
         syntaxpfad.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("Knoten2"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("Knoten2"), new Symbolidentifizierung(1)));
         fail();
     }
 
@@ -95,16 +95,16 @@ public class SyntaxpfadTest
     public void testZufuegenBlatt() {
         final Syntaxpfad syntaxpfad = new Syntaxpfad();
         syntaxpfad.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("Knoten"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("Knoten"), new Symbolidentifizierung(1)));
         syntaxpfad.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("Blatt"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("Blatt"), new Symbolidentifizierung(1)));
     }
 
     @Test(expected = SyntaxparserException.class)
     public void testZufuegenBlattParameterNull() {
         final Syntaxpfad syntaxpfad = new Syntaxpfad();
         syntaxpfad.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("Knoten"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("Knoten"), new Symbolidentifizierung(1)));
         syntaxpfad.zufuegenBlatt(null);
         fail();
     }
@@ -113,35 +113,35 @@ public class SyntaxpfadTest
     public void testZufuegenBlattFertig() {
         final Syntaxpfad syntaxpfad = new Syntaxpfad();
         syntaxpfad.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("Knoten"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("Knoten"), new Symbolidentifizierung(1)));
         syntaxpfad.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("Blatt1"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("Blatt1"), new Symbolidentifizierung(1)));
         syntaxpfad.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("Blatt2"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("Blatt2"), new Symbolidentifizierung(1)));
         fail();
     }
 
     @Test
     public void testGebeKnotenfolge() {
         final List<Symbolkennung> knoten = new ArrayList<>();
-        knoten.add(new Symbolkennung(new Symbolbezeichnung("Knoten"), new Symbolidentifizierung(Integer.valueOf(1))));
+        knoten.add(new Symbolkennung(new Symbolbezeichnung("Knoten"), new Symbolidentifizierung(1)));
         final Syntaxpfad syntaxpfad = new Syntaxpfad();
         syntaxpfad.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("Knoten"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("Knoten"), new Symbolidentifizierung(1)));
         syntaxpfad.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("Blatt"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("Blatt"), new Symbolidentifizierung(1)));
         assertEquals(knoten, syntaxpfad.gebeKnotenfolge());
     }
 
     @Test
     public void testGebeBlatt() {
         final Symbolkennung blatt = new Symbolkennung(new Symbolbezeichnung("Blatt"),
-                new Symbolidentifizierung(Integer.valueOf(1)));
+                new Symbolidentifizierung(1));
         final Syntaxpfad syntaxpfad = new Syntaxpfad();
         syntaxpfad.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("Knoten"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("Knoten"), new Symbolidentifizierung(1)));
         syntaxpfad.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("Blatt"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("Blatt"), new Symbolidentifizierung(1)));
         assertEquals(blatt, syntaxpfad.gebeBlatt());
     }
 
@@ -149,7 +149,7 @@ public class SyntaxpfadTest
     public void testGebeBlattNichtFertig() {
         final Syntaxpfad syntaxpfad = new Syntaxpfad();
         syntaxpfad.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("Knoten"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("Knoten"), new Symbolidentifizierung(1)));
         syntaxpfad.gebeBlatt();
         fail();
     }
@@ -159,10 +159,10 @@ public class SyntaxpfadTest
         final Syntaxpfad syntaxpfad = new Syntaxpfad();
         assertFalse(syntaxpfad.istFertig());
         syntaxpfad.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("Knoten"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("Knoten"), new Symbolidentifizierung(1)));
         assertFalse(syntaxpfad.istFertig());
         syntaxpfad.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("Blatt"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("Blatt"), new Symbolidentifizierung(1)));
         assertTrue(syntaxpfad.istFertig());
     }
 }

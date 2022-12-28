@@ -1,5 +1,6 @@
 package de.platen.syntaxparser.syntaxpfad;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,7 +26,7 @@ public class Syntaxpfadersteller
 
     public Set<Syntaxpfad> ermittleSyntaxpfadeVonStartSymbol() {
         return ermittleSyntaxpfade(new Symbolkennung(grammatik.getStartregel().getSymbolbezeichnung(),
-                new Symbolidentifizierung(Integer.valueOf(0))));
+                new Symbolidentifizierung(0)));
     }
 
     public Set<Syntaxpfad> ermittleSyntaxpfade(final Symbolkennung regel) {
@@ -38,15 +39,44 @@ public class Syntaxpfadersteller
         if (grammatik.getSymbolregeln().get().containsKey(regel.getSymbolbezeichnung())) {
             return behandleSymbolregeln(regel);
         }
-        if (grammatik.getZeichenbereichregeln().get().containsKey(regel.getSymbolbezeichnung()) || grammatik.getZeichenfolgeregeln().get().containsKey(regel.getSymbolbezeichnung()) || grammatik.getZeichenmengeregeln().get().containsKey(regel.getSymbolbezeichnung())) {
+        if (grammatik.getZeichenbereichregeln().get().containsKey(regel.getSymbolbezeichnung()) || grammatik.getZeichenfolgeregeln().get().containsKey(regel.getSymbolbezeichnung()) || grammatik.getZeichenmengeregeln().get().containsKey(regel.getSymbolbezeichnung()) || grammatik.getRegExregeln().get().containsKey(regel.getSymbolbezeichnung())) {
             return behandleBlattregeln(regel);
         }
         throw new SyntaxparserException();
     }
 
+    public Set<Syntaxpfadfolge> behandleNaechstenKnoten(final List<SyntaxpfadMitWort> syntaxpfadeMitWort, final Syntaxpfad syntaxpfadNaechstesSymbol) {
+        if (syntaxpfadeMitWort == null || syntaxpfadNaechstesSymbol == null) {
+            throw new SyntaxparserException();
+        }
+        Set<Syntaxpfadfolge> syntaxpfadfolgen = new HashSet<>();
+        if (syntaxpfadNaechstesSymbol.istFertig() || syntaxpfadNaechstesSymbol.gebeKnotenfolge().isEmpty()) {
+            return syntaxpfadfolgen;
+        }
+        final List<Symbolkennung> knotenfolge = syntaxpfadNaechstesSymbol.gebeKnotenfolge();
+        final Symbolkennung symbolkennung = knotenfolge.get(knotenfolge.size() - 1);
+        final List<Symbolkennung> symbolkennungen = new ArrayList<>();
+        for (int index = 0; index < (knotenfolge.size() - 1); index++) {
+            symbolkennungen.add(knotenfolge.get(index));
+        }
+        final Set<Syntaxpfad> syntaxpfadeErmittelt = ermittleSyntaxpfade(symbolkennung);
+        for (final Syntaxpfad syntaxpfadErmittelt : syntaxpfadeErmittelt) {
+            final List<Symbolkennung> symbolkennungenNeu = new ArrayList<>(symbolkennungen);
+            symbolkennungenNeu.addAll(syntaxpfadErmittelt.gebeKnotenfolge());
+            final Syntaxpfad syntaxpfadNeu = new Syntaxpfad();
+            for (final Symbolkennung symbolkennungNeu : symbolkennungenNeu) {
+                syntaxpfadNeu.zufuegenKnoten(symbolkennungNeu);
+            }
+            syntaxpfadNeu.zufuegenBlatt(syntaxpfadErmittelt.gebeBlatt());
+            final Syntaxpfadfolge syntaxpfadfolgeNeu = new Syntaxpfadfolge(syntaxpfadeMitWort);
+            syntaxpfadfolgeNeu.setzeAktuellenSyntaxpfad(syntaxpfadNeu);
+            syntaxpfadfolgen.add(syntaxpfadfolgeNeu);
+        }
+        return syntaxpfadfolgen;
+    }
+
     private Set<Syntaxpfad> behandleStartregel(final Symbolkennung regel) {
-        Set<Syntaxpfad> syntaxpfade = new HashSet<>();
-        syntaxpfade = ermittleSyntaxpfade(grammatik.getStartregel().getSymbole().get(0).getSymbolkennung());
+        Set<Syntaxpfad> syntaxpfade = ermittleSyntaxpfade(grammatik.getStartregel().getSymbole().get(0).getSymbolkennung());
         return kopiereSyntaxpfadeMitNeuerWurzel(syntaxpfade, regel);
     }
 

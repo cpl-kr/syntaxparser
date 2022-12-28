@@ -7,4 +7,8 @@ public class SyntaxparserException extends RuntimeException
 
     public SyntaxparserException() {
     }
+
+    public SyntaxparserException(final Throwable e) {
+        super(e);
+    }
 }
