@@ -34,9 +34,9 @@ public class SyntaxpfadMitWortTest
     public void testKonstruktor() {
         final Syntaxpfad syntaxpfad = new Syntaxpfad();
         syntaxpfad.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("symbol"), new Symbolidentifizierung(Integer.valueOf(0))));
+                new Symbolkennung(new Symbolbezeichnung("symbol"), new Symbolidentifizierung(0)));
         syntaxpfad.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("symbol"), new Symbolidentifizierung(Integer.valueOf(0))));
+                new Symbolkennung(new Symbolbezeichnung("symbol"), new Symbolidentifizierung(0)));
         new SyntaxpfadMitWort(syntaxpfad, "test");
     }
 }

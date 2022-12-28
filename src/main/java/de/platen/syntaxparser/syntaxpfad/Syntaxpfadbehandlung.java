@@ -15,9 +15,12 @@ import de.platen.syntaxparser.grammatik.elemente.Symbolkennung;
 import de.platen.syntaxparser.grammatik.elemente.Zeichenbereich;
 import de.platen.syntaxparser.grammatik.elemente.Zeichenfolge;
 import de.platen.syntaxparser.grammatik.elemente.Zeichenmenge;
+import de.platen.syntaxparser.regelverarbeitung.Verarbeitung;
+import de.platen.syntaxparser.regelverarbeitung.VerarbeitungRegEx;
+import de.platen.syntaxparser.regelverarbeitung.VerarbeitungZeichenbereichUndMenge;
+import de.platen.syntaxparser.regelverarbeitung.VerarbeitungZeichenfolge;
 
-public class Syntaxpfadbehandlung
-{
+public class Syntaxpfadbehandlung {
 
     private final Grammatik grammatik;
 
@@ -28,6 +31,21 @@ public class Syntaxpfadbehandlung
         this.grammatik = grammatik;
     }
 
+    public Verarbeitung ermittleVerarbeitung(final Symbolkennung symbolkennung) {
+        if (symbolkennung == null) {
+            throw new SyntaxparserException();
+        }
+        if (grammatik.getZeichenfolgeregeln().get().containsKey(symbolkennung.getSymbolbezeichnung())) {
+            return new VerarbeitungZeichenfolge(symbolkennung.getSymbolbezeichnung(), grammatik.getZeichenfolgeregeln().get().get(symbolkennung.getSymbolbezeichnung()));
+        } else {
+            if (grammatik.getRegExregeln().get().containsKey(symbolkennung.getSymbolbezeichnung())) {
+                return new VerarbeitungRegEx(symbolkennung.getSymbolbezeichnung(), grammatik.getRegExregeln().get().get(symbolkennung.getSymbolbezeichnung()));
+            } else {
+                return new VerarbeitungZeichenbereichUndMenge(symbolkennung.getSymbolbezeichnung(), grammatik.getZeichenbereichregeln().get().get(symbolkennung.getSymbolbezeichnung()), grammatik.getZeichenmengeregeln().get().get(symbolkennung.getSymbolbezeichnung()));
+            }
+        }
+    }
+
     public Set<Syntaxpfad> findePassendeSyntaxpfade(final Set<Syntaxpfad> syntaxpfade, final String wort) {
         if ((syntaxpfade == null) || (wort == null)) {
             throw new SyntaxparserException();
@@ -35,7 +53,7 @@ public class Syntaxpfadbehandlung
         final Set<Syntaxpfad> passendeSyntaxpfade = new HashSet<>();
         for (final Syntaxpfad syntaxpfad : syntaxpfade) {
             final Symbolkennung symbolkennung = syntaxpfad.gebeBlatt();
-            boolean istWortGefunden = false;
+            boolean istWortGefunden;
             if (grammatik.getZeichenfolgeregeln().get().containsKey(symbolkennung.getSymbolbezeichnung())) {
                 istWortGefunden = vergleicheZeichenfolgen(symbolkennung.getSymbolbezeichnung(), wort);
             } else {
@@ -72,7 +90,7 @@ public class Syntaxpfadbehandlung
                     return findeNaechstesSymbol(erstelleSyntaxpfad(knotenfolge));
                 }
                 final Symbolkennung symbolkennungNeu = grammatik.getSymbolregeln()
-                        .gebeNaechstesSymbolInnerhalbRegel(symbolkennung);
+                                                                .gebeNaechstesSymbolInnerhalbRegel(symbolkennung);
                 if (!grammatik.getSymbolregeln().get().containsKey(symbolkennungNeu.getSymbolbezeichnung())) {
                     return erstelleSyntaxpfad(knotenfolge, symbolkennungNeu);
                 }
@@ -82,7 +100,7 @@ public class Syntaxpfadbehandlung
             }
             if (!grammatik.getStartregel().istLetztesSymbol(symbolkennung)) {
                 final Symbolkennung symbolkennungStartregel = grammatik.getStartregel()
-                        .gebeNaechstesSymbol(symbolkennung);
+                                                                       .gebeNaechstesSymbol(symbolkennung);
                 if (!grammatik.getSymbolregeln().get().containsKey(symbolkennungStartregel.getSymbolbezeichnung())) {
                     return erstelleSyntaxpfad(knotenfolge, symbolkennungStartregel);
                 }
@@ -127,10 +145,10 @@ public class Syntaxpfadbehandlung
             boolean istZeichenGefunden = false;
             if (istInZeichenbereich) {
                 final Set<Zeichenbereich> zeichenbereiche = grammatik.getZeichenbereichregeln().get()
-                        .get(symbolbezeichnung);
+                                                                     .get(symbolbezeichnung);
                 for (final Zeichenbereich zeichenbereich : zeichenbereiche) {
-                    if ((ch.charValue() >= zeichenbereich.getVon().charValue())
-                            && (ch.charValue() <= zeichenbereich.getBis().charValue())) {
+                    if ((ch >= zeichenbereich.getVon())
+                            && (ch <= zeichenbereich.getBis())) {
                         istZeichenGefunden = true;
                     }
                 }
@@ -176,7 +194,7 @@ public class Syntaxpfadbehandlung
     }
 
     private List<Symbolkennung> kopiereSymbolkennungenMitWeiteremElement(final List<Symbolkennung> symbolkennungen,
-            final Symbolkennung symbolkennung) {
+                                                                         final Symbolkennung symbolkennung) {
         final List<Symbolkennung> symbolkennungenNeu = new ArrayList<>(symbolkennungen);
         symbolkennungenNeu.add(symbolkennung);
         return symbolkennungenNeu;

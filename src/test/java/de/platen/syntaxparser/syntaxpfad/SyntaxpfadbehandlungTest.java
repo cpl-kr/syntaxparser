@@ -12,6 +12,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.platen.syntaxparser.regelverarbeitung.Verarbeitung;
+import de.platen.syntaxparser.regelverarbeitung.VerarbeitungRegEx;
+import de.platen.syntaxparser.regelverarbeitung.VerarbeitungZeichenbereichUndMenge;
+import de.platen.syntaxparser.regelverarbeitung.VerarbeitungZeichenfolge;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -45,6 +49,83 @@ public class SyntaxpfadbehandlungTest
     }
 
     @Test(expected = SyntaxparserException.class)
+    public void testErmittleVerarbeitungParameterNull() {
+        final Grammatik grammatik = Mockito.mock(Grammatik.class);
+        new Syntaxpfadbehandlung(grammatik).ermittleVerarbeitung(null);
+        fail();
+    }
+
+    @Test
+    public void testErmittleVerarbeitungZeichenfolgeregeln() {
+        final Grammatik grammatik = Mockito.mock(Grammatik.class);
+        Symbolkennung symbolkennung = Mockito.mock(Symbolkennung.class);
+        Symbolbezeichnung symbolbezeichnung = new Symbolbezeichnung("symbolbezeichnung");
+        Mockito.when(symbolkennung.getSymbolbezeichnung()).thenReturn(symbolbezeichnung);
+        Map<Symbolbezeichnung, Set<Zeichenfolge>> zeichenfolgen = new HashMap<>();
+        Set<Zeichenfolge> zeichenfolge = new HashSet<>();
+        zeichenfolge.add(new Zeichenfolge("zeichenfolge"));
+        zeichenfolgen.put(symbolbezeichnung, zeichenfolge);
+        Zeichenfolgeregeln zeichenfolgeregeln = Mockito.mock(Zeichenfolgeregeln.class);
+        Mockito.when(grammatik.getZeichenfolgeregeln()).thenReturn(zeichenfolgeregeln);
+        Mockito.when(zeichenfolgeregeln.get()).thenReturn(zeichenfolgen);
+        Verarbeitung verarbeitung = new Syntaxpfadbehandlung(grammatik).ermittleVerarbeitung(symbolkennung);
+        assertTrue(verarbeitung instanceof VerarbeitungZeichenfolge);
+        assertEquals(symbolbezeichnung, verarbeitung.gebeSymbolbezeichnung());
+    }
+
+    @Test
+    public void testErmittleVerarbeitungRegExregeln() {
+        final Grammatik grammatik = Mockito.mock(Grammatik.class);
+        Symbolkennung symbolkennung = Mockito.mock(Symbolkennung.class);
+        Symbolbezeichnung symbolbezeichnung = new Symbolbezeichnung("symbolbezeichnung");
+        Mockito.when(symbolkennung.getSymbolbezeichnung()).thenReturn(symbolbezeichnung);
+        Map<Symbolbezeichnung, Set<Zeichenfolge>> zeichenfolgen = new HashMap<>();
+        Zeichenfolgeregeln zeichenfolgeregeln = Mockito.mock(Zeichenfolgeregeln.class);
+        Mockito.when(grammatik.getZeichenfolgeregeln()).thenReturn(zeichenfolgeregeln);
+        Mockito.when(zeichenfolgeregeln.get()).thenReturn(zeichenfolgen);
+        RegExregeln regExregeln = Mockito.mock(RegExregeln.class);
+        Map<Symbolbezeichnung, Set<RegEx>> regExMap = new HashMap<>();
+        Set<RegEx> regExSet = new HashSet<>();
+        regExSet.add(new RegEx("[a-z]"));
+        regExMap.put(symbolbezeichnung, regExSet);
+        Mockito.when(regExregeln.get()).thenReturn(regExMap);
+        Mockito.when(grammatik.getRegExregeln()).thenReturn(regExregeln);
+        Verarbeitung verarbeitung = new Syntaxpfadbehandlung(grammatik).ermittleVerarbeitung(symbolkennung);
+        assertTrue(verarbeitung instanceof VerarbeitungRegEx);
+        assertEquals(symbolbezeichnung, verarbeitung.gebeSymbolbezeichnung());
+    }
+
+    @Test
+    public void testErmittleVerarbeitungZeichenbereichUndMengeregeln() {
+        final Grammatik grammatik = Mockito.mock(Grammatik.class);
+        Symbolkennung symbolkennung = Mockito.mock(Symbolkennung.class);
+        Symbolbezeichnung symbolbezeichnung = new Symbolbezeichnung("symbolbezeichnung");
+        Mockito.when(symbolkennung.getSymbolbezeichnung()).thenReturn(symbolbezeichnung);
+        Map<Symbolbezeichnung, Set<Zeichenfolge>> zeichenfolgen = new HashMap<>();
+        Zeichenfolgeregeln zeichenfolgeregeln = Mockito.mock(Zeichenfolgeregeln.class);
+        Mockito.when(grammatik.getZeichenfolgeregeln()).thenReturn(zeichenfolgeregeln);
+        Mockito.when(zeichenfolgeregeln.get()).thenReturn(zeichenfolgen);
+        RegExregeln regExregeln = Mockito.mock(RegExregeln.class);
+        Map<Symbolbezeichnung, Set<RegEx>> regExMap = new HashMap<>();
+        Mockito.when(regExregeln.get()).thenReturn(regExMap);
+        Mockito.when(grammatik.getRegExregeln()).thenReturn(regExregeln);
+        Zeichenbereichregeln zeichenbereichregeln = Mockito.mock(Zeichenbereichregeln.class);
+        Map<Symbolbezeichnung, Set<Zeichenbereich>> zeichenbereichMap = new HashMap<>();
+        Set<Zeichenbereich> zeichenbereichSet = new HashSet<>();
+        zeichenbereichSet.add(new Zeichenbereich('a','z'));
+        zeichenbereichMap.put(symbolbezeichnung, zeichenbereichSet);
+        Mockito.when(zeichenbereichregeln.get()).thenReturn(zeichenbereichMap);
+        Zeichenmengeregeln zeichenmengeregeln = Mockito.mock(Zeichenmengeregeln.class);
+        Map<Symbolbezeichnung, Set<Zeichenmenge>> zeichenmengeMap = new HashMap<>();
+        Mockito.when(zeichenmengeregeln.get()).thenReturn(zeichenmengeMap);
+        Mockito.when(grammatik.getZeichenbereichregeln()).thenReturn(zeichenbereichregeln);
+        Mockito.when(grammatik.getZeichenmengeregeln()).thenReturn(zeichenmengeregeln);
+        Verarbeitung verarbeitung = new Syntaxpfadbehandlung(grammatik).ermittleVerarbeitung(symbolkennung);
+        assertTrue(verarbeitung instanceof VerarbeitungZeichenbereichUndMenge);
+        assertEquals(symbolbezeichnung, verarbeitung.gebeSymbolbezeichnung());
+    }
+
+    @Test(expected = SyntaxparserException.class)
     public void testFindePassendeSytaxpfadeParameterSyntaxpfadeNull() {
         final Grammatik grammatik = Mockito.mock(Grammatik.class);
         new Syntaxpfadbehandlung(grammatik).findePassendeSyntaxpfade(null, "wort");
@@ -63,7 +144,7 @@ public class SyntaxpfadbehandlungTest
         final Grammatik grammatik = mockGrammatik(new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>());
         final Syntaxpfad syntaxpfad = Mockito.mock(Syntaxpfad.class);
         Mockito.when(syntaxpfad.gebeBlatt()).thenReturn(
-                new Symbolkennung(new Symbolbezeichnung("nichts"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("nichts"), new Symbolidentifizierung(1)));
         final Set<Syntaxpfad> syntaxpfade = new HashSet<>();
         syntaxpfade.add(syntaxpfad);
         final Syntaxpfadbehandlung syntaxpfadbehandlung = new Syntaxpfadbehandlung(grammatik);
@@ -80,7 +161,7 @@ public class SyntaxpfadbehandlungTest
         final Grammatik grammatik = mockGrammatik(new HashMap<>(), new HashMap<>(), mapZeichenfolgen, new HashMap<>());
         final Syntaxpfad syntaxpfad = new Syntaxpfad();
         syntaxpfad.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("symbol"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("symbol"), new Symbolidentifizierung(1)));
         final Set<Syntaxpfad> syntaxpfade = new HashSet<>();
         syntaxpfade.add(syntaxpfad);
         final Syntaxpfadbehandlung syntaxpfadbehandlung = new Syntaxpfadbehandlung(grammatik);
@@ -97,7 +178,7 @@ public class SyntaxpfadbehandlungTest
         final Grammatik grammatik = mockGrammatik(new HashMap<>(), new HashMap<>(), new HashMap<>(), mapRegEx);
         final Syntaxpfad syntaxpfad = new Syntaxpfad();
         syntaxpfad.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("symbol"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("symbol"), new Symbolidentifizierung(1)));
         final Set<Syntaxpfad> syntaxpfade = new HashSet<>();
         syntaxpfade.add(syntaxpfad);
         final Syntaxpfadbehandlung syntaxpfadbehandlung = new Syntaxpfadbehandlung(grammatik);
@@ -107,7 +188,7 @@ public class SyntaxpfadbehandlungTest
     @Test
     public void testFindePassendeSytaxpfadeWortInZeichenbereich() {
         final Set<Zeichenbereich> zeichenbereiche = new HashSet<>();
-        final Zeichenbereich zeichenbereich = new Zeichenbereich(Character.valueOf('a'), Character.valueOf('c'));
+        final Zeichenbereich zeichenbereich = new Zeichenbereich('a','c');
         zeichenbereiche.add(zeichenbereich);
         final Map<Symbolbezeichnung, Set<Zeichenbereich>> mapZeichenbereiche = new HashMap<>();
         mapZeichenbereiche.put(new Symbolbezeichnung("symbol"), zeichenbereiche);
@@ -115,7 +196,7 @@ public class SyntaxpfadbehandlungTest
                 new HashMap<>());
         final Syntaxpfad syntaxpfad = new Syntaxpfad();
         syntaxpfad.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("symbol"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("symbol"), new Symbolidentifizierung(1)));
         final Set<Syntaxpfad> syntaxpfade = new HashSet<>();
         syntaxpfade.add(syntaxpfad);
         final Syntaxpfadbehandlung syntaxpfadbehandlung = new Syntaxpfadbehandlung(grammatik);
@@ -135,7 +216,7 @@ public class SyntaxpfadbehandlungTest
         final Grammatik grammatik = mockGrammatik(new HashMap<>(), mapZeichenmengen, new HashMap<>(), new HashMap<>());
         final Syntaxpfad syntaxpfad = new Syntaxpfad();
         syntaxpfad.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("symbol"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("symbol"), new Symbolidentifizierung(1)));
         final Set<Syntaxpfad> syntaxpfade = new HashSet<>();
         syntaxpfade.add(syntaxpfad);
         final Syntaxpfadbehandlung syntaxpfadbehandlung = new Syntaxpfadbehandlung(grammatik);
@@ -145,7 +226,7 @@ public class SyntaxpfadbehandlungTest
     @Test
     public void testFindePassendeSytaxpfadeWortInZeichenbereichUndZeichenmenge() {
         final Set<Zeichenbereich> zeichenbereiche = new HashSet<>();
-        final Zeichenbereich zeichenbereich = new Zeichenbereich(Character.valueOf('a'), Character.valueOf('c'));
+        final Zeichenbereich zeichenbereich = new Zeichenbereich('a', 'c');
         zeichenbereiche.add(zeichenbereich);
         final Map<Symbolbezeichnung, Set<Zeichenbereich>> mapZeichenbereiche = new HashMap<>();
         mapZeichenbereiche.put(new Symbolbezeichnung("symbol"), zeichenbereiche);
@@ -161,7 +242,7 @@ public class SyntaxpfadbehandlungTest
                 new HashMap<>());
         final Syntaxpfad syntaxpfad = new Syntaxpfad();
         syntaxpfad.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("symbol"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("symbol"), new Symbolidentifizierung(1)));
         final Set<Syntaxpfad> syntaxpfade = new HashSet<>();
         syntaxpfade.add(syntaxpfad);
         final Syntaxpfadbehandlung syntaxpfadbehandlung = new Syntaxpfadbehandlung(grammatik);
@@ -180,18 +261,18 @@ public class SyntaxpfadbehandlungTest
         final Grammatik grammatik = mockGrammatik();
         final Syntaxpfad syntaxpfadAktuell = new Syntaxpfad();
         syntaxpfadAktuell.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(Integer.valueOf(0))));
+                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(0)));
         syntaxpfadAktuell.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S1"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("S1"), new Symbolidentifizierung(1)));
         syntaxpfadAktuell.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("Z1-1"), new Symbolidentifizierung(Integer.valueOf(110))));
+                new Symbolkennung(new Symbolbezeichnung("Z1-1"), new Symbolidentifizierung(110)));
         final Syntaxpfad syntaxpfadErwartet = new Syntaxpfad();
         syntaxpfadErwartet.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(Integer.valueOf(0))));
+                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(0)));
         syntaxpfadErwartet.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S1"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("S1"), new Symbolidentifizierung(1)));
         syntaxpfadErwartet.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("Z1-2"), new Symbolidentifizierung(Integer.valueOf(120))));
+                new Symbolkennung(new Symbolbezeichnung("Z1-2"), new Symbolidentifizierung(120)));
         final Syntaxpfadbehandlung syntaxpfadbehandlung = new Syntaxpfadbehandlung(grammatik);
         final Syntaxpfad syntaxpfadErgebnis = syntaxpfadbehandlung.findeNaechstesSymbol(syntaxpfadAktuell);
         assertEquals(syntaxpfadErwartet, syntaxpfadErgebnis);
@@ -202,18 +283,18 @@ public class SyntaxpfadbehandlungTest
         final Grammatik grammatik = mockGrammatik();
         final Syntaxpfad syntaxpfadAktuell = new Syntaxpfad();
         syntaxpfadAktuell.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(Integer.valueOf(0))));
+                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(0)));
         syntaxpfadAktuell.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S2"), new Symbolidentifizierung(Integer.valueOf(2))));
+                new Symbolkennung(new Symbolbezeichnung("S2"), new Symbolidentifizierung(2)));
         syntaxpfadAktuell.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("Z2-1"), new Symbolidentifizierung(Integer.valueOf(210))));
+                new Symbolkennung(new Symbolbezeichnung("Z2-1"), new Symbolidentifizierung(210)));
         final Syntaxpfad syntaxpfadErwartet = new Syntaxpfad();
         syntaxpfadErwartet.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(Integer.valueOf(0))));
+                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(0)));
         syntaxpfadErwartet.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S2"), new Symbolidentifizierung(Integer.valueOf(2))));
+                new Symbolkennung(new Symbolbezeichnung("S2"), new Symbolidentifizierung(2)));
         syntaxpfadErwartet.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S2-2"), new Symbolidentifizierung(Integer.valueOf(22))));
+                new Symbolkennung(new Symbolbezeichnung("S2-2"), new Symbolidentifizierung(22)));
         final Syntaxpfadbehandlung syntaxpfadbehandlung = new Syntaxpfadbehandlung(grammatik);
         final Syntaxpfad syntaxpfadErgebnis = syntaxpfadbehandlung.findeNaechstesSymbol(syntaxpfadAktuell);
         assertEquals(syntaxpfadErwartet, syntaxpfadErgebnis);
@@ -224,20 +305,20 @@ public class SyntaxpfadbehandlungTest
         final Grammatik grammatik = mockGrammatik();
         final Syntaxpfad syntaxpfadAktuell = new Syntaxpfad();
         syntaxpfadAktuell.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(Integer.valueOf(0))));
+                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(0)));
         syntaxpfadAktuell.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S3"), new Symbolidentifizierung(Integer.valueOf(3))));
+                new Symbolkennung(new Symbolbezeichnung("S3"), new Symbolidentifizierung(3)));
         syntaxpfadAktuell.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S3-1"), new Symbolidentifizierung(Integer.valueOf(31))));
+                new Symbolkennung(new Symbolbezeichnung("S3-1"), new Symbolidentifizierung(31)));
         syntaxpfadAktuell.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("Z3-1-2"), new Symbolidentifizierung(Integer.valueOf(3120))));
+                new Symbolkennung(new Symbolbezeichnung("Z3-1-2"), new Symbolidentifizierung(3120)));
         final Syntaxpfad syntaxpfadErwartet = new Syntaxpfad();
         syntaxpfadErwartet.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(Integer.valueOf(0))));
+                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(0)));
         syntaxpfadErwartet.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S3"), new Symbolidentifizierung(Integer.valueOf(3))));
+                new Symbolkennung(new Symbolbezeichnung("S3"), new Symbolidentifizierung(3)));
         syntaxpfadErwartet.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("Z3-2"), new Symbolidentifizierung(Integer.valueOf(320))));
+                new Symbolkennung(new Symbolbezeichnung("Z3-2"), new Symbolidentifizierung(320)));
         final Syntaxpfadbehandlung syntaxpfadbehandlung = new Syntaxpfadbehandlung(grammatik);
         final Syntaxpfad syntaxpfadErgebnis = syntaxpfadbehandlung.findeNaechstesSymbol(syntaxpfadAktuell);
         assertEquals(syntaxpfadErwartet, syntaxpfadErgebnis);
@@ -248,20 +329,20 @@ public class SyntaxpfadbehandlungTest
         final Grammatik grammatik = mockGrammatik();
         final Syntaxpfad syntaxpfadAktuell = new Syntaxpfad();
         syntaxpfadAktuell.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(Integer.valueOf(0))));
+                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(0)));
         syntaxpfadAktuell.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S4"), new Symbolidentifizierung(Integer.valueOf(4))));
+                new Symbolkennung(new Symbolbezeichnung("S4"), new Symbolidentifizierung(4)));
         syntaxpfadAktuell.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S4-1"), new Symbolidentifizierung(Integer.valueOf(41))));
+                new Symbolkennung(new Symbolbezeichnung("S4-1"), new Symbolidentifizierung(41)));
         syntaxpfadAktuell.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("Z4-1-2"), new Symbolidentifizierung(Integer.valueOf(4120))));
+                new Symbolkennung(new Symbolbezeichnung("Z4-1-2"), new Symbolidentifizierung(4120)));
         final Syntaxpfad syntaxpfadErwartet = new Syntaxpfad();
         syntaxpfadErwartet.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(Integer.valueOf(0))));
+                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(0)));
         syntaxpfadErwartet.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S4"), new Symbolidentifizierung(Integer.valueOf(4))));
+                new Symbolkennung(new Symbolbezeichnung("S4"), new Symbolidentifizierung(4)));
         syntaxpfadErwartet.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S4-2"), new Symbolidentifizierung(Integer.valueOf(42))));
+                new Symbolkennung(new Symbolbezeichnung("S4-2"), new Symbolidentifizierung(42)));
         final Syntaxpfadbehandlung syntaxpfadbehandlung = new Syntaxpfadbehandlung(grammatik);
         final Syntaxpfad syntaxpfadErgebnis = syntaxpfadbehandlung.findeNaechstesSymbol(syntaxpfadAktuell);
         assertEquals(syntaxpfadErwartet, syntaxpfadErgebnis);
@@ -272,22 +353,22 @@ public class SyntaxpfadbehandlungTest
         final Grammatik grammatik = mockGrammatik();
         final Syntaxpfad syntaxpfadAktuell = new Syntaxpfad();
         syntaxpfadAktuell.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(Integer.valueOf(0))));
+                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(0)));
         syntaxpfadAktuell.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S5"), new Symbolidentifizierung(Integer.valueOf(5))));
+                new Symbolkennung(new Symbolbezeichnung("S5"), new Symbolidentifizierung(5)));
         syntaxpfadAktuell.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S5-1"), new Symbolidentifizierung(Integer.valueOf(51))));
+                new Symbolkennung(new Symbolbezeichnung("S5-1"), new Symbolidentifizierung(51)));
         syntaxpfadAktuell.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S5-1-1"), new Symbolidentifizierung(Integer.valueOf(511))));
+                new Symbolkennung(new Symbolbezeichnung("S5-1-1"), new Symbolidentifizierung(511)));
         syntaxpfadAktuell.zufuegenBlatt(new Symbolkennung(new Symbolbezeichnung("Z5-1-1-2"),
-                new Symbolidentifizierung(Integer.valueOf(51120))));
+                new Symbolidentifizierung(51120)));
         final Syntaxpfad syntaxpfadErwartet = new Syntaxpfad();
         syntaxpfadErwartet.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(Integer.valueOf(0))));
+                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(0)));
         syntaxpfadErwartet.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S5"), new Symbolidentifizierung(Integer.valueOf(5))));
+                new Symbolkennung(new Symbolbezeichnung("S5"), new Symbolidentifizierung(5)));
         syntaxpfadErwartet.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("Z5-2"), new Symbolidentifizierung(Integer.valueOf(520))));
+                new Symbolkennung(new Symbolbezeichnung("Z5-2"), new Symbolidentifizierung(520)));
         final Syntaxpfadbehandlung syntaxpfadbehandlung = new Syntaxpfadbehandlung(grammatik);
         final Syntaxpfad syntaxpfadErgebnis = syntaxpfadbehandlung.findeNaechstesSymbol(syntaxpfadAktuell);
         assertEquals(syntaxpfadErwartet, syntaxpfadErgebnis);
@@ -298,22 +379,22 @@ public class SyntaxpfadbehandlungTest
         final Grammatik grammatik = mockGrammatik();
         final Syntaxpfad syntaxpfadAktuell = new Syntaxpfad();
         syntaxpfadAktuell.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(Integer.valueOf(0))));
+                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(0)));
         syntaxpfadAktuell.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S6"), new Symbolidentifizierung(Integer.valueOf(6))));
+                new Symbolkennung(new Symbolbezeichnung("S6"), new Symbolidentifizierung(6)));
         syntaxpfadAktuell.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S6-1"), new Symbolidentifizierung(Integer.valueOf(61))));
+                new Symbolkennung(new Symbolbezeichnung("S6-1"), new Symbolidentifizierung(61)));
         syntaxpfadAktuell.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S6-1-1"), new Symbolidentifizierung(Integer.valueOf(611))));
+                new Symbolkennung(new Symbolbezeichnung("S6-1-1"), new Symbolidentifizierung(611)));
         syntaxpfadAktuell.zufuegenBlatt(new Symbolkennung(new Symbolbezeichnung("Z6-1-1-2"),
-                new Symbolidentifizierung(Integer.valueOf(61120))));
+                new Symbolidentifizierung(61120)));
         final Syntaxpfad syntaxpfadErwartet = new Syntaxpfad();
         syntaxpfadErwartet.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(Integer.valueOf(0))));
+                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(0)));
         syntaxpfadErwartet.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S6"), new Symbolidentifizierung(Integer.valueOf(6))));
+                new Symbolkennung(new Symbolbezeichnung("S6"), new Symbolidentifizierung(6)));
         syntaxpfadErwartet.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S6-2"), new Symbolidentifizierung(Integer.valueOf(62))));
+                new Symbolkennung(new Symbolbezeichnung("S6-2"), new Symbolidentifizierung(62)));
         final Syntaxpfadbehandlung syntaxpfadbehandlung = new Syntaxpfadbehandlung(grammatik);
         final Syntaxpfad syntaxpfadErgebnis = syntaxpfadbehandlung.findeNaechstesSymbol(syntaxpfadAktuell);
         assertEquals(syntaxpfadErwartet, syntaxpfadErgebnis);
@@ -324,13 +405,13 @@ public class SyntaxpfadbehandlungTest
         final Grammatik grammatik = mockGrammatik();
         final Syntaxpfad syntaxpfadAktuell = new Syntaxpfad();
         syntaxpfadAktuell.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(Integer.valueOf(0))));
+                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(0)));
         syntaxpfadAktuell.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S7"), new Symbolidentifizierung(Integer.valueOf(7))));
+                new Symbolkennung(new Symbolbezeichnung("S7"), new Symbolidentifizierung(7)));
         syntaxpfadAktuell.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S7-1"), new Symbolidentifizierung(Integer.valueOf(71))));
+                new Symbolkennung(new Symbolbezeichnung("S7-1"), new Symbolidentifizierung(71)));
         syntaxpfadAktuell.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("Z7-1-2"), new Symbolidentifizierung(Integer.valueOf(7120))));
+                new Symbolkennung(new Symbolbezeichnung("Z7-1-2"), new Symbolidentifizierung(7120)));
         final Syntaxpfad syntaxpfadErwartet = new Syntaxpfad();
         final Syntaxpfadbehandlung syntaxpfadbehandlung = new Syntaxpfadbehandlung(grammatik);
         final Syntaxpfad syntaxpfadErgebnis = syntaxpfadbehandlung.findeNaechstesSymbol(syntaxpfadAktuell);
@@ -342,16 +423,16 @@ public class SyntaxpfadbehandlungTest
         final Grammatik grammatik = erstelleGrammatik();
         final Syntaxpfad syntaxpfadAktuell = new Syntaxpfad();
         syntaxpfadAktuell.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(Integer.valueOf(0))));
+                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(0)));
         syntaxpfadAktuell.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S1"), new Symbolidentifizierung(Integer.valueOf(1))));
+                new Symbolkennung(new Symbolbezeichnung("S1"), new Symbolidentifizierung(1)));
         syntaxpfadAktuell.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("Z1-1"), new Symbolidentifizierung(Integer.valueOf(6))));
+                new Symbolkennung(new Symbolbezeichnung("Z1-1"), new Symbolidentifizierung(6)));
         final Syntaxpfad syntaxpfadErwartet = new Syntaxpfad();
         syntaxpfadErwartet.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(Integer.valueOf(0))));
+                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(0)));
         syntaxpfadErwartet.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("Z2"), new Symbolidentifizierung(Integer.valueOf(2))));
+                new Symbolkennung(new Symbolbezeichnung("Z2"), new Symbolidentifizierung(2)));
         final Syntaxpfadbehandlung syntaxpfadbehandlung = new Syntaxpfadbehandlung(grammatik);
         final Syntaxpfad syntaxpfadErgebnis = syntaxpfadbehandlung.findeNaechstesSymbol(syntaxpfadAktuell);
         assertEquals(syntaxpfadErwartet, syntaxpfadErgebnis);
@@ -362,14 +443,14 @@ public class SyntaxpfadbehandlungTest
         final Grammatik grammatik = erstelleGrammatik();
         final Syntaxpfad syntaxpfadAktuell = new Syntaxpfad();
         syntaxpfadAktuell.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(Integer.valueOf(0))));
+                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(0)));
         syntaxpfadAktuell.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("Z2"), new Symbolidentifizierung(Integer.valueOf(2))));
+                new Symbolkennung(new Symbolbezeichnung("Z2"), new Symbolidentifizierung(2)));
         final Syntaxpfad syntaxpfadErwartet = new Syntaxpfad();
         syntaxpfadErwartet.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(Integer.valueOf(0))));
+                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(0)));
         syntaxpfadErwartet.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("Z3"), new Symbolidentifizierung(Integer.valueOf(3))));
+                new Symbolkennung(new Symbolbezeichnung("Z3"), new Symbolidentifizierung(3)));
         final Syntaxpfadbehandlung syntaxpfadbehandlung = new Syntaxpfadbehandlung(grammatik);
         final Syntaxpfad syntaxpfadErgebnis = syntaxpfadbehandlung.findeNaechstesSymbol(syntaxpfadAktuell);
         assertEquals(syntaxpfadErwartet, syntaxpfadErgebnis);
@@ -380,16 +461,16 @@ public class SyntaxpfadbehandlungTest
         final Grammatik grammatik = erstelleGrammatik();
         final Syntaxpfad syntaxpfadAktuell = new Syntaxpfad();
         syntaxpfadAktuell.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(Integer.valueOf(0))));
+                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(0)));
         syntaxpfadAktuell.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S4"), new Symbolidentifizierung(Integer.valueOf(4))));
+                new Symbolkennung(new Symbolbezeichnung("S4"), new Symbolidentifizierung(4)));
         syntaxpfadAktuell.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("Z4-1"), new Symbolidentifizierung(Integer.valueOf(7))));
+                new Symbolkennung(new Symbolbezeichnung("Z4-1"), new Symbolidentifizierung(7)));
         final Syntaxpfad syntaxpfadErwartet = new Syntaxpfad();
         syntaxpfadErwartet.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(Integer.valueOf(0))));
+                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(0)));
         syntaxpfadErwartet.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S5"), new Symbolidentifizierung(Integer.valueOf(5))));
+                new Symbolkennung(new Symbolbezeichnung("S5"), new Symbolidentifizierung(5)));
         final Syntaxpfadbehandlung syntaxpfadbehandlung = new Syntaxpfadbehandlung(grammatik);
         final Syntaxpfad syntaxpfadErgebnis = syntaxpfadbehandlung.findeNaechstesSymbol(syntaxpfadAktuell);
         assertEquals(syntaxpfadErwartet, syntaxpfadErgebnis);
@@ -400,14 +481,14 @@ public class SyntaxpfadbehandlungTest
         final Grammatik grammatik = erstelleGrammatik();
         final Syntaxpfad syntaxpfadAktuell = new Syntaxpfad();
         syntaxpfadAktuell.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(Integer.valueOf(0))));
+                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(0)));
         syntaxpfadAktuell.zufuegenBlatt(
-                new Symbolkennung(new Symbolbezeichnung("Z3"), new Symbolidentifizierung(Integer.valueOf(3))));
+                new Symbolkennung(new Symbolbezeichnung("Z3"), new Symbolidentifizierung(3)));
         final Syntaxpfad syntaxpfadErwartet = new Syntaxpfad();
         syntaxpfadErwartet.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(Integer.valueOf(0))));
+                new Symbolkennung(new Symbolbezeichnung("S"), new Symbolidentifizierung(0)));
         syntaxpfadErwartet.zufuegenKnoten(
-                new Symbolkennung(new Symbolbezeichnung("S4"), new Symbolidentifizierung(Integer.valueOf(4))));
+                new Symbolkennung(new Symbolbezeichnung("S4"), new Symbolidentifizierung(4)));
         final Syntaxpfadbehandlung syntaxpfadbehandlung = new Syntaxpfadbehandlung(grammatik);
         final Syntaxpfad syntaxpfadErgebnis = syntaxpfadbehandlung.findeNaechstesSymbol(syntaxpfadAktuell);
         assertEquals(syntaxpfadErwartet, syntaxpfadErgebnis);
@@ -462,25 +543,25 @@ public class SyntaxpfadbehandlungTest
             final Map<Symbolbezeichnung, Set<Zeichenfolge>> mapZeichenfolgen) {
         // S { S1 S2 S3 S4 S5 S6 S7}
         startregel.add(new Symbol(
-                new Symbolkennung(new Symbolbezeichnung("S1"), new Symbolidentifizierung(Integer.valueOf(1))),
+                new Symbolkennung(new Symbolbezeichnung("S1"), new Symbolidentifizierung(1)),
                 Kardinalitaet.GENAU_EINMAL));
         startregel.add(new Symbol(
-                new Symbolkennung(new Symbolbezeichnung("S2"), new Symbolidentifizierung(Integer.valueOf(2))),
+                new Symbolkennung(new Symbolbezeichnung("S2"), new Symbolidentifizierung(2)),
                 Kardinalitaet.GENAU_EINMAL));
         startregel.add(new Symbol(
-                new Symbolkennung(new Symbolbezeichnung("S3"), new Symbolidentifizierung(Integer.valueOf(3))),
+                new Symbolkennung(new Symbolbezeichnung("S3"), new Symbolidentifizierung(3)),
                 Kardinalitaet.GENAU_EINMAL));
         startregel.add(new Symbol(
-                new Symbolkennung(new Symbolbezeichnung("S4"), new Symbolidentifizierung(Integer.valueOf(4))),
+                new Symbolkennung(new Symbolbezeichnung("S4"), new Symbolidentifizierung(4)),
                 Kardinalitaet.GENAU_EINMAL));
         startregel.add(new Symbol(
-                new Symbolkennung(new Symbolbezeichnung("S5"), new Symbolidentifizierung(Integer.valueOf(5))),
+                new Symbolkennung(new Symbolbezeichnung("S5"), new Symbolidentifizierung(5)),
                 Kardinalitaet.GENAU_EINMAL));
         startregel.add(new Symbol(
-                new Symbolkennung(new Symbolbezeichnung("S6"), new Symbolidentifizierung(Integer.valueOf(6))),
+                new Symbolkennung(new Symbolbezeichnung("S6"), new Symbolidentifizierung(6)),
                 Kardinalitaet.GENAU_EINMAL));
         startregel.add(new Symbol(
-                new Symbolkennung(new Symbolbezeichnung("S7"), new Symbolidentifizierung(Integer.valueOf(7))),
+                new Symbolkennung(new Symbolbezeichnung("S7"), new Symbolidentifizierung(7)),
                 Kardinalitaet.GENAU_EINMAL));
         // S1 { Z1-1 Z1-2 Z1-3 }
         final List<Symbol> symboleS1 = Arrays.asList(erzeugeSymbol("Z1-1", 110), erzeugeSymbol("Z1-2", 120),
@@ -640,7 +721,7 @@ public class SyntaxpfadbehandlungTest
 
     private Symbol erzeugeSymbol(final String bezeichnung, final int wert) {
         return new Symbol(
-                new Symbolkennung(new Symbolbezeichnung(bezeichnung), new Symbolidentifizierung(Integer.valueOf(wert))),
+                new Symbolkennung(new Symbolbezeichnung(bezeichnung), new Symbolidentifizierung(wert)),
                 Kardinalitaet.GENAU_EINMAL);
     }
 

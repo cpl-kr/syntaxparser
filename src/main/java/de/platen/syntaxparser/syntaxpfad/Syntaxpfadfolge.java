@@ -2,46 +2,68 @@ package de.platen.syntaxparser.syntaxpfad;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import de.platen.syntaxparser.SyntaxparserException;
 
-public class Syntaxpfadfolge
-{
+public class Syntaxpfadfolge {
 
     private final List<SyntaxpfadMitWort> syntaxpfadeMitWort = new ArrayList<>();
     private Syntaxpfad aktuell = null;
+    private int gesamtlaenge = 0;
 
     public Syntaxpfadfolge() {
     }
 
     public Syntaxpfadfolge(final List<SyntaxpfadMitWort> syntaxpfadeMitWort) {
-        if ((syntaxpfadeMitWort == null) || syntaxpfadeMitWort.isEmpty()) {
+        if (syntaxpfadeMitWort == null) {
             throw new SyntaxparserException();
         }
         this.syntaxpfadeMitWort.addAll(syntaxpfadeMitWort);
+        for (final SyntaxpfadMitWort syntaxpfadMitWort : this.syntaxpfadeMitWort) {
+            this.gesamtlaenge += syntaxpfadMitWort.getWort().length();
+        }
     }
 
     public void setzeAktuellenSyntaxpfad(final Syntaxpfad syntaxpfad) {
-        if ((syntaxpfad == null) || (aktuell != null) || !syntaxpfad.istFertig()) {
+        if ((syntaxpfad == null) || (this.aktuell != null) || !syntaxpfad.istFertig()) {
             throw new SyntaxparserException();
         }
-        aktuell = syntaxpfad;
+        this.aktuell = syntaxpfad.kopiere();
     }
 
     public void uebernehmeAktuellenSyntaxpfad(final String wort) {
-        if ((wort == null) || wort.isBlank() || (aktuell == null)) {
+        if ((wort == null) || wort.isBlank() || (this.aktuell == null)) {
             throw new SyntaxparserException();
         }
-        syntaxpfadeMitWort.add(new SyntaxpfadMitWort(aktuell.kopiere(), wort));
-        aktuell = null;
+        this.syntaxpfadeMitWort.add(new SyntaxpfadMitWort(this.aktuell.kopiere(), wort));
+        this.gesamtlaenge += wort.length();
+        this.aktuell = null;
     }
 
     public List<SyntaxpfadMitWort> getSyntaxpfadeMitWort() {
-        return syntaxpfadeMitWort;
+        return this.syntaxpfadeMitWort;
     }
 
     public Syntaxpfad getAktuell() {
-        return aktuell;
+        return this.aktuell;
+    }
+
+    public int getGesamtlaenge() {
+        return this.gesamtlaenge;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Syntaxpfadfolge that = (Syntaxpfadfolge) o;
+        return gesamtlaenge == that.gesamtlaenge && Objects.equals(syntaxpfadeMitWort, that.syntaxpfadeMitWort) && Objects.equals(aktuell, that.aktuell);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(syntaxpfadeMitWort, aktuell, gesamtlaenge);
     }
 
     @Override

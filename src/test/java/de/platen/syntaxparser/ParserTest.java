@@ -1,11 +1,18 @@
 package de.platen.syntaxparser;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 import java.util.List;
 
+import de.platen.syntaxparser.syntaxpfad.Syntaxpfadbehandlung;
+import de.platen.syntaxparser.syntaxpfad.Syntaxpfadersteller;
+import de.platen.syntaxparser.zeichenverarbeitung.Eingabewortabschluss;
+import de.platen.syntaxparser.zeichenverarbeitung.Satzabschluss;
+import de.platen.syntaxparser.zeichenverarbeitung.Wortabschluss;
+import de.platen.syntaxparser.zeichenverarbeitung.Zeichenverarbeitung;
 import org.junit.Test;
 
 import de.platen.syntaxparser.grammatik.Grammatik;
@@ -13,54 +20,117 @@ import de.platen.syntaxparser.grammatik.GrammatikAufbau;
 import de.platen.syntaxparser.grammatik.GrammatikLesen;
 import de.platen.syntaxparser.syntaxpfad.Syntaxpfad;
 import de.platen.syntaxparser.syntaxpfad.SyntaxpfadMitWort;
+import org.mockito.Mockito;
 
 public class ParserTest
 {
 
-    @Test(expected = SyntaxparserException.class)
+    @Test
     public void testKonstruktorparameterNull() {
-        new Parser(null);
-        fail();
+        final ParserInitialisierung parserInitialisierung = Mockito.mock(ParserInitialisierung.class);
+        final Zeichenverarbeitung zeichenverarbeitung = Mockito.mock(Zeichenverarbeitung.class);
+        final Eingabewortabschluss eingabewortabschluss = Mockito.mock(Eingabewortabschluss.class);
+        final Satzabschluss satzabschluss = Mockito.mock(Satzabschluss.class);
+        try {
+            new Parser(null, zeichenverarbeitung, eingabewortabschluss, satzabschluss);
+            fail();
+        } catch (SyntaxparserException e) {
+        }
+        try {
+            new Parser(parserInitialisierung, null, eingabewortabschluss, satzabschluss);
+            fail();
+        } catch (SyntaxparserException e) {
+        }
+        try {
+            new Parser(parserInitialisierung, zeichenverarbeitung, null, satzabschluss);
+            fail();
+        } catch (SyntaxparserException e) {
+        }
+        try {
+            new Parser(parserInitialisierung, zeichenverarbeitung, eingabewortabschluss, null);
+            fail();
+        } catch (SyntaxparserException e) {
+        }
     }
 
-    @Test(expected = SyntaxparserException.class)
+    @Test
     public void testVerarbeiteZeichenParameterNull() {
-        final List<String> regeln = Arrays.asList("S {S1 S2 S3}\n", "S1 \"test\"\n", "S2 [az]\n", "S3 (.,)");
-        final Grammatik grammatik = erstelleGrammatik(regeln);
-        final Parser parser = new Parser(grammatik);
-        parser.verarbeiteZeichen(null);
+        final ParserInitialisierung parserInitialisierung = Mockito.mock(ParserInitialisierung.class);
+        final Zeichenverarbeitung zeichenverarbeitung = Mockito.mock(Zeichenverarbeitung.class);
+        final Eingabewortabschluss eingabewortabschluss = Mockito.mock(Eingabewortabschluss.class);
+        final Satzabschluss satzabschluss = Mockito.mock(Satzabschluss.class);
+        final Parser parser = new Parser(parserInitialisierung, zeichenverarbeitung, eingabewortabschluss, satzabschluss);
+        try {
+            parser.verarbeiteZeichen(null);
+            fail();
+        } catch (SyntaxparserException e) {
+        }
     }
 
-    @Test(expected = ParseException.class)
-    public void testVerarbeiteZeichenParseFehler() {
+    @Test
+    public void testVerarbeiteZeichenParseFehler1() {
         final List<String> regeln = Arrays.asList("S {S1 S2 S3}\n", "S1 \"test\"\n", "S2 [az]\n", "S3 (.,)");
         final Grammatik grammatik = erstelleGrammatik(regeln);
-        final Parser parser = new Parser(grammatik);
-        final String text = "test abcxyz 0\n";
+        final ParserInitialisierung parserInitialisierung = new ParserInitialisierung(new Syntaxpfadersteller(grammatik), new Syntaxpfadbehandlung(grammatik));
+        final Wortabschluss wortabschluss = new Wortabschluss(new Syntaxpfadersteller(grammatik), new Syntaxpfadbehandlung(grammatik));
+        final Eingabewortabschluss eingabewortabschluss = new Eingabewortabschluss(wortabschluss);
+        final Satzabschluss satzabschluss = new Satzabschluss();
+        final Zeichenverarbeitung zeichenverarbeitung = new Zeichenverarbeitung(wortabschluss);
+        final Parser parser = new Parser(parserInitialisierung, zeichenverarbeitung, eingabewortabschluss, satzabschluss);
+        final String text = "test abcxyz";
         for (int index = 0; index < text.length(); index++) {
             parser.verarbeiteZeichen(text.charAt(index));
+        }
+        try {
+            parser.verarbeiteZeichen('0');
+            fail();
+        } catch (ParseException e) {
+        }
+    }
+
+    @Test
+    public void testVerarbeiteZeichenParseFehler2() {
+        final List<String> regeln = Arrays.asList("S {S1 S2 S3}\n", "S1 \"test\"\n", "S2 [az]\n", "S3 (.,)");
+        final Grammatik grammatik = erstelleGrammatik(regeln);
+        final ParserInitialisierung parserInitialisierung = new ParserInitialisierung(new Syntaxpfadersteller(grammatik), new Syntaxpfadbehandlung(grammatik));
+        final Wortabschluss wortabschluss = new Wortabschluss(new Syntaxpfadersteller(grammatik), new Syntaxpfadbehandlung(grammatik));
+        final Eingabewortabschluss eingabewortabschluss = new Eingabewortabschluss(wortabschluss);
+        final Satzabschluss satzabschluss = new Satzabschluss();
+        final Zeichenverarbeitung zeichenverarbeitung = new Zeichenverarbeitung(wortabschluss);
+        final Parser parser = new Parser(parserInitialisierung, zeichenverarbeitung, eingabewortabschluss, satzabschluss);
+        final String text = "test abcxyz ";
+        for (int index = 0; index < text.length(); index++) {
+            parser.verarbeiteZeichen(text.charAt(index));
+        }
+        try {
+            parser.verarbeiteZeichen('0');
+            fail();
+        } catch (ParseException e) {
         }
     }
 
     @Test
     public void testVerarbeiteZeichen1() {
-        final List<String> regeln = Arrays.asList("S {S1 S2 S3 S4}\n", //
+        final List<String> regeln = Arrays.asList("S { S1 S2 S3 S4 }\n", //
                 "S1 \"test1\\ test2\"\n", //
                 "S2 [az]\n", //
                 "S3 (.,\\\\)\n", //
                 "S4 <[0-9]+,[0-9]+>");
         final Grammatik grammatik = erstelleGrammatik(regeln);
-        final Parser parser = new Parser(grammatik);
-        final String text = "test1\\ test2 abcxyz ....\\\\,,,, 123,456\n";
+        final ParserInitialisierung parserInitialisierung = new ParserInitialisierung(new Syntaxpfadersteller(grammatik), new Syntaxpfadbehandlung(grammatik));
+        final Wortabschluss wortabschluss = new Wortabschluss(new Syntaxpfadersteller(grammatik), new Syntaxpfadbehandlung(grammatik));
+        final Eingabewortabschluss eingabewortabschluss = new Eingabewortabschluss(wortabschluss);
+        final Satzabschluss satzabschluss = new Satzabschluss();
+        final Zeichenverarbeitung zeichenverarbeitung = new Zeichenverarbeitung(wortabschluss);
+        final Parser parser = new Parser(parserInitialisierung, zeichenverarbeitung, eingabewortabschluss, satzabschluss);
+        final String text = "test1\\ test2 abcxyz ....\\\\,,,, 123,456";
         for (int index = 0; index < text.length(); index++) {
             parser.verarbeiteZeichen(text.charAt(index));
         }
-        final List<SyntaxpfadMitWort> syntaxpfadeMitWortErgebnis = parser.gebeSyntaxpfadeMitWort();
+        final List<SyntaxpfadMitWort> syntaxpfadeMitWortErgebnis = parser.ermittleSyntaxpfadeMitWort(true);
         assertEquals(4, syntaxpfadeMitWortErgebnis.size());
-        assertEquals("test1 test2", syntaxpfadeMitWortErgebnis.get(0).getWort());
-        assertEquals("abcxyz", syntaxpfadeMitWortErgebnis.get(1).getWort());
-        assertEquals("....\\,,,,", syntaxpfadeMitWortErgebnis.get(2).getWort());
-        assertEquals("123,456", syntaxpfadeMitWortErgebnis.get(3).getWort());
+        final List<String> wortfolge = Arrays.asList("test1 test2", "abcxyz", "....\\,,,,", "123,456");
+        checkWortfolge(wortfolge, syntaxpfadeMitWortErgebnis);
         checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(0).getSyntaxpfad(), Arrays.asList("S"), "S1");
         checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(1).getSyntaxpfad(), Arrays.asList("S"), "S2");
         checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(2).getSyntaxpfad(), Arrays.asList("S"), "S3");
@@ -71,26 +141,27 @@ public class ParserTest
     public void testVerarbeiteZeichen2() {
         final List<String> regeln = Arrays.asList("S { Operand Operationsteil }\n", //
                 "Operationsteil { Operator Operand }\n", //
-                "Operationsteil { Operator Operand Operationsteil}\n", //
-                "Operator (+-*/)\n", //
+                "Operationsteil { Operator Operand Operationsteil }\n", //
+                "Operator \"+\"\n", //
+                "Operator \"-\"\n", //
+                "Operator \"*\"\n", //
+                "Operator \"/\"\n", //
                 "Operand [09]\n");
         final Grammatik grammatik = erstelleGrammatik(regeln);
-        final Parser parser = new Parser(grammatik);
-        final String text = "111 + 222 - 333 * 444 / 555\n";
+        final ParserInitialisierung parserInitialisierung = new ParserInitialisierung(new Syntaxpfadersteller(grammatik), new Syntaxpfadbehandlung(grammatik));
+        final Wortabschluss wortabschluss = new Wortabschluss(new Syntaxpfadersteller(grammatik), new Syntaxpfadbehandlung(grammatik));
+        final Eingabewortabschluss eingabewortabschluss = new Eingabewortabschluss(wortabschluss);
+        final Satzabschluss satzabschluss = new Satzabschluss();
+        final Zeichenverarbeitung zeichenverarbeitung = new Zeichenverarbeitung(wortabschluss);
+        final Parser parser = new Parser(parserInitialisierung, zeichenverarbeitung, eingabewortabschluss, satzabschluss);
+        final String text = "111 + 222 - 333 * 444 / 555";
         for (int index = 0; index < text.length(); index++) {
             parser.verarbeiteZeichen(text.charAt(index));
         }
-        final List<SyntaxpfadMitWort> syntaxpfadeMitWortErgebnis = parser.gebeSyntaxpfadeMitWort();
+        final List<SyntaxpfadMitWort> syntaxpfadeMitWortErgebnis = parser.ermittleSyntaxpfadeMitWort(true);
         assertEquals(9, syntaxpfadeMitWortErgebnis.size());
-        assertEquals("111", syntaxpfadeMitWortErgebnis.get(0).getWort());
-        assertEquals("+", syntaxpfadeMitWortErgebnis.get(1).getWort());
-        assertEquals("222", syntaxpfadeMitWortErgebnis.get(2).getWort());
-        assertEquals("-", syntaxpfadeMitWortErgebnis.get(3).getWort());
-        assertEquals("333", syntaxpfadeMitWortErgebnis.get(4).getWort());
-        assertEquals("*", syntaxpfadeMitWortErgebnis.get(5).getWort());
-        assertEquals("444", syntaxpfadeMitWortErgebnis.get(6).getWort());
-        assertEquals("/", syntaxpfadeMitWortErgebnis.get(7).getWort());
-        assertEquals("555", syntaxpfadeMitWortErgebnis.get(8).getWort());
+        final List<String> wortfolge = Arrays.asList("111", "+", "222", "-", "333", "*", "444", "/", "555");
+        checkWortfolge(wortfolge, syntaxpfadeMitWortErgebnis);
         checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(0).getSyntaxpfad(), Arrays.asList("S"), "Operand");
         checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(1).getSyntaxpfad(), Arrays.asList("S", "Operationsteil"),
                 "Operator");
@@ -135,27 +206,21 @@ public class ParserTest
                 "Wort [AZ]\n", //
                 "Zahl [09]\n");
         final Grammatik grammatik = erstelleGrammatik(regeln);
-        final Parser parser = new Parser(grammatik);
-        final String text = "Kunde Kundennummer 123 Vorname Hans Nachname Meier Artikel Artikelbezeichnung Waschmaschine Artikelnummer 456 ; ;\n";
+        final ParserInitialisierung parserInitialisierung = new ParserInitialisierung(new Syntaxpfadersteller(grammatik), new Syntaxpfadbehandlung(grammatik));
+        final Wortabschluss wortabschluss = new Wortabschluss(new Syntaxpfadersteller(grammatik), new Syntaxpfadbehandlung(grammatik));
+        final Eingabewortabschluss eingabewortabschluss = new Eingabewortabschluss(wortabschluss);
+        final Satzabschluss satzabschluss = new Satzabschluss();
+        final Zeichenverarbeitung zeichenverarbeitung = new Zeichenverarbeitung(wortabschluss);
+        final Parser parser = new Parser(parserInitialisierung, zeichenverarbeitung, eingabewortabschluss, satzabschluss);
+        final String text = "Kunde Kundennummer 123 Vorname Hans Nachname Meier Artikel Artikelbezeichnung Waschmaschine Artikelnummer 456 ; ;";
         for (int index = 0; index < text.length(); index++) {
             parser.verarbeiteZeichen(text.charAt(index));
         }
-        final List<SyntaxpfadMitWort> syntaxpfadeMitWortErgebnis = parser.gebeSyntaxpfadeMitWort();
+        final List<SyntaxpfadMitWort> syntaxpfadeMitWortErgebnis = parser.ermittleSyntaxpfadeMitWort(true);
         assertEquals(14, syntaxpfadeMitWortErgebnis.size());
-        assertEquals("Kunde", syntaxpfadeMitWortErgebnis.get(0).getWort());
-        assertEquals("Kundennummer", syntaxpfadeMitWortErgebnis.get(1).getWort());
-        assertEquals("123", syntaxpfadeMitWortErgebnis.get(2).getWort());
-        assertEquals("Vorname", syntaxpfadeMitWortErgebnis.get(3).getWort());
-        assertEquals("Hans", syntaxpfadeMitWortErgebnis.get(4).getWort());
-        assertEquals("Nachname", syntaxpfadeMitWortErgebnis.get(5).getWort());
-        assertEquals("Meier", syntaxpfadeMitWortErgebnis.get(6).getWort());
-        assertEquals("Artikel", syntaxpfadeMitWortErgebnis.get(7).getWort());
-        assertEquals("Artikelbezeichnung", syntaxpfadeMitWortErgebnis.get(8).getWort());
-        assertEquals("Waschmaschine", syntaxpfadeMitWortErgebnis.get(9).getWort());
-        assertEquals("Artikelnummer", syntaxpfadeMitWortErgebnis.get(10).getWort());
-        assertEquals("456", syntaxpfadeMitWortErgebnis.get(11).getWort());
-        assertEquals(";", syntaxpfadeMitWortErgebnis.get(12).getWort());
-        assertEquals(";", syntaxpfadeMitWortErgebnis.get(13).getWort());
+        final List<String> wortfolge = Arrays.asList("Kunde", "Kundennummer", "123", "Vorname", "Hans", "Nachname",
+                "Meier", "Artikel", "Artikelbezeichnung", "Waschmaschine", "Artikelnummer", "456", ";", ";");
+        checkWortfolge(wortfolge, syntaxpfadeMitWortErgebnis);
         checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(0).getSyntaxpfad(), Arrays.asList("S", "Kunden", "Kunde"),
                 "Kundentext");
         checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(1).getSyntaxpfad(), Arrays.asList("S", "Kunden", "Kunde"),
@@ -185,6 +250,51 @@ public class ParserTest
         checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(13).getSyntaxpfad(), Arrays.asList("S", "Kunden"), "Semikolon");
     }
 
+    @Test
+    public void testVerarbeiteZeichen4() {
+        final List<String> regeln = Arrays.asList("S { Operand Operationsteil }\n", //
+                "Operationsteil { Operator Operand }\n", //
+                "Operationsteil { Operator Operand Operationsteil }\n", //
+                "Operator \"+\"\n", //
+                "Operator \"-\"\n", //
+                "Operator \"*\"\n", //
+                "Operator \"/\"\n", //
+                "Operand [09]\n");
+        final Grammatik grammatik = erstelleGrammatik(regeln);
+        final ParserInitialisierung parserInitialisierung = new ParserInitialisierung(new Syntaxpfadersteller(grammatik), new Syntaxpfadbehandlung(grammatik));
+        final Wortabschluss wortabschluss = new Wortabschluss(new Syntaxpfadersteller(grammatik), new Syntaxpfadbehandlung(grammatik));
+        final Eingabewortabschluss eingabewortabschluss = new Eingabewortabschluss(wortabschluss);
+        final Satzabschluss satzabschluss = new Satzabschluss();
+        final Zeichenverarbeitung zeichenverarbeitung = new Zeichenverarbeitung(wortabschluss);
+        final Parser parser = new Parser(parserInitialisierung, zeichenverarbeitung, eingabewortabschluss, satzabschluss);
+        final String text = "111+222-333*444/555";
+        for (int index = 0; index < text.length(); index++) {
+            parser.verarbeiteZeichen(text.charAt(index));
+        }
+        final List<SyntaxpfadMitWort> syntaxpfadeMitWortErgebnis = parser.ermittleSyntaxpfadeMitWort(true);
+        assertNotNull(syntaxpfadeMitWortErgebnis);
+        assertEquals(9, syntaxpfadeMitWortErgebnis.size());
+        final List<String> wortfolge = Arrays.asList("111", "+", "222", "-", "333", "*", "444", "/", "555");
+        checkWortfolge(wortfolge, syntaxpfadeMitWortErgebnis);
+        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(0).getSyntaxpfad(), Arrays.asList("S"), "Operand");
+        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(1).getSyntaxpfad(), Arrays.asList("S", "Operationsteil"),
+                "Operator");
+        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(2).getSyntaxpfad(), Arrays.asList("S", "Operationsteil"),
+                "Operand");
+        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(3).getSyntaxpfad(),
+                Arrays.asList("S", "Operationsteil", "Operationsteil"), "Operator");
+        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(4).getSyntaxpfad(),
+                Arrays.asList("S", "Operationsteil", "Operationsteil"), "Operand");
+        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(5).getSyntaxpfad(),
+                Arrays.asList("S", "Operationsteil", "Operationsteil", "Operationsteil"), "Operator");
+        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(6).getSyntaxpfad(),
+                Arrays.asList("S", "Operationsteil", "Operationsteil", "Operationsteil"), "Operand");
+        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(7).getSyntaxpfad(),
+                Arrays.asList("S", "Operationsteil", "Operationsteil", "Operationsteil", "Operationsteil"), "Operator");
+        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(8).getSyntaxpfad(),
+                Arrays.asList("S", "Operationsteil", "Operationsteil", "Operationsteil", "Operationsteil"), "Operand");
+    }
+
     private Grammatik erstelleGrammatik(final List<String> regeln) {
         final StringBuilder stringBuilder = new StringBuilder();
         for (final String regel : regeln) {
@@ -198,6 +308,14 @@ public class ParserTest
         }
         grammatikLesen.checkGrammatik();
         return grammatikLesen.getGrammatik();
+    }
+
+    private void checkWortfolge(final List<String> wortfolge,
+            final List<SyntaxpfadMitWort> syntaxpfadeMitWortErgebnis) {
+        assertEquals(wortfolge.size(), syntaxpfadeMitWortErgebnis.size());
+        for (int index = 0; index < wortfolge.size(); index++) {
+            assertEquals(wortfolge.get(index), syntaxpfadeMitWortErgebnis.get(index).getWort());
+        }
     }
 
     private void checkSyntaxpfad(final Syntaxpfad syntaxpfad, final List<String> knoten, final String blatt) {
