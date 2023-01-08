@@ -49,7 +49,6 @@ public class Symbolkennung implements Serializable
 
     @Override
     public String toString() {
-        return "Symbolkennung [symbolbezeichnung=" + symbolbezeichnung + ", symbolidentifizierung="
-                + symbolidentifizierung + "]";
+        return "Symbolkennung: [" + symbolbezeichnung + ", " + symbolidentifizierung + "]";
     }
 }

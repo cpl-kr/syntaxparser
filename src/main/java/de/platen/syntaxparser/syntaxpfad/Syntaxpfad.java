@@ -96,36 +96,6 @@ public class Syntaxpfad
 
     @Override
     public String toString() {
-        final StringBuilder stringBuilder = new StringBuilder();
-        final String leerzeichen = "    ";
-        stringBuilder.append("Syntaxpfad\n");
-        stringBuilder.append(leerzeichen);
-        stringBuilder.append("Knoten");
-        stringBuilder.append("\n");
-        for (final Symbolkennung symbolkennung : knoten) {
-            stringBuilder.append(leerzeichen);
-            stringBuilder.append(leerzeichen);
-            stringBuilder.append(symbolkennung);
-            stringBuilder.append("\n");
-        }
-        stringBuilder.append(leerzeichen);
-        stringBuilder.append("Blatt");
-        stringBuilder.append("\n");
-        stringBuilder.append(leerzeichen);
-        stringBuilder.append(leerzeichen);
-        if (blatt != null) {
-            stringBuilder.append(blatt);
-        } else {
-            stringBuilder.append("null");
-        }
-        stringBuilder.append("\n");
-        stringBuilder.append(leerzeichen);
-        stringBuilder.append("IstFertig");
-        stringBuilder.append("\n");
-        stringBuilder.append(leerzeichen);
-        stringBuilder.append(leerzeichen);
-        stringBuilder.append(istFertig);
-        stringBuilder.append("\n");
-        return stringBuilder.toString();
+        return "Syntaxpfad: [" + knoten + ", " + blatt + "]";
     }
 }

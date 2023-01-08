@@ -45,17 +45,6 @@ public class SyntaxpfadMitWort
 
     @Override
     public String toString() {
-        final StringBuilder stringBuilder = new StringBuilder();
-        final String leerzeichen = "    ";
-        stringBuilder.append("SyntaxpfadMitWort\n");
-        stringBuilder.append(leerzeichen);
-        stringBuilder.append(syntaxpfad.toString());
-        stringBuilder.append("\n");
-        stringBuilder.append(leerzeichen);
-        stringBuilder.append("Wort\n");
-        stringBuilder.append(leerzeichen);
-        stringBuilder.append(wort);
-        stringBuilder.append("\n");
-        return stringBuilder.toString();
+        return "SyntaxpfadMitWort: [" + syntaxpfad + ", " + "Wort=" + "'" + wort + "'" + "]";
     }
 }

@@ -42,6 +42,6 @@ public class Symbolbezeichnung implements Serializable
 
     @Override
     public String toString() {
-        return "Symbolbezeichnung [symbolbezeichnung=" + symbolbezeichnung + "]";
+        return "Symbolbezeichnung=" + "'" + symbolbezeichnung + "'";
     }
 }

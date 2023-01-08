@@ -42,6 +42,6 @@ public class Symbolidentifizierung implements Serializable
 
     @Override
     public String toString() {
-        return "Symbolidentifizierung [symbolidentifizierung=" + symbolidentifizierung + "]";
+        return "Symbolidentifizierung=" + symbolidentifizierung;
     }
 }
