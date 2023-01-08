@@ -75,6 +75,11 @@ public class Parser
         Set<Verarbeitungsstand> verarbeitungsstaendeKopie = new HashSet<>(this.verarbeitungsstaendeInBearbeitung);
         return this.satzabschluss.schliesseSatzAb(verarbeitungsstaendeKopie);
     }
+
+    public String ermittleSyntaxpfadeMitWortAlsString(final boolean alsAbschluss) {
+        return ermittleSyntaxpfadeMitWort(alsAbschluss).toString();
+    }
+
     private boolean istWhiteSpace(final Character c) {
         return (c == ' ') || (c == '\t') || istZeilenende(c);
     }

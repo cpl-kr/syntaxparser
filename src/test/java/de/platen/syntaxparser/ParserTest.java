@@ -295,6 +295,31 @@ public class ParserTest
                 Arrays.asList("S", "Operationsteil", "Operationsteil", "Operationsteil", "Operationsteil"), "Operand");
     }
 
+    @Test
+    public void testErmittleSyntaxpfadeMitWortAlsString() {
+        final List<String> regeln = Arrays.asList("S { Operand Operationsteil }\n", //
+                "Operationsteil { Operator Operand }\n", //
+                "Operationsteil { Operator Operand Operationsteil }\n", //
+                "Operator \"+\"\n", //
+                "Operator \"-\"\n", //
+                "Operator \"*\"\n", //
+                "Operator \"/\"\n", //
+                "Operand [09]\n");
+        final Grammatik grammatik = erstelleGrammatik(regeln);
+        final ParserInitialisierung parserInitialisierung = new ParserInitialisierung(new Syntaxpfadersteller(grammatik), new Syntaxpfadbehandlung(grammatik));
+        final Wortabschluss wortabschluss = new Wortabschluss(new Syntaxpfadersteller(grammatik), new Syntaxpfadbehandlung(grammatik));
+        final Eingabewortabschluss eingabewortabschluss = new Eingabewortabschluss(wortabschluss);
+        final Satzabschluss satzabschluss = new Satzabschluss();
+        final Zeichenverarbeitung zeichenverarbeitung = new Zeichenverarbeitung(wortabschluss);
+        final Parser parser = new Parser(parserInitialisierung, zeichenverarbeitung, eingabewortabschluss, satzabschluss);
+        final String text = "111+222-333*444/555";
+        for (int index = 0; index < text.length(); index++) {
+            parser.verarbeiteZeichen(text.charAt(index));
+        }
+        final String ergebnis = parser.ermittleSyntaxpfadeMitWortAlsString(true);
+        assertEquals("[SyntaxpfadMitWort: [Syntaxpfad: [[Symbolkennung: [Symbolbezeichnung='S', Symbolidentifizierung=0]], Symbolkennung: [Symbolbezeichnung='Operand', Symbolidentifizierung=1]], Wort='111'], SyntaxpfadMitWort: [Syntaxpfad: [[Symbolkennung: [Symbolbezeichnung='S', Symbolidentifizierung=0], Symbolkennung: [Symbolbezeichnung='Operationsteil', Symbolidentifizierung=2]], Symbolkennung: [Symbolbezeichnung='Operator', Symbolidentifizierung=5]], Wort='+'], SyntaxpfadMitWort: [Syntaxpfad: [[Symbolkennung: [Symbolbezeichnung='S', Symbolidentifizierung=0], Symbolkennung: [Symbolbezeichnung='Operationsteil', Symbolidentifizierung=2]], Symbolkennung: [Symbolbezeichnung='Operand', Symbolidentifizierung=6]], Wort='222'], SyntaxpfadMitWort: [Syntaxpfad: [[Symbolkennung: [Symbolbezeichnung='S', Symbolidentifizierung=0], Symbolkennung: [Symbolbezeichnung='Operationsteil', Symbolidentifizierung=2], Symbolkennung: [Symbolbezeichnung='Operationsteil', Symbolidentifizierung=7]], Symbolkennung: [Symbolbezeichnung='Operator', Symbolidentifizierung=5]], Wort='-'], SyntaxpfadMitWort: [Syntaxpfad: [[Symbolkennung: [Symbolbezeichnung='S', Symbolidentifizierung=0], Symbolkennung: [Symbolbezeichnung='Operationsteil', Symbolidentifizierung=2], Symbolkennung: [Symbolbezeichnung='Operationsteil', Symbolidentifizierung=7]], Symbolkennung: [Symbolbezeichnung='Operand', Symbolidentifizierung=6]], Wort='333'], SyntaxpfadMitWort: [Syntaxpfad: [[Symbolkennung: [Symbolbezeichnung='S', Symbolidentifizierung=0], Symbolkennung: [Symbolbezeichnung='Operationsteil', Symbolidentifizierung=2], Symbolkennung: [Symbolbezeichnung='Operationsteil', Symbolidentifizierung=7], Symbolkennung: [Symbolbezeichnung='Operationsteil', Symbolidentifizierung=7]], Symbolkennung: [Symbolbezeichnung='Operator', Symbolidentifizierung=5]], Wort='*'], SyntaxpfadMitWort: [Syntaxpfad: [[Symbolkennung: [Symbolbezeichnung='S', Symbolidentifizierung=0], Symbolkennung: [Symbolbezeichnung='Operationsteil', Symbolidentifizierung=2], Symbolkennung: [Symbolbezeichnung='Operationsteil', Symbolidentifizierung=7], Symbolkennung: [Symbolbezeichnung='Operationsteil', Symbolidentifizierung=7]], Symbolkennung: [Symbolbezeichnung='Operand', Symbolidentifizierung=6]], Wort='444'], SyntaxpfadMitWort: [Syntaxpfad: [[Symbolkennung: [Symbolbezeichnung='S', Symbolidentifizierung=0], Symbolkennung: [Symbolbezeichnung='Operationsteil', Symbolidentifizierung=2], Symbolkennung: [Symbolbezeichnung='Operationsteil', Symbolidentifizierung=7], Symbolkennung: [Symbolbezeichnung='Operationsteil', Symbolidentifizierung=7], Symbolkennung: [Symbolbezeichnung='Operationsteil', Symbolidentifizierung=7]], Symbolkennung: [Symbolbezeichnung='Operator', Symbolidentifizierung=3]], Wort='/'], SyntaxpfadMitWort: [Syntaxpfad: [[Symbolkennung: [Symbolbezeichnung='S', Symbolidentifizierung=0], Symbolkennung: [Symbolbezeichnung='Operationsteil', Symbolidentifizierung=2], Symbolkennung: [Symbolbezeichnung='Operationsteil', Symbolidentifizierung=7], Symbolkennung: [Symbolbezeichnung='Operationsteil', Symbolidentifizierung=7], Symbolkennung: [Symbolbezeichnung='Operationsteil', Symbolidentifizierung=7]], Symbolkennung: [Symbolbezeichnung='Operand', Symbolidentifizierung=4]], Wort='555']]", ergebnis);
+    }
+
     private Grammatik erstelleGrammatik(final List<String> regeln) {
         final StringBuilder stringBuilder = new StringBuilder();
         for (final String regel : regeln) {
