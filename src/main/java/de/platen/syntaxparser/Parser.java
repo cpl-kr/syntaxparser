@@ -31,7 +31,7 @@ public class Parser
         this.satzabschluss = satzabschluss;
     }
 
-    public void verarbeiteZeichen(final Character c) {
+    public boolean verarbeiteZeichen(final Character c) {
         if (c == null) {
             throw new SyntaxparserException();
         }
@@ -42,13 +42,13 @@ public class Parser
                     this.istSondermodus = true;
                 } else {
                     if (!this.zeichenverarbeitung.verarbeiteZeichen(c, this.verarbeitungsstaendeInBearbeitung)) {
-                        throw new ParseException();
+                        return false;
                     }
                 }
             } else {
                 if (!this.istWortabschlussDurchgefuehrt) {
                     if (!this.eingabewortabschluss.schliesseEingabewortAb(this.verarbeitungsstaendeInBearbeitung)) {
-                        throw new ParseException();
+                        return false;
                     }
                     this.istWortabschlussDurchgefuehrt = true;
                 }
@@ -56,9 +56,10 @@ public class Parser
         } else {
             this.istSondermodus = false;
             if (!this.zeichenverarbeitung.verarbeiteZeichen(c, this.verarbeitungsstaendeInBearbeitung)) {
-                throw new ParseException();
+                return false;
             }
         }
+        return true;
     }
 
     public List<SyntaxpfadMitWort> ermittleSyntaxpfadeMitWort(final boolean alsAbschluss) {

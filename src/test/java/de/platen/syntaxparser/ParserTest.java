@@ -3,6 +3,8 @@ package de.platen.syntaxparser;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -79,13 +81,9 @@ public class ParserTest
         final Parser parser = new Parser(parserInitialisierung, zeichenverarbeitung, eingabewortabschluss, satzabschluss);
         final String text = "test abcxyz";
         for (int index = 0; index < text.length(); index++) {
-            parser.verarbeiteZeichen(text.charAt(index));
+            assertTrue(parser.verarbeiteZeichen(text.charAt(index)));
         }
-        try {
-            parser.verarbeiteZeichen('0');
-            fail();
-        } catch (ParseException e) {
-        }
+        assertFalse(parser.verarbeiteZeichen('0'));
     }
 
     @Test
@@ -100,13 +98,9 @@ public class ParserTest
         final Parser parser = new Parser(parserInitialisierung, zeichenverarbeitung, eingabewortabschluss, satzabschluss);
         final String text = "test abcxyz ";
         for (int index = 0; index < text.length(); index++) {
-            parser.verarbeiteZeichen(text.charAt(index));
+            assertTrue(parser.verarbeiteZeichen(text.charAt(index)));
         }
-        try {
-            parser.verarbeiteZeichen('0');
-            fail();
-        } catch (ParseException e) {
-        }
+        assertFalse(parser.verarbeiteZeichen('0'));
     }
 
     @Test
