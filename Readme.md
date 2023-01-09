@@ -57,7 +57,7 @@ Beispiel für den Aufbau einer Grammatik:
     GrammatikAufbau grammatikAufbau = new GrammatikAufbau();
     GrammatikLesen grammatikLesen = new GrammatikLesen(grammatikAufbau);
     String grammatikText = "...";
-    for (int index = 0; index < grammatik.length(); index++) {
+    for (int index = 0; index < grammatikText.length(); index++) {
         grammatikLesen.verarbeiteZeichen(grammatikText.charAt(index));
     }
     grammatikLesen.checkGrammatik();
@@ -79,12 +79,13 @@ Beispiel für die Verwendung des Parsers:
     Grammatik grammatik = ....;
     Parser parser = new Parser(grammatik);
     String text = "...";
-    for (int index = 0; index < grammatik.length(); index++) {
+    for (int index = 0; index < text.length(); index++) {
         parser.verarbeiteZeichen(text.charAt(index);
     }
     List<SyntaxpfadMitWort> syntaxpfadeMitWort = parser.ermittleSyntaxpfadeMitWort(true);
 </pre>
-Zur Methode verarbeiteZeichen():
+Zur Methode verarbeiteZeichen():\
+Diese Methode gibt einen boolschen Wert zurück, true im Falle, dass das Teichen verarbeitet werden konnte.\
 Als Whitespaces werden " ", "\n", "\r" und "\t" gewertet.
 Das Zeichen "\" wird als Steuerzeichen gewertet, wobei das nachfolgende Zeichen als Zeichen zur weiteren Verarbeitung gewertet wird.
 So können die Whitespaces und das Steuerzeichen "\" als Zeichen zur weiteren Verarbeitung gewertet werden.
@@ -191,7 +192,7 @@ Example of how to build a grammar:\
     GrammatikAufbau grammatikAufbau = new GrammatikAufbau();
     GrammatikLesen grammatikLesen = new GrammatikLesen(grammatikAufbau);
     String grammatikText = "...";
-    for (int index = 0; index < grammatik.length(); index++) {
+    for (int index = 0; index < grammatikText.length(); index++) {
         grammatikLesen.verarbeiteZeichen(grammatikText.charAt(index));
     }
     grammatikLesen.checkGrammatik();
@@ -213,12 +214,13 @@ Example of the use of the parser:
     Grammatik grammatik = ....;
     Parser parser = new Parser(grammatik);
     String text = "...";
-    for (int index = 0; index < grammatik.length(); index++) {
+    for (int index = 0; index < text.length(); index++) {
         parser.verarbeiteZeichen(text.charAt(index);
     }
     List<SyntaxpfadMitWort> syntaxpfadeMitWort = parser.ermittleSyntaxpfadeMitWort(true);
 </pre>
-To the verarbeiteZeichen() method:
+To the verarbeiteZeichen() method\:
+This method returns a boolean value, true in the case that the ponding could be processed.\
 " ", "\n", "\r" and "\t" are evaluated as whitespaces.
 The character "\" is evaluated as a control character, whereas the following character is evaluated as a character for further processing.
 Thus, the whitespaces and the control character "\" can be evaluated as characters for further processing.
