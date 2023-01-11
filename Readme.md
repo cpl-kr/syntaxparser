@@ -85,7 +85,7 @@ Beispiel für die Verwendung des Parsers:
     List<SyntaxpfadMitWort> syntaxpfadeMitWort = parser.ermittleSyntaxpfadeMitWort(true);
 </pre>
 Zur Methode verarbeiteZeichen():\
-Diese Methode gibt einen boolschen Wert zurück, true im Falle, dass das Teichen verarbeitet werden konnte.\
+Diese Methode gibt einen boolschen Wert zurück, true im Falle, dass das Zeichen verarbeitet werden konnte.\
 Als Whitespaces werden " ", "\n", "\r" und "\t" gewertet.
 Das Zeichen "\" wird als Steuerzeichen gewertet, wobei das nachfolgende Zeichen als Zeichen zur weiteren Verarbeitung gewertet wird.
 So können die Whitespaces und das Steuerzeichen "\" als Zeichen zur weiteren Verarbeitung gewertet werden.
@@ -93,7 +93,7 @@ Das Ergebnis kann mit der Methode ermittleSyntaxpfadeMitWort(boolean alsAbschlus
 Das boolsche Flag "alsAbschluss" dient zur Unterscheidung, ob die Methode zum Schluss des Parsens oder als Zwischenstand aufgerufen wird.
 Wird diese Methode als Zwischenstand aufgerufen, so muss vorher die Methode "verarbeiteZeichen" mit einem Whitespace aufgerufen worden sein.
 Man erhält eine Liste von "SyntaxpfadMitWort" mit den Methoden getSyntaxpfad() und getWort().
-Die Methode getSyntaxpfad() liefert einen Syntaxpfad mit einer Knotenfolge und einem Blatt (also Symbolen eines Syntaxbaumes).
+Die Methode getSyntaxpfad() liefert einen Syntaxpfad mit einer Knotenfolge und einem Blatt (also Symbolen eines Syntaxbaumes), was einer Grammatikregel entspricht.
 
 
 ## Behandlung unterschiedlicher Versionen einer Grammatik
@@ -228,7 +228,7 @@ The result can be fetched with the method ermittleSyntaxpfadeMitWort(boolean asT
 The boolean flag "alsAbschluss" serves to distinguish whether the method is called at the end of the parsing or as an intermediate state.
 If this method is called as an intermediate state, the method "processcharacters" must have been called with a whitespace beforehand.
 One gets a list of "SyntaxpathWithWord" with the methods getSyntaxpath() and getWord().
-The getSyntaxpath() method returns a syntax path with a node sequence and a leaf (i.e. symbols of a syntax tree).
+The getSyntaxpath() method returns a syntax path with a node sequence and a leaf (i.e. symbols of a syntax tree), which corresponds to a grammar rule.
 
 
 ## Handling different versions of a grammar
