@@ -63,11 +63,17 @@ Beispiel für den Aufbau einer Grammatik:
     grammatikLesen.checkGrammatik();
     Grammatik grammatik = grammatikLesen.getGrammatik();
 </pre>
-Zur Methode verarbeiteZeichen():
+Zur Methode verarbeiteZeichen():\
 Die Grammatik wird Zeichen für Zeichen eingelesen.
 Als Whitespaces werden " ", "\n", "\r" und "\t" gewertet.
 Das Zeichen "\" wird als Steuerzeichen gewertet, wobei das nachfolgende Zeichen als Zeichen zur weiteren Verarbeitung gewertet wird.
-So können sowohl die Whitespaces als auch die Steuerzeichen """, ")", "]", ">" und "\" als Zeichen zur weiteren Verarbeitung gewertet werden.
+So können sowohl die Whitespaces als auch die Steuerzeichen """, ")", "]", ">" und "\" als Zeichen zur weiteren Verarbeitung gewertet werden.\
+Zur Methode checkGrammatik():\
+Die Methode prüft die Grammatik auf Konsistenz und wirft eine GrammatikException, wenn ein Fehler bei der Prüfung erkannt wird.\
+Zur Methode checkGrammatikStrikt():\
+Die Methode führt eine einschränkendere Prüfung durch und wirft eine GrammatikException, wenn ein Fehler bei der Prüfung erkannt wird.
+Die Einschränkungen hierbei sind: Es darf nicht mehrere Symbolregeln zu einem Symbol geben und
+ein Symbbol einer Regel darf nicht bei derselben Regel links und rechts stehen.\
 Die KLasse Grammatik ist serialisierbar.
 
 
@@ -198,11 +204,17 @@ Example of how to build a grammar:\
     grammatikLesen.checkGrammatik();
     Grammatik grammatik = grammatikLesen.getGrammatik();
 </pre>
-To the verarbeiteZeichen() method:
+To the verarbeiteZeichen() method:\
 The grammar is read in character by character.
 " ", "\n", "\r" and "\t" are evaluated as whitespaces.
 The character "\" is evaluated as a control character, whereas the following character is evaluated as a character for further processing.
-Thus, both the whitespaces and the control characters """, ")", "]", ">", and "\" can be evaluated as characters for further processing.
+Thus, both the whitespaces and the control characters """, ")", "]", ">", and "\" can be evaluated as characters for further processing.\
+To the checkGrammatik() method:\
+The method checks the grammar for consistency and throws a GrammarException if an error is detected during the check.\
+To the checkGrammatikStrikt() method:\
+The method performs a more restrictive check and throws a GrammarException if an error is detected during the check.
+The restrictions here are: There must not be more than one symbol rule for a symbol and
+a symbol of a rule must not be on the left and on the right of the same rule.\
 The class Grammatik ist serializable.
 
 
