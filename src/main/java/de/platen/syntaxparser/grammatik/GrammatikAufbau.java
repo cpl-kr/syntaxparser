@@ -153,4 +153,21 @@ public class GrammatikAufbau extends Grammatik
             }
         }
     }
+
+    public void checkGrammatikStrikt() {
+        checkGrammatik();
+        for (final Symbolbezeichnung symbolbezeichnung : symbolregeln.keySet()) {
+            final Set<List<Symbol>> symbole = symbolregeln.get(symbolbezeichnung);
+            if (symbole.size() != 1) {
+                throw new GrammatikException();
+            }
+            for (List<Symbol> symbolListe : symbole) {
+                for (Symbol symbol : symbolListe ) {
+                    if (symbol.getSymbolkennung().getSymbolbezeichnung().equals(symbolbezeichnung)) {
+                        throw new GrammatikException();
+                    }
+                }
+            }
+        }
+    }
 }

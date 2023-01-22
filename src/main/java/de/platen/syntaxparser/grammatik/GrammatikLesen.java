@@ -87,6 +87,10 @@ public class GrammatikLesen
         grammatikAufbau.checkGrammatik();
     }
 
+    public void checkGrammatikStrikt() {
+        grammatikAufbau.checkGrammatikStrikt();
+    }
+
     public Grammatik getGrammatik() {
         return grammatikAufbau;
     }

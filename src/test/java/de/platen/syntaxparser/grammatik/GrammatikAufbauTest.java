@@ -4,10 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.junit.Test;
 
@@ -500,6 +497,59 @@ public class GrammatikAufbauTest
         final RegelSymbole regelSymbole1 = macheRegel("Symbol1", symbolbezeichnungen1, kardinalitaeten);
         grammatikAufbau.addRegelSymbole(regelSymbole1);
         grammatikAufbau.checkGrammatik();
+        fail();
+    }
+
+    @Test
+    public void testCheckGrammatikStriktOk() {
+        final GrammatikAufbau grammatikAufbau = erzeugeGrammatikAufbau();
+        final RegelZeichenbereich regelZeichenbereich1 = macheZeichenbereich("S1", '0', '9');
+        final RegelZeichenbereich regelZeichenbereich2 = macheZeichenbereich("S2", 'a', 'z');
+        grammatikAufbau.addRegelZeichenbereich(regelZeichenbereich1);
+        grammatikAufbau.addRegelZeichenbereich(regelZeichenbereich2);
+        grammatikAufbau.checkGrammatikStrikt();
+    }
+
+
+    @Test(expected = GrammatikException.class)
+    public void textCheckGrammatikStriktMehrereRegeln() {
+        final String[] symbolbezeichnungen = { S1, S2, "S3" };
+        final Kardinalitaet[] kardinalitaeten = { Kardinalitaet.GENAU_EINMAL, Kardinalitaet.GENAU_EINMAL, Kardinalitaet.GENAU_EINMAL };
+        final RegelSymbole regelSymbole = macheRegel(SYMBOLNAME_STARTREGEL, symbolbezeichnungen, kardinalitaeten);
+        final GrammatikAufbau grammatikAufbau = new GrammatikAufbau();
+        grammatikAufbau.setStartregel(regelSymbole);
+        final RegelZeichenbereich regelZeichenbereich1 = macheZeichenbereich("S1", '0', '9');
+        final RegelZeichenbereich regelZeichenbereich2 = macheZeichenbereich("S2", 'a', 'z');
+        grammatikAufbau.addRegelZeichenbereich(regelZeichenbereich1);
+        grammatikAufbau.addRegelZeichenbereich(regelZeichenbereich2);
+        final String[] symbolbezeichnungen1 = { S1 };
+        final Kardinalitaet[] kardinalitaeten1 = { Kardinalitaet.GENAU_EINMAL };
+        final RegelSymbole regelSymbole1 = macheRegel("S3", symbolbezeichnungen1, kardinalitaeten1);
+        grammatikAufbau.addRegelSymbole(regelSymbole1);
+        final String[] symbolbezeichnungen2 = { S2 };
+        final Kardinalitaet[] kardinalitaeten2 = { Kardinalitaet.GENAU_EINMAL };
+        final RegelSymbole regelSymbole2 = macheRegel("S3", symbolbezeichnungen2, kardinalitaeten2);
+        grammatikAufbau.addRegelSymbole(regelSymbole2);
+        grammatikAufbau.checkGrammatikStrikt();
+        fail();
+    }
+
+    @Test(expected = GrammatikException.class)
+    public void textCheckGrammatikStriktSelbesSymbolinRegel() {
+        final String[] symbolbezeichnungen = { S1, S2 };
+        final Kardinalitaet[] kardinalitaeten = { Kardinalitaet.GENAU_EINMAL, Kardinalitaet.GENAU_EINMAL };
+        final RegelSymbole regelSymbole = macheRegel(SYMBOLNAME_STARTREGEL, symbolbezeichnungen, kardinalitaeten);
+        final GrammatikAufbau grammatikAufbau = new GrammatikAufbau();
+        grammatikAufbau.setStartregel(regelSymbole);
+        final RegelZeichenbereich regelZeichenbereich1 = macheZeichenbereich("S1", '0', '9');
+        final RegelZeichenbereich regelZeichenbereich2 = macheZeichenbereich("S2", 'a', 'z');
+        grammatikAufbau.addRegelZeichenbereich(regelZeichenbereich1);
+        grammatikAufbau.addRegelZeichenbereich(regelZeichenbereich2);
+        final String[] symbolbezeichnungen1 = { S1, "S3" };
+        final Kardinalitaet[] kardinalitaeten1 = { Kardinalitaet.GENAU_EINMAL, Kardinalitaet.GENAU_EINMAL };
+        final RegelSymbole regelSymbole1 = macheRegel("S3", symbolbezeichnungen1, kardinalitaeten1);
+        grammatikAufbau.addRegelSymbole(regelSymbole1);
+        grammatikAufbau.checkGrammatikStrikt();
         fail();
     }
 
