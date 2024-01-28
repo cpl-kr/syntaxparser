@@ -6,7 +6,7 @@ English version see below
 
 # Ein universeller Syntaxparser für Domain spezifische Sprachen
 
-Mit der vorliegenden Version 2.0.0 des universellen Syntaxparsers für Domain spezifische Sprachen können anhand einer definierbaren Grammatik Texte geparst werden.
+Mit der vorliegenden Version 2.1.0 des universellen Syntaxparsers für Domain spezifische Sprachen können anhand einer definierbaren Grammatik Texte geparst werden.
 So ist man unabhängig von einer Trägersyntax (z.B. XML, JSON), um menschenlesbaren Maschinekode zu handhaben.
 Um den Parser zu verwenden, muss eine Grammatik in einem vorgegebenen Format erstellt werden.
 Mit dieser Grammatik kann ein Text syntaktisch geprüft werden.
