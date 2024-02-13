@@ -104,7 +104,7 @@ public class ParserTest
     }
 
     @Test
-    public void testVerarbeiteZeichen1() {
+    public void testVerarbeiteZeichen1a() {
         final List<String> regeln = Arrays.asList("S { S1 S2 S3 S4 }\n", //
                 "S1 \"test1\\ test2\"\n", //
                 "S2 [az]\n", //
@@ -125,10 +125,32 @@ public class ParserTest
         assertEquals(4, syntaxpfadeMitWortErgebnis.size());
         final List<String> wortfolge = Arrays.asList("test1 test2", "abcxyz", "....\\,,,,", "123,456");
         checkWortfolge(wortfolge, syntaxpfadeMitWortErgebnis);
-        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(0).getSyntaxpfad(), Arrays.asList("S"), "S1");
-        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(1).getSyntaxpfad(), Arrays.asList("S"), "S2");
-        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(2).getSyntaxpfad(), Arrays.asList("S"), "S3");
-        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(3).getSyntaxpfad(), Arrays.asList("S"), "S4");
+        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(0).getSyntaxpfad(), List.of("S"), "S1");
+        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(1).getSyntaxpfad(), List.of("S"), "S2");
+        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(2).getSyntaxpfad(), List.of("S"), "S3");
+        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(3).getSyntaxpfad(), List.of("S"), "S4");
+    }
+
+    @Test
+    public void testVerarbeiteZeichen1b() {
+        final List<String> regeln = Arrays.asList("S { S1 S2 S3 S4 }\n", //
+                "S1 \"test1\\ test2\"\n", //
+                "S2 [az]\n", //
+                "S3 (.,\\\\)\n", //
+                "S4 <[0-9]+,[0-9]+>");
+        final Parser parser = new Parser(erstelleGrammatik(regeln));
+        final String text = "test1\\ test2 abcxyz ....\\\\,,,, 123,456";
+        for (int index = 0; index < text.length(); index++) {
+            parser.verarbeiteZeichen(text.charAt(index));
+        }
+        final List<SyntaxpfadMitWort> syntaxpfadeMitWortErgebnis = parser.ermittleSyntaxpfadeMitWort(true);
+        assertEquals(4, syntaxpfadeMitWortErgebnis.size());
+        final List<String> wortfolge = Arrays.asList("test1 test2", "abcxyz", "....\\,,,,", "123,456");
+        checkWortfolge(wortfolge, syntaxpfadeMitWortErgebnis);
+        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(0).getSyntaxpfad(), List.of("S"), "S1");
+        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(1).getSyntaxpfad(), List.of("S"), "S2");
+        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(2).getSyntaxpfad(), List.of("S"), "S3");
+        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(3).getSyntaxpfad(), List.of("S"), "S4");
     }
 
     @Test
@@ -156,7 +178,7 @@ public class ParserTest
         assertEquals(9, syntaxpfadeMitWortErgebnis.size());
         final List<String> wortfolge = Arrays.asList("111", "+", "222", "-", "333", "*", "444", "/", "555");
         checkWortfolge(wortfolge, syntaxpfadeMitWortErgebnis);
-        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(0).getSyntaxpfad(), Arrays.asList("S"), "Operand");
+        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(0).getSyntaxpfad(), List.of("S"), "Operand");
         checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(1).getSyntaxpfad(), Arrays.asList("S", "Operationsteil"),
                 "Operator");
         checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(2).getSyntaxpfad(), Arrays.asList("S", "Operationsteil"),
@@ -270,7 +292,7 @@ public class ParserTest
         assertEquals(9, syntaxpfadeMitWortErgebnis.size());
         final List<String> wortfolge = Arrays.asList("111", "+", "222", "-", "333", "*", "444", "/", "555");
         checkWortfolge(wortfolge, syntaxpfadeMitWortErgebnis);
-        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(0).getSyntaxpfad(), Arrays.asList("S"), "Operand");
+        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(0).getSyntaxpfad(), List.of("S"), "Operand");
         checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(1).getSyntaxpfad(), Arrays.asList("S", "Operationsteil"),
                 "Operator");
         checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(2).getSyntaxpfad(), Arrays.asList("S", "Operationsteil"),

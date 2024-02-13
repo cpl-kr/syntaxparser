@@ -4,11 +4,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import de.platen.syntaxparser.grammatik.Grammatik;
 import de.platen.syntaxparser.syntaxpfad.SyntaxpfadMitWort;
+import de.platen.syntaxparser.syntaxpfad.Syntaxpfadbehandlung;
+import de.platen.syntaxparser.syntaxpfad.Syntaxpfadersteller;
 import de.platen.syntaxparser.zeichenverarbeitung.Eingabewortabschluss;
 import de.platen.syntaxparser.zeichenverarbeitung.Satzabschluss;
 import de.platen.syntaxparser.zeichenverarbeitung.Verarbeitungsstand;
+import de.platen.syntaxparser.zeichenverarbeitung.Wortabschluss;
 import de.platen.syntaxparser.zeichenverarbeitung.Zeichenverarbeitung;
+
+import static java.util.Objects.requireNonNull;
 
 public class Parser
 {
@@ -20,6 +26,17 @@ public class Parser
 
     private final Satzabschluss satzabschluss;
     private final Set<Verarbeitungsstand> verarbeitungsstaendeInBearbeitung;
+
+    public Parser(final Grammatik grammatik) {
+        requireNonNull(grammatik);
+        final ParserInitialisierung parserInitialisierung = new ParserInitialisierung(new Syntaxpfadersteller(grammatik), new Syntaxpfadbehandlung(grammatik));
+        final Wortabschluss wortabschluss = new Wortabschluss(new Syntaxpfadersteller(grammatik), new Syntaxpfadbehandlung(grammatik));
+        final Eingabewortabschluss eingabewortabschluss = new Eingabewortabschluss(wortabschluss);
+        this.satzabschluss = new Satzabschluss();
+        this.zeichenverarbeitung = new Zeichenverarbeitung(wortabschluss);
+        this.verarbeitungsstaendeInBearbeitung = parserInitialisierung.initialisiereVerarbeitungsstaende();
+        this.eingabewortabschluss = eingabewortabschluss;
+    }
 
     public Parser(final ParserInitialisierung parserInitialisierung, final Zeichenverarbeitung zeichenverarbeitung, final Eingabewortabschluss eingabewortabschluss, final Satzabschluss satzabschluss) {
         if ((parserInitialisierung == null) || (zeichenverarbeitung == null) || (eingabewortabschluss == null)  || (satzabschluss == null)) {
