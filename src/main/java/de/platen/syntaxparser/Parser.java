@@ -39,13 +39,11 @@ public class Parser
     }
 
     public Parser(final ParserInitialisierung parserInitialisierung, final Zeichenverarbeitung zeichenverarbeitung, final Eingabewortabschluss eingabewortabschluss, final Satzabschluss satzabschluss) {
-        if ((parserInitialisierung == null) || (zeichenverarbeitung == null) || (eingabewortabschluss == null)  || (satzabschluss == null)) {
-            throw new SyntaxparserException();
-        }
-        this.zeichenverarbeitung = zeichenverarbeitung;
+        requireNonNull(parserInitialisierung);
+        this.zeichenverarbeitung = requireNonNull(zeichenverarbeitung);
         this.verarbeitungsstaendeInBearbeitung = parserInitialisierung.initialisiereVerarbeitungsstaende();
-        this.eingabewortabschluss = eingabewortabschluss;
-        this.satzabschluss = satzabschluss;
+        this.eingabewortabschluss = requireNonNull(eingabewortabschluss);
+        this.satzabschluss = requireNonNull(satzabschluss);
     }
 
     public boolean verarbeiteZeichen(final Character c) {
@@ -58,9 +56,7 @@ public class Parser
                 if (c == '\\') {
                     this.istSondermodus = true;
                 } else {
-                    if (!this.zeichenverarbeitung.verarbeiteZeichen(c, this.verarbeitungsstaendeInBearbeitung)) {
-                        return false;
-                    }
+                    return this.zeichenverarbeitung.verarbeiteZeichen(c, this.verarbeitungsstaendeInBearbeitung);
                 }
             } else {
                 if (!this.istWortabschlussDurchgefuehrt) {
@@ -72,9 +68,7 @@ public class Parser
             }
         } else {
             this.istSondermodus = false;
-            if (!this.zeichenverarbeitung.verarbeiteZeichen(c, this.verarbeitungsstaendeInBearbeitung)) {
-                return false;
-            }
+            return this.zeichenverarbeitung.verarbeiteZeichen(c, this.verarbeitungsstaendeInBearbeitung);
         }
         return true;
     }
