@@ -2,7 +2,6 @@ package de.platen.syntaxparser;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -10,11 +9,8 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
-import de.platen.syntaxparser.syntaxpfad.Syntaxpfadbehandlung;
-import de.platen.syntaxparser.syntaxpfad.Syntaxpfadersteller;
 import de.platen.syntaxparser.zeichenverarbeitung.Eingabewortabschluss;
 import de.platen.syntaxparser.zeichenverarbeitung.Satzabschluss;
-import de.platen.syntaxparser.zeichenverarbeitung.Wortabschluss;
 import de.platen.syntaxparser.zeichenverarbeitung.Zeichenverarbeitung;
 import org.junit.Test;
 
@@ -235,16 +231,26 @@ public class ParserTest
                 "Zahl [09]\n", //
                 "WortHtml \"Html\"\n", //
                 "WortUrl \"Url\"\n", //
-                "Base64 <(\\w|\\d|\\s)+>\n", //
+                "Base64 <[A-Za-z0-9+=]+>\n", //
                 "Adresse <(http|https)://[-\\w]+(\\.\\w[-\\w]*)+>\n");
         final Parser parser = new Parser(erstelleGrammatik(regeln));
-        final String text = "Version 1.0.0 Breite 10 Höhe 20 Html " + Base64.getEncoder().encodeToString("<html></html>".getBytes());
+        final String base64 = Base64.getEncoder().encodeToString("<html></html>".getBytes());
+        final String text = "Version 1.0.0 Breite 10 Höhe 20 Html " + base64;
         for (int index = 0; index < text.length(); index++) {
             parser.verarbeiteZeichen(text.charAt(index));
         }
         final List<SyntaxpfadMitWort> syntaxpfadeMitWortErgebnis = parser.ermittleSyntaxpfadeMitWort(true);
         assertEquals(8, syntaxpfadeMitWortErgebnis.size());
-        // TODO
+        final List<String> wortfolge = Arrays.asList("Version", "1.0.0", "Breite", "10", "Höhe", "20", "Html", base64);
+        checkWortfolge(wortfolge, syntaxpfadeMitWortErgebnis);
+        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(0).getSyntaxpfad(), Arrays.asList("S", "Version"),"WortVersion");
+        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(1).getSyntaxpfad(), Arrays.asList("S", "Version"),"Versionsangabe");
+        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(2).getSyntaxpfad(), Arrays.asList("S", "Masse", "Breite"),"WortBreite");
+        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(3).getSyntaxpfad(), Arrays.asList("S", "Masse", "Breite"),"Zahl");
+        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(4).getSyntaxpfad(), Arrays.asList("S", "Masse", "Höhe"),"WortHoehe");
+        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(5).getSyntaxpfad(), Arrays.asList("S", "Masse", "Höhe"),"Zahl");
+        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(6).getSyntaxpfad(), Arrays.asList("S", "Daten"),"WortHtml");
+        checkSyntaxpfad(syntaxpfadeMitWortErgebnis.get(7).getSyntaxpfad(), Arrays.asList("S", "Daten"),"Base64");
     }
 
     @Test
