@@ -515,7 +515,7 @@ public class SyntaxpfadbehandlungTest
     }
 
     private Grammatik mockGrammatik() {
-        final Map<Symbolbezeichnung, Set<List<Symbol>>> mapSymbolregeln = new HashMap<>();
+        final Map<Symbolbezeichnung, List<List<Symbol>>> mapSymbolregeln = new HashMap<>();
         final Map<Symbolbezeichnung, Set<Zeichenbereich>> mapZeichenbereiche = new HashMap<>();
         final Map<Symbolbezeichnung, Set<Zeichenmenge>> mapZeichenmengen = new HashMap<>();
         final Map<Symbolbezeichnung, Set<Zeichenfolge>> mapZeichenfolgen = new HashMap<>();
@@ -539,7 +539,7 @@ public class SyntaxpfadbehandlungTest
     }
 
     private void erzeugeRegeln(final List<Symbol> startregel,
-            final Map<Symbolbezeichnung, Set<List<Symbol>>> mapSymbolregeln,
+            final Map<Symbolbezeichnung, List<List<Symbol>>> mapSymbolregeln,
             final Map<Symbolbezeichnung, Set<Zeichenfolge>> mapZeichenfolgen) {
         // S { S1 S2 S3 S4 S5 S6 S7}
         startregel.add(new Symbol(
@@ -566,94 +566,94 @@ public class SyntaxpfadbehandlungTest
         // S1 { Z1-1 Z1-2 Z1-3 }
         final List<Symbol> symboleS1 = Arrays.asList(erzeugeSymbol("Z1-1", 110), erzeugeSymbol("Z1-2", 120),
                 erzeugeSymbol("Z1-3", 130));
-        final Set<List<Symbol>> setSymboleS1 = new HashSet<>();
+        final List<List<Symbol>> setSymboleS1 = new ArrayList<>();
         setSymboleS1.add(symboleS1);
         mapSymbolregeln.put(new Symbolbezeichnung("S1"), setSymboleS1);
         // S2 { Z2-1 S2-2 Z2-3 }
         final List<Symbol> symboleS2 = Arrays.asList(erzeugeSymbol("Z2-1", 210), erzeugeSymbol("S2-2", 22),
                 erzeugeSymbol("Z2-3", 230));
-        final Set<List<Symbol>> setSymboleS2 = new HashSet<>();
+        final List<List<Symbol>> setSymboleS2 = new ArrayList<>();
         setSymboleS2.add(symboleS2);
         mapSymbolregeln.put(new Symbolbezeichnung("S2"), setSymboleS2);
         // S2-2 { Z2-2-1 }
-        final List<Symbol> symboleS2_2 = Arrays.asList(erzeugeSymbol("Z2-2-1", 2210));
-        final Set<List<Symbol>> setSymboleS2_2 = new HashSet<>();
+        final List<Symbol> symboleS2_2 = List.of(erzeugeSymbol("Z2-2-1", 2210));
+        final List<List<Symbol>> setSymboleS2_2 = new ArrayList<>();
         setSymboleS2_2.add(symboleS2_2);
         mapSymbolregeln.put(new Symbolbezeichnung("S2-2"), setSymboleS2_2);
         // S3 { S3-1 Z3-2 Z3-3 }
         final List<Symbol> symboleS3 = Arrays.asList(erzeugeSymbol("S3-1", 31), erzeugeSymbol("Z3-2", 320),
                 erzeugeSymbol("Z3-3", 330));
-        final Set<List<Symbol>> setSymboleS3 = new HashSet<>();
+        final List<List<Symbol>> setSymboleS3 = new ArrayList<>();
         setSymboleS3.add(symboleS3);
         mapSymbolregeln.put(new Symbolbezeichnung("S3"), setSymboleS3);
         // S3-1 { Z3-1-1 Z3-1-2 }
         final List<Symbol> symboleS3_1 = Arrays.asList(erzeugeSymbol("Z3-1-1", 3110), erzeugeSymbol("Z3-1-2", 3120));
-        final Set<List<Symbol>> setSymboleS3_1 = new HashSet<>();
+        final List<List<Symbol>> setSymboleS3_1 = new ArrayList<>();
         setSymboleS3_1.add(symboleS3_1);
         mapSymbolregeln.put(new Symbolbezeichnung("S3-1"), setSymboleS3_1);
         // S4 { S4-1 S4-2 Z4-3 }
         final List<Symbol> symboleS4 = Arrays.asList(erzeugeSymbol("S4-1", 41), erzeugeSymbol("S4-2", 42),
                 erzeugeSymbol("Z4-3", 430));
-        final Set<List<Symbol>> setSymboleS4 = new HashSet<>();
+        final List<List<Symbol>> setSymboleS4 = new ArrayList<>();
         setSymboleS4.add(symboleS4);
         mapSymbolregeln.put(new Symbolbezeichnung("S4"), setSymboleS4);
         // S4-1 { Z4-1-1 Z4-1-2 }
         final List<Symbol> symboleS4_1 = Arrays.asList(erzeugeSymbol("Z4-1-1", 4110), erzeugeSymbol("Z4-1-2", 4120));
-        final Set<List<Symbol>> setSymboleS4_1 = new HashSet<>();
+        final List<List<Symbol>> setSymboleS4_1 = new ArrayList<>();
         setSymboleS4_1.add(symboleS4_1);
         mapSymbolregeln.put(new Symbolbezeichnung("S4-1"), setSymboleS4_1);
         // S4-2 { Z4-2-1 }
-        final List<Symbol> symboleS4_2 = Arrays.asList(erzeugeSymbol("Z4-2-1", 4210));
-        final Set<List<Symbol>> setSymboleS4_2 = new HashSet<>();
+        final List<Symbol> symboleS4_2 = List.of(erzeugeSymbol("Z4-2-1", 4210));
+        final List<List<Symbol>> setSymboleS4_2 = new ArrayList<>();
         setSymboleS4_2.add(symboleS4_2);
         mapSymbolregeln.put(new Symbolbezeichnung("S4-2"), setSymboleS4_2);
         // S5 { S5-1 Z5-2 Z5-3 }
         final List<Symbol> symboleS5 = Arrays.asList(erzeugeSymbol("S5-1", 51), erzeugeSymbol("Z5-2", 520),
                 erzeugeSymbol("Z5-3", 530));
-        final Set<List<Symbol>> setSymboleS5 = new HashSet<>();
+        final List<List<Symbol>> setSymboleS5 = new ArrayList<>();
         setSymboleS5.add(symboleS5);
         mapSymbolregeln.put(new Symbolbezeichnung("S5"), setSymboleS5);
         // S5-1 { S5-1-1 }
-        final List<Symbol> symboleS5_1 = Arrays.asList(erzeugeSymbol("S5-1-1", 511));
-        final Set<List<Symbol>> setSymboleS5_1 = new HashSet<>();
+        final List<Symbol> symboleS5_1 = List.of(erzeugeSymbol("S5-1-1", 511));
+        final List<List<Symbol>> setSymboleS5_1 = new ArrayList<>();
         setSymboleS5_1.add(symboleS5_1);
         mapSymbolregeln.put(new Symbolbezeichnung("S5_1"), setSymboleS5_1);
         // S5-1-1 { Z5-1-1-1 Z5-1-1-2 }
         final List<Symbol> symboleS5_1_1 = Arrays.asList(erzeugeSymbol("Z5-1-1-1", 51110),
                 erzeugeSymbol("Z5-1-1-2", 51120));
-        final Set<List<Symbol>> setSymboleS5_1_1 = new HashSet<>();
+        final List<List<Symbol>> setSymboleS5_1_1 = new ArrayList<>();
         setSymboleS5_1_1.add(symboleS5_1_1);
         mapSymbolregeln.put(new Symbolbezeichnung("S5-1-1"), setSymboleS5_1_1);
         // S6 { S6-1 S6-2 Z6-3 }
         final List<Symbol> symboleS6 = Arrays.asList(erzeugeSymbol("S6-1", 61), erzeugeSymbol("S6-2", 62),
                 erzeugeSymbol("Z6-3", 630));
-        final Set<List<Symbol>> setSymboleS6 = new HashSet<>();
+        final List<List<Symbol>> setSymboleS6 = new ArrayList<>();
         setSymboleS6.add(symboleS6);
         mapSymbolregeln.put(new Symbolbezeichnung("S6"), setSymboleS6);
         // S6-1 { S6-1-1 }
-        final List<Symbol> symboleS6_1 = Arrays.asList(erzeugeSymbol("S6-1-1", 611));
-        final Set<List<Symbol>> setSymboleS6_1 = new HashSet<>();
+        final List<Symbol> symboleS6_1 = List.of(erzeugeSymbol("S6-1-1", 611));
+        final List<List<Symbol>> setSymboleS6_1 = new ArrayList<>();
         setSymboleS6_1.add(symboleS6_1);
         mapSymbolregeln.put(new Symbolbezeichnung("S6-1"), setSymboleS6_1);
         // S6-1-1 { Z6-1-1-1 Z6-1-1-2 }
         final List<Symbol> symboleS6_1_1 = Arrays.asList(erzeugeSymbol("Z6-1-1-1", 61110),
                 erzeugeSymbol("Z6-1-1-2", 61120));
-        final Set<List<Symbol>> setSymboleS6_1_1 = new HashSet<>();
+        final List<List<Symbol>> setSymboleS6_1_1 = new ArrayList<>();
         setSymboleS6_1_1.add(symboleS6_1_1);
         mapSymbolregeln.put(new Symbolbezeichnung("S6-1-1"), setSymboleS6_1_1);
         // S6-2 { Z6-2-1 Z6-2-2 }
         final List<Symbol> symboleS6_2 = Arrays.asList(erzeugeSymbol("Z6-2-1", 6210), erzeugeSymbol("Z6-2-2", 6220));
-        final Set<List<Symbol>> setSymboleS6_2 = new HashSet<>();
+        final List<List<Symbol>> setSymboleS6_2 = new ArrayList<>();
         setSymboleS6_2.add(symboleS6_2);
         mapSymbolregeln.put(new Symbolbezeichnung("S6-2"), setSymboleS6_2);
         // S7 { S7-1 }
-        final List<Symbol> symboleS7 = Arrays.asList(erzeugeSymbol("S7-1", 71));
-        final Set<List<Symbol>> setSymboleS7 = new HashSet<>();
+        final List<Symbol> symboleS7 = List.of(erzeugeSymbol("S7-1", 71));
+        final List<List<Symbol>> setSymboleS7 = new ArrayList<>();
         setSymboleS7.add(symboleS7);
         mapSymbolregeln.put(new Symbolbezeichnung("S7"), setSymboleS7);
         // S7-1 { Z7-1-1 Z7-1-2 }
         final List<Symbol> symboleS7_1 = Arrays.asList(erzeugeSymbol("Z7-1-1", 7110), erzeugeSymbol("Z7-1-2", 7120));
-        final Set<List<Symbol>> setSymboleS7_1 = new HashSet<>();
+        final List<List<Symbol>> setSymboleS7_1 = new ArrayList<>();
         setSymboleS7_1.add(symboleS7_1);
         mapSymbolregeln.put(new Symbolbezeichnung("S7_1"), setSymboleS7_1);
         // Z1-1 "Z"

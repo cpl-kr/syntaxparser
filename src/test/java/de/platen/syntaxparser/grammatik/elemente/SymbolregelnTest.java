@@ -4,12 +4,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.junit.Test;
 
@@ -118,8 +117,8 @@ public class SymbolregelnTest
                 symbolkennung);
     }
 
-    private Map<Symbolbezeichnung, Set<List<Symbol>>> erzeugeRegeln() {
-        final Map<Symbolbezeichnung, Set<List<Symbol>>> symbolregeln = new HashMap<>();
+    private Map<Symbolbezeichnung, List<List<Symbol>>> erzeugeRegeln() {
+        final Map<Symbolbezeichnung, List<List<Symbol>>> symbolregeln = new HashMap<>();
         final List<Symbol> symbole1 = Arrays.asList(erzeugeSymbol("symbol1", 1), erzeugeSymbol("symbol2", 2),
                 erzeugeSymbol("symbol3", 3), erzeugeSymbol("symbol4", 4));
         final List<Symbol> symbole2 = Arrays.asList(erzeugeSymbol("symbol5", 5), erzeugeSymbol("symbol6", 6),
@@ -128,8 +127,8 @@ public class SymbolregelnTest
                 erzeugeSymbol("symbol11", 11), erzeugeSymbol("symbol12", 12));
         final List<Symbol> symbole4 = Arrays.asList(erzeugeSymbol("symbol13", 13), erzeugeSymbol("symbol14", 14),
                 erzeugeSymbol("symbol15", 15), erzeugeSymbol("symbol16", 16));
-        final Set<List<Symbol>> regelmenge1 = new HashSet<>();
-        final Set<List<Symbol>> regelmenge2 = new HashSet<>();
+        final List<List<Symbol>> regelmenge1 = new ArrayList<>();
+        final List<List<Symbol>> regelmenge2 = new ArrayList<>();
         regelmenge1.add(symbole1);
         regelmenge1.add(symbole2);
         regelmenge2.add(symbole3);

@@ -1,5 +1,6 @@
 package de.platen.syntaxparser.grammatik;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,7 +40,7 @@ public class GrammatikAufbau extends Grammatik
         if (symbolregeln.containsKey(regelSymbole.getSymbolbezeichnung())) {
             symbolregeln.get(regelSymbole.getSymbolbezeichnung()).add(regelSymbole.getSymbole());
         } else {
-            final Set<List<Symbol>> symbole = new HashSet<>();
+            final List<List<Symbol>> symbole = new ArrayList<>();
             symbole.add(regelSymbole.getSymbole());
             symbolregeln.put(regelSymbole.getSymbolbezeichnung(), symbole);
         }
@@ -139,7 +140,7 @@ public class GrammatikAufbau extends Grammatik
             }
         }
         for (final Symbolbezeichnung symbolbezeichnung : symbolregeln.keySet()) {
-            final Set<List<Symbol>> symbole = symbolregeln.get(symbolbezeichnung);
+            final List<List<Symbol>> symbole = symbolregeln.get(symbolbezeichnung);
             for (final List<Symbol> symbolliste : symbole) {
                 for (final Symbol symbol : symbolliste) {
                     if (!symbolregeln.containsKey(symbol.getSymbolkennung().getSymbolbezeichnung()) && //
@@ -157,7 +158,7 @@ public class GrammatikAufbau extends Grammatik
     public void checkGrammatikStrikt() {
         checkGrammatik();
         for (final Symbolbezeichnung symbolbezeichnung : symbolregeln.keySet()) {
-            final Set<List<Symbol>> symbole = symbolregeln.get(symbolbezeichnung);
+            final List<List<Symbol>> symbole = symbolregeln.get(symbolbezeichnung);
             if (symbole.size() != 1) {
                 throw new GrammatikException();
             }

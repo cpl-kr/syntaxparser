@@ -14,10 +14,10 @@ public class Symbolregeln implements Serializable
 
     private static final long serialVersionUID = 1L;
 
-    private final Map<Symbolbezeichnung, Set<List<Symbol>>> symbolregeln;
+    private final Map<Symbolbezeichnung, List<List<Symbol>>> symbolregeln;
     private final Map<Symbolkennung, List<Symbol>> zuordnungen = new HashMap<>();
 
-    public Symbolregeln(final Map<Symbolbezeichnung, Set<List<Symbol>>> symbolregeln) {
+    public Symbolregeln(final Map<Symbolbezeichnung, List<List<Symbol>>> symbolregeln) {
         if (symbolregeln == null) {
             throw new GrammatikException();
         }
@@ -25,7 +25,7 @@ public class Symbolregeln implements Serializable
         macheZordnungen();
     }
 
-    public Map<Symbolbezeichnung, Set<List<Symbol>>> get() {
+    public Map<Symbolbezeichnung, List<List<Symbol>>> get() {
         return symbolregeln;
     }
 
@@ -60,7 +60,7 @@ public class Symbolregeln implements Serializable
     private void macheZordnungen() {
         final Set<Symbolbezeichnung> symbolbezeichnungen = symbolregeln.keySet();
         for (final Symbolbezeichnung symbolbezeichnung : symbolbezeichnungen) {
-            final Set<List<Symbol>> symbolmenge = symbolregeln.get(symbolbezeichnung);
+            final List<List<Symbol>> symbolmenge = symbolregeln.get(symbolbezeichnung);
             for (final List<Symbol> symbole : symbolmenge) {
                 for (final Symbol symbol : symbole) {
                     zuordnungen.put(symbol.getSymbolkennung(), symbole);

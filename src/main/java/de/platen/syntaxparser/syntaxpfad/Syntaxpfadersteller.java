@@ -83,7 +83,7 @@ public class Syntaxpfadersteller
     private Set<Syntaxpfad> behandleSymbolregeln(final Symbolkennung regel) {
         final Set<Syntaxpfad> syntaxpfade = new HashSet<>();
         final Symbolregeln symbolregeln = grammatik.getSymbolregeln();
-        final Set<List<Symbol>> symbolmenge = symbolregeln.get().get(regel.getSymbolbezeichnung());
+        final List<List<Symbol>> symbolmenge = symbolregeln.get().get(regel.getSymbolbezeichnung());
         for (final List<Symbol> symbolliste : symbolmenge) {
             final Symbolkennung symbolbezeichnung = symbolliste.get(0).getSymbolkennung();
             final Set<Syntaxpfad> syntaxpfadeZuSymbol = ermittleSyntaxpfade(symbolbezeichnung);
