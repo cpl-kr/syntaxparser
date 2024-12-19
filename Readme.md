@@ -6,7 +6,7 @@ English version see below
 
 # Ein universeller Syntaxparser für Domain spezifische Sprachen
 
-Mit der vorliegenden Version 2.1.2 des universellen Syntaxparsers für Domain spezifische Sprachen können anhand einer definierbaren Grammatik Texte geparst werden.
+Mit der vorliegenden Version 2.2.0 des universellen Syntaxparsers für Domain spezifische Sprachen können anhand einer definierbaren Grammatik Texte geparst werden.
 So ist man unabhängig von einer Trägersyntax (z.B. XML, JSON), um menschenlesbaren Maschinekode zu handhaben.
 Um den Parser zu verwenden, muss eine Grammatik in einem vorgegebenen Format erstellt werden.
 Mit dieser Grammatik kann ein Text syntaktisch geprüft werden.
@@ -141,6 +141,28 @@ bei denen Daten in menschenlesbarer Form vorliegen sollen.
 Auch kann er für Non-SQL Datenbanken verwendet werden.
 Hierbei kann jede Datenentität durch eine Menge von Grammatikregeln dargestellt werden.
 
+## Klassengenerierung
+
+Um bei Service-Schnittstellen nicht nur Text, sondern auch serialisierte Java-Objekte für die Service-Domäne zu behandeln,
+gibt es die Möglichkeit der Klassengenerierung.
+Anhand einer Grammatik können Records und Klassen erzeugt werden.
+Jede Regel führt zu einem Record oder einer Klasse.
+
+Beispiel für die Klassengenerierung:\
+<pre>
+    Grammatik grammatik = ....;
+    Klassengenerierung klassengenerierung = new Klassengenerierung(grammatik);
+    Set<NameInhalt> generierteKlassen = klassengenerierung.generiere("paket");
+</pre>
+
+Zur Methode generiere() der Klasse Klassengenerierung:\
+Der Parameter ist der Paketname, in dem die erzeugten Records und Methoden zusammengefasst sind.
+Als Ergebnis erhält man eine Menge an erzeugten Records und Klassen in Textform mit dem jeweils zugehörigem Namen der Regel,
+welche auch dem Namen des Records oder der Klasse entspricht.
+Diese Records und Klassen könne in einem weiteren Schritt abgespeichert werden.
+In der vorliegenden Version muss die Grammatik eingeschränkt sein:
+* Keine Möglichkeit zur Auswahl von mehreren Regeln zu ein und demselben Symbol
+* Die Zeichenfolgen der Regeln für Zeichenfolgen dürfen keine Whitespaces (also Leerzeichen, Tabulatoren und Zeilenenden) enthalten
 
 --------------------------------------------------
 
@@ -281,3 +303,27 @@ The parser can be used generally for interfaces,
 where data should be available in human-readable form.
 It can also be used for non-SQL databases.
 Here, each data entity can be represented by a set of grammar rules.
+
+
+## Class generation
+
+To handle not only text but also serialized Java objects for the service domain in service interfaces,
+there is the option of class generation.
+Records and classes can be generated using a grammar.
+Each rule leads to a record or a class.
+
+Example for class generation:\
+<pre>
+    Grammatik grammatik = ....;
+    Klassengenerierung klassengenerierung = new Klassengenerierung(grammatik);
+    Set<NameInhalt> generierteKlassen = klassengenerierung.generiere("paket");
+</pre>
+
+For the generate() method of the class Klassengenerierung:\
+The parameter is the package name in which the generated records and methods are summarized.
+The result is a set of generated records and classes in text form with the corresponding name of the rule,
+which also corresponds to the name of the record or class.
+These records and classes can be saved in a further step.
+In the current version, the grammar must be restricted:
+* No possibility to select several rules for one and the same symbol
+* The character strings of the rules for character strings must not contain whitespaces (i.e. spaces, tabs and line endings)
