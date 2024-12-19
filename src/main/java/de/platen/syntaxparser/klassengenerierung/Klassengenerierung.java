@@ -1,6 +1,9 @@
 package de.platen.syntaxparser.klassengenerierung;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -62,12 +65,20 @@ public class Klassengenerierung {
             + MUSTER_TOSTRING
             + "}\n";
     private static final String PARAMETER_DATENTYP = "String value";
+    private static final String PARAMETER_NAME = "value";
     private static final String PARAMETER_POSTFIX = "_";
 
     private final Grammatik grammatik;
+    private final Map<String, Datentyp> abbildungDatentypen;
 
     public Klassengenerierung(final Grammatik grammatik) {
-        this.grammatik = grammatik;
+        this.grammatik = requireNonNull(grammatik);
+        this.abbildungDatentypen = new HashMap<>();
+    }
+
+    public Klassengenerierung(final Grammatik grammatik, final Map<String, Datentyp> abbildungDatentypen) {
+        this.grammatik = requireNonNull(grammatik);
+        this.abbildungDatentypen = requireNonNull(abbildungDatentypen);
     }
 
     public Set<NameInhalt> generiere(final String paketname) {
@@ -76,7 +87,7 @@ public class Klassengenerierung {
         symbolbezeichnungen.addAll(this.grammatik.getRegExregeln().get().keySet());
         symbolbezeichnungen.addAll(this.grammatik.getZeichenbereichregeln().get().keySet());
         symbolbezeichnungen.addAll(this.grammatik.getZeichenmengeregeln().get().keySet());
-        final Set<NameInhalt> erzeugteKlassen = new HashSet<>(erzeugeBlattklassen(paketname, symbolbezeichnungen));
+        final Set<NameInhalt> erzeugteKlassen = new HashSet<>(erzeugeBlattklassen(paketname, symbolbezeichnungen, this.abbildungDatentypen));
         erzeugteKlassen.addAll(erzeugeBlattklassenZeichenfolge(paketname, this.grammatik.getZeichenfolgeregeln()
                                                                                         .get()));
         erzeugteKlassen.addAll(erzeugeSymbolregelnKlassen(paketname, this.grammatik.getSymbolregeln().get()));
@@ -121,9 +132,17 @@ public class Klassengenerierung {
     }
 
     private static List<NameInhalt> erzeugeBlattklassen(final String paketname,
-                                                        final Set<Symbolbezeichnung> symbolbezeichnungen) {
+                                                        final Set<Symbolbezeichnung> symbolbezeichnungen,
+                                                        final Map<String, Datentyp> datentypen) {
         List<NameInhalt> erzeugteKlassen = new ArrayList<>();
-        symbolbezeichnungen.forEach((symbolbezeichnung) -> erzeugteKlassen.add(erzeugeKlasse(paketname, symbolbezeichnung.getSymbolbezeichnung(), PARAMETER_DATENTYP)));
+        symbolbezeichnungen.forEach((symbolbezeichnung) -> {
+            String parameter = PARAMETER_DATENTYP;
+            Datentyp datentyp = datentypen.get(symbolbezeichnung.getSymbolbezeichnung());
+            if (datentyp != null) {
+                parameter = datentyp.getTyp() + " " + PARAMETER_NAME;
+            }
+            erzeugteKlassen.add(erzeugeKlasse(paketname, symbolbezeichnung.getSymbolbezeichnung(), parameter));
+        });
         return erzeugteKlassen;
     }
 
