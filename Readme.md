@@ -155,6 +155,18 @@ Beispiel für die Klassengenerierung:\
     Set<NameInhalt> generierteKlassen = klassengenerierung.generiere("paket");
 </pre>
 
+Beispiel für die Klassengenerierung mit alternativem Konstruktor:\
+<pre>
+    Grammatik grammatik = ....;
+    HashMap<String, Datentyp> datentypabbildungen = new HashMap<>();
+    datentypabbildungen.put("S2", Datentyp.INTEGER);
+    Klassengenerierung klassengenerierung = new Klassengenerierung(grammatik, datentypabbildungen);
+    Set<NameInhalt> generierteKlassen = klassengenerierung.generiere("paket");
+</pre>
+Hierbei werden die Symbolregeln, welche zu Datenwerten führen mit einem Typ versehen (z.B. public record S2(Integer value){}).
+In der Enumeration Datentyp sind die möglichen Datentypen aufgeführt.
+
+
 Zur Methode generiere() der Klasse Klassengenerierung:\
 Der Parameter ist der Paketname, in dem die erzeugten Records und Methoden zusammengefasst sind.
 Als Ergebnis erhält man eine Menge an erzeugten Records und Klassen in Textform mit dem jeweils zugehörigem Namen der Regel,
@@ -318,6 +330,17 @@ Example for class generation:\
     Klassengenerierung klassengenerierung = new Klassengenerierung(grammatik);
     Set<NameInhalt> generierteKlassen = klassengenerierung.generiere("paket");
 </pre>
+
+Example of class generation with alternative constructor:\
+<pre>
+    Grammatik grammatik = ....;
+    HashMap<String, Datentyp> datentypabbildungen = new HashMap<>();
+    datentypabbildungen.put("S2", Datentyp.INTEGER);
+    Klassengenerierung klassengenerierung = new Klassengenerierung(grammatik, datentypabbildungen);
+    Set<NameInhalt> generierteKlassen = klassengenerierung.generiere("paket");
+</pre>
+The symbol rules that lead to data values are assigned a type (e.g. public record S2(Integer value){}).
+The possible data types are listed in the data type enumeration.
 
 For the generate() method of the class Klassengenerierung:\
 The parameter is the package name in which the generated records and methods are summarized.
