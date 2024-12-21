@@ -172,9 +172,7 @@ Der Parameter ist der Paketname, in dem die erzeugten Records und Methoden zusam
 Als Ergebnis erhält man eine Menge an erzeugten Records und Klassen in Textform mit dem jeweils zugehörigem Namen der Regel,
 welche auch dem Namen des Records oder der Klasse entspricht.
 Diese Records und Klassen könne in einem weiteren Schritt abgespeichert werden.
-In der vorliegenden Version muss die Grammatik eingeschränkt sein:
-* Keine Möglichkeit zur Auswahl von mehreren Regeln zu ein und demselben Symbol
-* Die Zeichenfolgen der Regeln für Zeichenfolgen dürfen keine Whitespaces (also Leerzeichen, Tabulatoren und Zeilenenden) enthalten
+
 
 --------------------------------------------------
 
@@ -347,6 +345,3 @@ The parameter is the package name in which the generated records and methods are
 The result is a set of generated records and classes in text form with the corresponding name of the rule,
 which also corresponds to the name of the record or class.
 These records and classes can be saved in a further step.
-In the current version, the grammar must be restricted:
-* No possibility to select several rules for one and the same symbol
-* The character strings of the rules for character strings must not contain whitespaces (i.e. spaces, tabs and line endings)
