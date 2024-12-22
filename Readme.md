@@ -6,8 +6,8 @@ English version see below
 
 # Ein universeller Syntaxparser für Domain spezifische Sprachen
 
-Mit der vorliegenden Version 2.2.0 des universellen Syntaxparsers für Domain spezifische Sprachen können anhand einer definierbaren Grammatik Texte geparst werden.
-So ist man unabhängig von einer Trägersyntax (z.B. XML, JSON), um menschenlesbaren Maschinekode zu handhaben.
+Mit der vorliegenden Version des universellen Syntaxparsers für Domain spezifische Sprachen können anhand einer definierbaren Grammatik Texte geparst werden.
+So ist man unabhängig von einer Trägersyntax (z.B. XML, JSON), um menschenlesbaren Maschinenkode zu handhaben.
 Um den Parser zu verwenden, muss eine Grammatik in einem vorgegebenen Format erstellt werden.
 Mit dieser Grammatik kann ein Text syntaktisch geprüft werden.
 Bei erfolgreicher Prüfung erhält man eine Folge der eingegebenen Worte des Textes zusammen mit den zugehörigen Symbolen der Grammatik (von der Wurzel des Syntaxbaumes aus).
@@ -23,9 +23,9 @@ Regeln mit Wortvorgaben haben die Form <Symbolbezeichnung> """ <Schlüsselwort> 
 oder die Form <Symbolbenzeichnung> "[" <2 Zeichen für Zeichenbereich> "\]"
 oder die Form <Symbolbezeichnung> "(" <Folge von einzelnen Zeichen> ")"
 oder die Form <Symbolbezeichnung> "<" <Regulärer Ausdruck> ">"
-Bei Regeln mit Symbolen darf dasselbe Symbol mehrmals auf der linken Seiute der Regel vorkommen.
-Dies bedeuetet eine Auswahl an Alternativen.
-Die erste vokommende Symbolregel wird als Startregel gwertet.
+Bei Regeln mit Symbolen darf dasselbe Symbol mehrmals auf der linken Seite der Regel vorkommen.
+Dies bedeutet eine Auswahl an Alternativen.
+Die erste vorkommende Symbolregel wird als Startregel gewertet.
 Hierbei darf das Startsymbol nur einmal auf der linken Seite einer Regel vorkommen.
 Beispiel für Regel mit Symbolen:\
 S { S1 S2 S3 S4 S5 }\
@@ -71,7 +71,7 @@ So können sowohl die Whitespaces als auch die Steuerzeichen """, ")", "]", ">" 
 Zur Methode checkGrammatik():\
 Die Methode prüft die Grammatik auf Konsistenz und wirft eine GrammatikException, wenn ein Fehler bei der Prüfung erkannt wird.\
 Zur Methode checkGrammatikStrikt():\
-Die Methode führt eine einschränkendere Prüfung durch und wirft eine GrammatikException, wenn ein Fehler bei der Prüfung erkannt wird.
+Die Methode führt eine einschränkende Prüfung durch und wirft eine GrammatikException, wenn ein Fehler bei der Prüfung erkannt wird.
 Die Einschränkungen hierbei sind: Es darf nicht mehrere Symbolregeln zu einem Symbol geben und
 ein Symbbol einer Regel darf nicht bei derselben Regel links und rechts stehen.\
 Die KLasse Grammatik ist serialisierbar.
@@ -152,16 +152,16 @@ Beispiel für die Klassengenerierung:\
 <pre>
     Grammatik grammatik = ....;
     Klassengenerierung klassengenerierung = new Klassengenerierung(grammatik);
-    Set<NameInhalt> generierteKlassen = klassengenerierung.generiere("paket");
+    Set<PaketNameInhalt> generierteKlassen = klassengenerierung.generiere("paket");
 </pre>
 
-Beispiel für die Klassengenerierung mit alternativem Konstruktor:\
+Beispiel für die Klassengenerierung mit einem Datentyp eines Konstruktorparameters:\
 <pre>
     Grammatik grammatik = ....;
     HashMap<String, Datentyp> datentypabbildungen = new HashMap<>();
     datentypabbildungen.put("S2", Datentyp.INTEGER);
     Klassengenerierung klassengenerierung = new Klassengenerierung(grammatik, datentypabbildungen);
-    Set<NameInhalt> generierteKlassen = klassengenerierung.generiere("paket");
+    Set<PaketNameInhalt> generierteKlassen = klassengenerierung.generiere("paket");
 </pre>
 Hierbei werden die Symbolregeln, welche zu Datenwerten führen mit einem Typ versehen (z.B. public record S2(Integer value){}).
 In der Enumeration Datentyp sind die möglichen Datentypen aufgeführt.
@@ -179,7 +179,7 @@ Diese Records und Klassen könne in einem weiteren Schritt abgespeichert werden.
 
 # A universal syntax parser for domain specific languages
 
-With the present version 2.0.0 of the universal syntax parser for domain specific languages texts can be parsed based on a definable grammar.
+With the present version of the universal syntax parser for domain specific languages texts can be parsed based on a definable grammar.
 Thus one is independent of a carrier syntax (e.g. XML, JSON) to handle human readable machine code.
 To use the parser, a grammar must be created in a given format.
 This grammar can be used to syntactically check a text.
@@ -326,16 +326,16 @@ Example for class generation:\
 <pre>
     Grammatik grammatik = ....;
     Klassengenerierung klassengenerierung = new Klassengenerierung(grammatik);
-    Set<NameInhalt> generierteKlassen = klassengenerierung.generiere("paket");
+    Set<PaketNameInhalt> generierteKlassen = klassengenerierung.generiere("paket");
 </pre>
 
-Example of class generation with alternative constructor:\
+Example of class generation with a datatyp of a constructor parameter:\
 <pre>
     Grammatik grammatik = ....;
     HashMap<String, Datentyp> datentypabbildungen = new HashMap<>();
     datentypabbildungen.put("S2", Datentyp.INTEGER);
     Klassengenerierung klassengenerierung = new Klassengenerierung(grammatik, datentypabbildungen);
-    Set<NameInhalt> generierteKlassen = klassengenerierung.generiere("paket");
+    Set<PaketNameInhalt> generierteKlassen = klassengenerierung.generiere("paket");
 </pre>
 The symbol rules that lead to data values are assigned a type (e.g. public record S2(Integer value){}).
 The possible data types are listed in the data type enumeration.
