@@ -25,21 +25,21 @@ public class Klassengenerierung {
     private static final String ERSETZTEIL_IMPORT = "<IMPORT>";
     private static final String MUSTER_RECORD = "package "
             + ERSETZTEIL_PAKETNAME
-            + ";\n\nimport java.io.Serializable;\n\npublic record "
+            + ";\n\nimport java.io.Serializable;\nimport java.util.List;\n\npublic record "
             + ERSETZTEIL_NAME
             + "("
             + ERSETZTEIL_PARAMETER
             + ") implements Serializable {}\n";
     private static final String MUSTER_RECORD_HAUPTKLASSE = "package "
             + ERSETZTEIL_PAKETNAME
-            + ";\n\nimport java.io.Serializable;\n\nimport <IMPORT>;\n\npublic record "
+            + ";\n\nimport java.io.Serializable;\nimport java.util.List;\n\nimport <IMPORT>;\n\npublic record "
             + ERSETZTEIL_NAME
             + "("
             + ERSETZTEIL_PARAMETER
             + ") implements Serializable {}\n";
     private static final String MUSTER_RECORD_PARAMETERKLASSE = "package "
             + ERSETZTEIL_PAKETNAME
-            + ";\n\nimport java.io.Serializable;\n\n<IMPORT>\n\npublic record "
+            + ";\n\nimport java.io.Serializable;\nimport java.util.List;\n\n<IMPORT>\n\npublic record "
             + ERSETZTEIL_NAME
             + "("
             + ERSETZTEIL_PARAMETER
@@ -69,7 +69,7 @@ public class Klassengenerierung {
     private static final String MUSTER_KLASSE = "package "
             + ERSETZTEIL_PAKETNAME
             + ";\n\n"
-            + "import java.io.Serializable;\nimport java.util.Objects;\n\npublic class "
+            + "import java.io.Serializable;\nimport java.util.List;\nimport java.util.Objects;\n\npublic class "
             + ERSETZTEIL_NAME
             + " implements Serializable {\n\n"
             + MUSTER_MEMBER
@@ -120,12 +120,6 @@ public class Klassengenerierung {
     }
 
     private void checkBedingungen() {
-        this.grammatik.getSymbolregeln().get().values()
-                      .forEach((list) -> list.forEach((symbole) -> symbole.forEach((symbol) -> {
-                          if (!symbol.getKardinalitaet().equals(Kardinalitaet.GENAU_EINMAL)) {
-                              throw new KlassengenerierungException();
-                          }
-                      })));
         this.grammatik.getZeichenfolgeregeln().get().values()
                       .forEach((menge) -> {
                           if (menge.size() > 1) {
@@ -195,7 +189,13 @@ public class Klassengenerierung {
         if (!symbole.isEmpty()) {
             final String symbolnameSymbol = symbole.get(0).getSymbolkennung().getSymbolbezeichnung()
                                                    .getSymbolbezeichnung();
-            parameter.append(symbolnameSymbol);
+            if (symbole.get(0).getKardinalitaet().equals(Kardinalitaet.GENAU_EINMAL)) {
+                parameter.append(symbolnameSymbol);
+            } else {
+                parameter.append("List<");
+                parameter.append(symbolnameSymbol);
+                parameter.append(">");
+            }
             parameter.append(" ");
             parameter.append(erzeugeParameterbezeichnung(symbolnameSymbol, 1));
         }
@@ -205,7 +205,13 @@ public class Klassengenerierung {
                 parameter.append(", ");
                 final String symbolnameSymbol = symbole.get(index).getSymbolkennung().getSymbolbezeichnung()
                                                        .getSymbolbezeichnung();
-                parameter.append(symbolnameSymbol);
+                if (symbole.get(index).getKardinalitaet().equals(Kardinalitaet.GENAU_EINMAL)) {
+                    parameter.append(symbolnameSymbol);
+                } else {
+                    parameter.append("List<");
+                    parameter.append(symbolnameSymbol);
+                    parameter.append(">");
+                }
                 parameter.append(" ").append(erzeugeParameterbezeichnung(symbolnameSymbol, nummer));
                 nummer++;
             }
@@ -222,7 +228,13 @@ public class Klassengenerierung {
         if (!symbole.isEmpty()) {
             final String symbolnameSymbol = symbole.get(0).getSymbolkennung().getSymbolbezeichnung()
                                                    .getSymbolbezeichnung();
-            parameter.append(symbolnameSymbol);
+            if (symbole.get(0).getKardinalitaet().equals(Kardinalitaet.GENAU_EINMAL)) {
+                parameter.append(symbolnameSymbol);
+            } else {
+                parameter.append("List<");
+                parameter.append(symbolnameSymbol);
+                parameter.append(">");
+            }
             parameter.append(" ");
             parameter.append(erzeugeParameterbezeichnung(symbolnameSymbol, 1));
         }
@@ -238,7 +250,13 @@ public class Klassengenerierung {
                                                        .getSymbolbezeichnung();
                 String einzelimport = "import " + paketname + "." + symbolnameSymbol + ";\n";
                 zusatzImport.append(einzelimport);
-                parameter.append(symbolnameSymbol);
+                if (symbole.get(index).getKardinalitaet().equals(Kardinalitaet.GENAU_EINMAL)) {
+                    parameter.append(symbolnameSymbol);
+                } else {
+                    parameter.append("List<");
+                    parameter.append(symbolnameSymbol);
+                    parameter.append(">");
+                }
                 parameter.append(" ").append(erzeugeParameterbezeichnung(symbolnameSymbol, nummer));
                 nummer++;
             }

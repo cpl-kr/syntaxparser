@@ -31,18 +31,19 @@ public class KlassengenerierungTest {
         final Klassengenerierung klassengenerierung = new Klassengenerierung(grammatik);
         final Set<PaketNameInhalt> generierteKlassen = assertDoesNotThrow(() -> klassengenerierung.generiere("paket"));
         assertEquals(8, generierteKlassen.size());
-        PaketNameInhalt paketNameInhalt = new PaketNameInhalt("paket", "S", "package paket;\n\nimport java.io.Serializable;\n\npublic record S(S0 s0_1, S1 s1_2, S2 s2_3, S3 s3_4, S4 s4_5) implements Serializable {}\n");
+        PaketNameInhalt paketNameInhalt = new PaketNameInhalt("paket", "S", "package paket;\n\nimport java.io.Serializable;\nimport java.util.List;\n\npublic record S(S0 s0_1, S1 s1_2, S2 s2_3, S3 s3_4, S4 s4_5) implements Serializable {}\n");
         assertTrue(generierteKlassen.contains(paketNameInhalt));
-        paketNameInhalt = new PaketNameInhalt("paket", "S0", "package paket;\n\nimport java.io.Serializable;\n\npublic record S0(S0_1 s0_1_1, S0_2 s0_2_2) implements Serializable {}\n");
+        paketNameInhalt = new PaketNameInhalt("paket", "S0", "package paket;\n\nimport java.io.Serializable;\nimport java.util.List;\n\npublic record S0(S0_1 s0_1_1, S0_2 s0_2_2) implements Serializable {}\n");
         assertTrue(generierteKlassen.contains(paketNameInhalt));
-        paketNameInhalt = new PaketNameInhalt("paket", "S0_1", "package paket;\n\nimport java.io.Serializable;\n\npublic record S0_1(S1 s1_1) implements Serializable {}\n");
+        paketNameInhalt = new PaketNameInhalt("paket", "S0_1", "package paket;\n\nimport java.io.Serializable;\nimport java.util.List;\n\npublic record S0_1(S1 s1_1) implements Serializable {}\n");
         assertTrue(generierteKlassen.contains(paketNameInhalt));
-        paketNameInhalt = new PaketNameInhalt("paket", "S0_2", "package paket;\n\nimport java.io.Serializable;\n\npublic record S0_2(S2 s2_1) implements Serializable {}\n");
+        paketNameInhalt = new PaketNameInhalt("paket", "S0_2", "package paket;\n\nimport java.io.Serializable;\nimport java.util.List;\n\npublic record S0_2(S2 s2_1) implements Serializable {}\n");
         assertTrue(generierteKlassen.contains(paketNameInhalt));
         paketNameInhalt = new PaketNameInhalt("paket", "S1", """
                 package paket;
 
                 import java.io.Serializable;
+                import java.util.List;
                 import java.util.Objects;
 
                 public class S1 implements Serializable {
@@ -73,11 +74,11 @@ public class KlassengenerierungTest {
                 }
                 """);
         assertTrue(generierteKlassen.contains(paketNameInhalt));
-        paketNameInhalt = new PaketNameInhalt("paket", "S2", "package paket;\n\nimport java.io.Serializable;\n\npublic record S2(String value) implements Serializable {}\n");
+        paketNameInhalt = new PaketNameInhalt("paket", "S2", "package paket;\n\nimport java.io.Serializable;\nimport java.util.List;\n\npublic record S2(String value) implements Serializable {}\n");
         assertTrue(generierteKlassen.contains(paketNameInhalt));
-        paketNameInhalt = new PaketNameInhalt("paket", "S3", "package paket;\n\nimport java.io.Serializable;\n\npublic record S3(String value) implements Serializable {}\n");
+        paketNameInhalt = new PaketNameInhalt("paket", "S3", "package paket;\n\nimport java.io.Serializable;\nimport java.util.List;\n\npublic record S3(String value) implements Serializable {}\n");
         assertTrue(generierteKlassen.contains(paketNameInhalt));
-        paketNameInhalt = new PaketNameInhalt("paket", "S4", "package paket;\n\nimport java.io.Serializable;\n\npublic record S4(String value) implements Serializable {}\n");
+        paketNameInhalt = new PaketNameInhalt("paket", "S4", "package paket;\n\nimport java.io.Serializable;\nimport java.util.List;\n\npublic record S4(String value) implements Serializable {}\n");
         assertTrue(generierteKlassen.contains(paketNameInhalt));
     }
 
@@ -96,6 +97,7 @@ public class KlassengenerierungTest {
                 package paket.name;
 
                 import java.io.Serializable;
+                import java.util.List;
 
                 public record S(Operand operand_1, Operationsteil operationsteil_2) implements Serializable {}
                 """);
@@ -104,6 +106,7 @@ public class KlassengenerierungTest {
                 package paket.name;
 
                 import java.io.Serializable;
+                import java.util.List;
 
                 import paket.name.paketnameOperationsteil.OperationsteilInterface;
 
@@ -114,6 +117,7 @@ public class KlassengenerierungTest {
                 package paket.name;
 
                 import java.io.Serializable;
+                import java.util.List;
 
                 public record Operator(String value) implements Serializable {}
                 """);
@@ -122,6 +126,7 @@ public class KlassengenerierungTest {
                 package paket.name;
 
                 import java.io.Serializable;
+                import java.util.List;
 
                 public record Operand(String value) implements Serializable {}
                 """);
@@ -136,6 +141,7 @@ public class KlassengenerierungTest {
                 package paket.name.paketnameOperationsteil;
 
                 import java.io.Serializable;
+                import java.util.List;
 
                 import paket.name.Operator;
                 import paket.name.Operand;
@@ -148,6 +154,7 @@ public class KlassengenerierungTest {
                 package paket.name.paketnameOperationsteil;
 
                 import java.io.Serializable;
+                import java.util.List;
 
                 import paket.name.Operator;
                 import paket.name.Operand;
@@ -160,8 +167,8 @@ public class KlassengenerierungTest {
     }
 
     @Test
-    public void testGeneriereExceptionKardinalitaet() {
-        final List<String> regeln = Arrays.asList("S { S0 S1 S2 S3 S4 }\n", //
+    public void testGeneriereKardinalitaet() {
+        final List<String> regeln = Arrays.asList("S { S0 S1 S2+ S3+ S4 }\n", //
                 "S0 { S0_1 S0_2 }", //
                 "S0_1 { S1+ }", //
                 "S0_2 { S2 }", //
@@ -171,7 +178,57 @@ public class KlassengenerierungTest {
                 "S4 <[0-9]+,[0-9]+>");
         final Grammatik grammatik = erstelleGrammatik(regeln);
         final Klassengenerierung klassengenerierung = new Klassengenerierung(grammatik);
-        assertThrows(KlassengenerierungException.class, () -> klassengenerierung.generiere("paket"));
+        final Set<PaketNameInhalt> generierteKlassen = assertDoesNotThrow(() -> klassengenerierung.generiere("paket"));
+        assertEquals(8, generierteKlassen.size());
+        PaketNameInhalt paketNameInhalt = new PaketNameInhalt("paket", "S", "package paket;\n\nimport java.io.Serializable;\nimport java.util.List;\n\npublic record S(S0 s0_1, S1 s1_2, List<S2> s2_3, List<S3> s3_4, S4 s4_5) implements Serializable {}\n");
+        assertTrue(generierteKlassen.contains(paketNameInhalt));
+        paketNameInhalt = new PaketNameInhalt("paket", "S0", "package paket;\n\nimport java.io.Serializable;\nimport java.util.List;\n\npublic record S0(S0_1 s0_1_1, S0_2 s0_2_2) implements Serializable {}\n");
+        assertTrue(generierteKlassen.contains(paketNameInhalt));
+        paketNameInhalt = new PaketNameInhalt("paket", "S0_1", "package paket;\n\nimport java.io.Serializable;\nimport java.util.List;\n\npublic record S0_1(List<S1> s1_1) implements Serializable {}\n");
+        assertTrue(generierteKlassen.contains(paketNameInhalt));
+        paketNameInhalt = new PaketNameInhalt("paket", "S0_2", "package paket;\n\nimport java.io.Serializable;\nimport java.util.List;\n\npublic record S0_2(S2 s2_1) implements Serializable {}\n");
+        assertTrue(generierteKlassen.contains(paketNameInhalt));
+        paketNameInhalt = new PaketNameInhalt("paket", "S1", """
+                package paket;
+
+                import java.io.Serializable;
+                import java.util.List;
+                import java.util.Objects;
+
+                public class S1 implements Serializable {
+
+                    private final String value = "test";
+
+                    public String value() {
+                        return value;
+                    }
+
+                    @Override
+                    public boolean equals(Object o) {
+                        if (!(o instanceof S1 S1)) return false;
+                        return Objects.equals(value, S1.value);
+                    }
+
+                    @Override
+                    public int hashCode() {
+                        return Objects.hashCode(value);
+                    }
+
+                    @Override
+                    public String toString() {
+                        return "S1{" +
+                                "value='" + value + '\\'' +
+                                '}';
+                    }
+                }
+                """);
+        assertTrue(generierteKlassen.contains(paketNameInhalt));
+        paketNameInhalt = new PaketNameInhalt("paket", "S2", "package paket;\n\nimport java.io.Serializable;\nimport java.util.List;\n\npublic record S2(String value) implements Serializable {}\n");
+        assertTrue(generierteKlassen.contains(paketNameInhalt));
+        paketNameInhalt = new PaketNameInhalt("paket", "S3", "package paket;\n\nimport java.io.Serializable;\nimport java.util.List;\n\npublic record S3(String value) implements Serializable {}\n");
+        assertTrue(generierteKlassen.contains(paketNameInhalt));
+        paketNameInhalt = new PaketNameInhalt("paket", "S4", "package paket;\n\nimport java.io.Serializable;\nimport java.util.List;\n\npublic record S4(String value) implements Serializable {}\n");
+        assertTrue(generierteKlassen.contains(paketNameInhalt));
     }
 
     @Test
@@ -207,18 +264,19 @@ public class KlassengenerierungTest {
         final Klassengenerierung klassengenerierung = new Klassengenerierung(grammatik, datentypabbildungen);
         final Set<PaketNameInhalt> generierteKlassen = assertDoesNotThrow(() -> klassengenerierung.generiere("paket"));
         assertEquals(8, generierteKlassen.size());
-        PaketNameInhalt paketNameInhalt = new PaketNameInhalt("paket", "S", "package paket;\n\nimport java.io.Serializable;\n\npublic record S(S0 s0_1, S1 s1_2, S2 s2_3, S3 s3_4, S4 s4_5) implements Serializable {}\n");
+        PaketNameInhalt paketNameInhalt = new PaketNameInhalt("paket", "S", "package paket;\n\nimport java.io.Serializable;\nimport java.util.List;\n\npublic record S(S0 s0_1, S1 s1_2, S2 s2_3, S3 s3_4, S4 s4_5) implements Serializable {}\n");
         assertTrue(generierteKlassen.contains(paketNameInhalt));
-        paketNameInhalt = new PaketNameInhalt("paket", "S0", "package paket;\n\nimport java.io.Serializable;\n\npublic record S0(S0_1 s0_1_1, S0_2 s0_2_2) implements Serializable {}\n");
+        paketNameInhalt = new PaketNameInhalt("paket", "S0", "package paket;\n\nimport java.io.Serializable;\nimport java.util.List;\n\npublic record S0(S0_1 s0_1_1, S0_2 s0_2_2) implements Serializable {}\n");
         assertTrue(generierteKlassen.contains(paketNameInhalt));
-        paketNameInhalt = new PaketNameInhalt("paket", "S0_1", "package paket;\n\nimport java.io.Serializable;\n\npublic record S0_1(S1 s1_1) implements Serializable {}\n");
+        paketNameInhalt = new PaketNameInhalt("paket", "S0_1", "package paket;\n\nimport java.io.Serializable;\nimport java.util.List;\n\npublic record S0_1(S1 s1_1) implements Serializable {}\n");
         assertTrue(generierteKlassen.contains(paketNameInhalt));
-        paketNameInhalt = new PaketNameInhalt("paket", "S0_2", "package paket;\n\nimport java.io.Serializable;\n\npublic record S0_2(S2 s2_1) implements Serializable {}\n");
+        paketNameInhalt = new PaketNameInhalt("paket", "S0_2", "package paket;\n\nimport java.io.Serializable;\nimport java.util.List;\n\npublic record S0_2(S2 s2_1) implements Serializable {}\n");
         assertTrue(generierteKlassen.contains(paketNameInhalt));
         paketNameInhalt = new PaketNameInhalt("paket", "S1", """
                 package paket;
 
                 import java.io.Serializable;
+                import java.util.List;
                 import java.util.Objects;
 
                 public class S1 implements Serializable {
@@ -249,11 +307,11 @@ public class KlassengenerierungTest {
                 }
                 """);
         assertTrue(generierteKlassen.contains(paketNameInhalt));
-        paketNameInhalt = new PaketNameInhalt("paket", "S2", "package paket;\n\nimport java.io.Serializable;\n\npublic record S2(Integer value) implements Serializable {}\n");
+        paketNameInhalt = new PaketNameInhalt("paket", "S2", "package paket;\n\nimport java.io.Serializable;\nimport java.util.List;\n\npublic record S2(Integer value) implements Serializable {}\n");
         assertTrue(generierteKlassen.contains(paketNameInhalt));
-        paketNameInhalt = new PaketNameInhalt("paket", "S3", "package paket;\n\nimport java.io.Serializable;\n\npublic record S3(Long value) implements Serializable {}\n");
+        paketNameInhalt = new PaketNameInhalt("paket", "S3", "package paket;\n\nimport java.io.Serializable;\nimport java.util.List;\n\npublic record S3(Long value) implements Serializable {}\n");
         assertTrue(generierteKlassen.contains(paketNameInhalt));
-        paketNameInhalt = new PaketNameInhalt("paket", "S4", "package paket;\n\nimport java.io.Serializable;\n\npublic record S4(byte[] value) implements Serializable {}\n");
+        paketNameInhalt = new PaketNameInhalt("paket", "S4", "package paket;\n\nimport java.io.Serializable;\nimport java.util.List;\n\npublic record S4(byte[] value) implements Serializable {}\n");
         assertTrue(generierteKlassen.contains(paketNameInhalt));
     }
 
