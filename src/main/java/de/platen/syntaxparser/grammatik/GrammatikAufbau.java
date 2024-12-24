@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import de.platen.syntaxparser.grammatik.elemente.Kardinalitaet;
 import de.platen.syntaxparser.grammatik.elemente.RegEx;
 import de.platen.syntaxparser.grammatik.elemente.RegelRegEx;
 import de.platen.syntaxparser.grammatik.elemente.RegelSymbole;
@@ -153,6 +154,14 @@ public class GrammatikAufbau extends Grammatik
                 }
             }
         }
+        checkZweiGleicheSymboleKardinalitaet(startregel.getSymbole());
+        for (final Symbolbezeichnung symbolbezeichnung : symbolregeln.keySet()) {
+            final List<List<Symbol>> symbole = symbolregeln.get(symbolbezeichnung);
+            for (final List<Symbol> symbolliste : symbole) {
+                checkZweiGleicheSymboleKardinalitaet(symbolliste);
+            }
+        }
+        // TODO Kaedinaltätsprüfung für zwei gleiche Symbole, wobei das Folgesymbol indirekt durch erstes selbes Symbol in der Symbolregel enthalten ist
     }
 
     public void checkGrammatikStrikt() {
@@ -165,6 +174,22 @@ public class GrammatikAufbau extends Grammatik
             for (List<Symbol> symbolListe : symbole) {
                 for (Symbol symbol : symbolListe ) {
                     if (symbol.getSymbolkennung().getSymbolbezeichnung().equals(symbolbezeichnung)) {
+                        throw new GrammatikException();
+                    }
+                }
+            }
+        }
+    }
+
+    private void checkZweiGleicheSymboleKardinalitaet(final List<Symbol> symbole) {
+        if (symbole.size() > 1) {
+            for (int index = 0; index < symbole.size(); index++) {
+                if ((index + 1) < symbole.size()) {
+                    final String symbolbezeichnung1 = symbole.get(index).getSymbolkennung().getSymbolbezeichnung().getSymbolbezeichnung();
+                    final String symbolbezeichnung2 = symbole.get(index + 1).getSymbolkennung().getSymbolbezeichnung().getSymbolbezeichnung();
+                    final Kardinalitaet kardinalitaet1 = symbole.get(index).getKardinalitaet();
+                    final Kardinalitaet kardinalitaet2 = symbole.get(index + 1).getKardinalitaet();
+                    if (symbolbezeichnung1.equals(symbolbezeichnung2) && kardinalitaet1.equals(Kardinalitaet.MINDESTENS_EINMAL)) {
                         throw new GrammatikException();
                     }
                 }

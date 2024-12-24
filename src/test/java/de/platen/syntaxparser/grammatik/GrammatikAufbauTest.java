@@ -479,6 +479,30 @@ public class GrammatikAufbauTest
     }
 
     @Test(expected = GrammatikException.class)
+    public void testCheckGrammatikStartregelZweiGleicheSymboleKardinalitaet() {
+        final GrammatikAufbau grammatikAufbau = erzeugeGrammatikAufbauKardinalitaetStartregel();
+        final RegelZeichenbereich regelZeichenbereich1 = macheZeichenbereich("S1", '0', '9');
+        final RegelZeichenbereich regelZeichenbereich2 = macheZeichenbereich("S2", 'a', 'z');
+        grammatikAufbau.addRegelZeichenbereich(regelZeichenbereich1);
+        grammatikAufbau.addRegelZeichenbereich(regelZeichenbereich2);
+        grammatikAufbau.checkGrammatik();
+        fail();
+    }
+
+    @Test(expected = GrammatikException.class)
+    public void testCheckGrammatikSymbolregelZweiGleicheSymboleKardinalitaet() {
+        final GrammatikAufbau grammatikAufbau = erzeugeGrammatikAufbau();
+        final RegelZeichenbereich regelZeichenbereich = macheZeichenbereich("S1", 'a', 'z');
+        grammatikAufbau.addRegelZeichenbereich(regelZeichenbereich);
+        final String[] symbolbezeichnungen = {"S1", "S1"};
+        final Kardinalitaet[] kardinalitaeten = {Kardinalitaet.MINDESTENS_EINMAL, Kardinalitaet.GENAU_EINMAL};
+        RegelSymbole regelSymbole = macheRegel("S2", symbolbezeichnungen, kardinalitaeten);
+        grammatikAufbau.addRegelSymbole(regelSymbole);
+        grammatikAufbau.checkGrammatik();
+        fail();
+    }
+
+    @Test(expected = GrammatikException.class)
     public void testCheckGrammatikKreisStartregel() {
         final String[] symbolbezeichnungen = { SYMBOLNAME_STARTREGEL, S2 };
         final Kardinalitaet[] kardinalitaeten = { Kardinalitaet.GENAU_EINMAL, Kardinalitaet.GENAU_EINMAL };
@@ -556,6 +580,15 @@ public class GrammatikAufbauTest
     private GrammatikAufbau erzeugeGrammatikAufbau() {
         final String[] symbolbezeichnungen = { S1, S2 };
         final Kardinalitaet[] kardinalitaeten = { Kardinalitaet.GENAU_EINMAL, Kardinalitaet.GENAU_EINMAL };
+        final RegelSymbole regelSymbole = macheRegel(SYMBOLNAME_STARTREGEL, symbolbezeichnungen, kardinalitaeten);
+        final GrammatikAufbau grammatikAufbau = new GrammatikAufbau();
+        grammatikAufbau.setStartregel(regelSymbole);
+        return grammatikAufbau;
+    }
+
+    private GrammatikAufbau erzeugeGrammatikAufbauKardinalitaetStartregel() {
+        final String[] symbolbezeichnungen = { S1, S1, S2 };
+        final Kardinalitaet[] kardinalitaeten = { Kardinalitaet.MINDESTENS_EINMAL, Kardinalitaet.GENAU_EINMAL, Kardinalitaet.GENAU_EINMAL };
         final RegelSymbole regelSymbole = macheRegel(SYMBOLNAME_STARTREGEL, symbolbezeichnungen, kardinalitaeten);
         final GrammatikAufbau grammatikAufbau = new GrammatikAufbau();
         grammatikAufbau.setStartregel(regelSymbole);
