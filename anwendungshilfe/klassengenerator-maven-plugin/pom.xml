@@ -47,7 +47,7 @@
         <dependency>
             <groupId>de.platen.syntaxparser.anwendungshilfe</groupId>
             <artifactId>klassengenerierung</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </dependency>
         <dependency>
             <groupId>de.platen.syntaxparser.anwendungshilfe</groupId>

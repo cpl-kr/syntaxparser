@@ -60,7 +60,7 @@ public class Kodegenerator extends AbstractMojo {
         String[] teile = mapping.split(";");
         for (String s : teile) {
             String[] teil = s.split(":");
-            datentypabbildungen.put(teil[0], Datentyp.valueOf(teil[1]));
+            datentypabbildungen.put(teil[0], Datentyp.of(teil[1]));
         }
         return datentypabbildungen;
     }
