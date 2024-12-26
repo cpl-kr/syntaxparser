@@ -6,4 +6,6 @@ cd ..
 cd klassenablage
 mvn clean install
 cd ..
+cd klassengenerator-maven-plugin
+mvn clean install
 cd ..
