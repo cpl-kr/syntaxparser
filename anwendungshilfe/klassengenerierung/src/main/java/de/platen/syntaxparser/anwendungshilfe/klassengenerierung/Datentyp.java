@@ -14,7 +14,20 @@ public enum Datentyp {
         this.typ = typ;
     }
 
-    String getTyp() {
+    public String getTyp() {
         return typ;
+    }
+
+    public static Datentyp of(final String typ) {
+        if (typ == null || typ.isBlank()) {
+            return null;
+        }
+        Datentyp[] datentypen = Datentyp.values();
+        for (Datentyp datentyp : datentypen) {
+            if (datentyp.typ.equals(typ)) {
+                return datentyp;
+            }
+        }
+        return null;
     }
 }
