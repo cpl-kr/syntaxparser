@@ -216,6 +216,11 @@ Hierbei sind als Parameter anzugeben:
 * Das Ablageverzeichnis, in die erzeugten Klasen abgespeichert werden
 
 
+### Script zum Bauen
+
+Mit dem Script "bauen.sh" werden die jar-Dateien (Syntaxparser, Klassengenerierung, Klassenablage, Maven Plugin) im lokalen Repository zur Verfügung gestellt.
+
+
 --------------------------------------------------
 
 
@@ -429,3 +434,7 @@ The following parameters must be specified:
 * The data types for the parameter types of individual classes
 * The storage directory in which the generated classes are to be saved
 
+
+### Script for building
+
+The jar files (syntax parser, class generation, class storage, Maven plugin) are made available in the local repository with the script “bauen.sh”.

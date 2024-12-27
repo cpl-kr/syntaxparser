@@ -29,7 +29,7 @@
         <dependency>
             <groupId>de.platen.syntaxparser.anwendungshilfe</groupId>
             <artifactId>klassengenerierung</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
