@@ -141,7 +141,9 @@ bei denen Daten in menschenlesbarer Form vorliegen sollen.
 Auch kann er für Non-SQL Datenbanken verwendet werden.
 Hierbei kann jede Datenentität durch eine Menge von Grammatikregeln dargestellt werden.
 
-## Klassengenerierung
+## Anwendungshilfe
+
+### Klassengenerierung
 
 Um bei Service-Schnittstellen nicht nur Text, sondern auch serialisierte Java-Objekte für die Service-Domäne zu behandeln,
 gibt es die Möglichkeit der Klassengenerierung.
@@ -172,6 +174,46 @@ Der Parameter ist der Paketname, in dem die erzeugten Records und Methoden zusam
 Als Ergebnis erhält man eine Menge an erzeugten Records und Klassen in Textform mit dem jeweils zugehörigem Namen der Regel,
 welche auch dem Namen des Records oder der Klasse entspricht.
 Diese Records und Klassen könne in einem weiteren Schritt abgespeichert werden.
+
+### Klassenablage
+
+Um die generierten Klassen entsprechend der Verzeichnisstruktur von Paketnamen abzulegen, gibt es die Möglichkeit der Klassenablage mit der Methode "ablegen":
+<pre>
+    final Resourcenbehandlung resourcenbehandlung = ....; // Erstellung eines Verzeichnis entsprechend der Verzeichnisstruktur von Paketnamen und Speichern der Dateien
+    Klassenablage klassenablage = new Klassenablage(resourcenbehandlung);
+    ablegen(final Set<PaketNameInhalt> generierteKlassen, final String ablageverzeichnis);
+</pre>
+
+### Maven Plugin für Klassengenerierung mit der Klassenablage
+
+Das Maven Plugin "klassengenerator-maven-plugin" vereinigt Klassengenerierung und Ablage der generierten Klassen.
+Verwendung in einer Pom-Datei:
+<pre>
+            <plugin>
+                <groupId>de.platen.syntaxparser.anwendungshilfe</groupId>
+                <artifactId>klassengenerator-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>kodegenerator</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <grammatikdatei>src/main/resources/Testgrammatik.txt</grammatikdatei>
+                    <paketname>de.platen.demo</paketname>
+                    <datentypen>Operator:Integer;Test:Long</datentypen>
+                    <ablageverzeichnis>src/main/java</ablageverzeichnis>
+                </configuration>
+            </plugin>
+
+</pre>
+Hierbei sind als Parameter anzugeben:
+* Die Grammatikdatei mit der darin enthaltenen Grammatik
+* Der Paketname, unter dem die Klassen generiert werden sollen
+* Die Datentypen für die Parametertypen einzelner Klassen
+* Das Ablageverzeichnis, in die erzeugten Klasen abgespeichert werden
 
 
 --------------------------------------------------
@@ -314,8 +356,9 @@ where data should be available in human-readable form.
 It can also be used for non-SQL databases.
 Here, each data entity can be represented by a set of grammar rules.
 
+## Application aid
 
-## Class generation
+### Class generation
 
 To handle not only text but also serialized Java objects for the service domain in service interfaces,
 there is the option of class generation.
@@ -345,3 +388,44 @@ The parameter is the package name in which the generated records and methods are
 The result is a set of generated records and classes in text form with the corresponding name of the rule,
 which also corresponds to the name of the record or class.
 These records and classes can be saved in a further step.
+
+### Class storage
+
+To store the generated classes according to the directory structure of package names, there is the option of storing classes using the “store” method:
+<pre>
+    final Resourcenbehandlung resourcenbehandlung = ....; // Erstellung eines Verzeichnis entsprechend der Verzeichnisstruktur von Paketnamen und Speichern der Dateien
+    Klassenablage klassenablage = new Klassenablage(resourcenbehandlung);
+    ablegen(final Set<PaketNameInhalt> generierteKlassen, final String ablageverzeichnis);
+</pre>
+
+### Maven plugin for class generation and storage of generated classes
+
+The Maven plugin “klassengenerator-maven-plugin” combines class generation and storage of the generated classes.
+Use in a Pom file:
+<pre>
+            <plugin>
+                <groupId>de.platen.syntaxparser.anwendungshilfe</groupId>
+                <artifactId>klassengenerator-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>kodegenerator</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <grammatikdatei>src/main/resources/Testgrammatik.txt</grammatikdatei>
+                    <paketname>de.platen.demo</paketname>
+                    <datentypen>Operator:Integer;Test:Long</datentypen>
+                    <ablageverzeichnis>src/main/java</ablageverzeichnis>
+                </configuration>
+            </plugin>
+
+</pre>
+The following parameters must be specified:
+* The grammar file with the grammar it contains
+* The package name under which the classes are to be generated
+* The data types for the parameter types of individual classes
+* The storage directory in which the generated classes are to be saved
+
