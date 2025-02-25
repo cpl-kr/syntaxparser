@@ -77,6 +77,29 @@ ein Symbbol einer Regel darf nicht bei derselben Regel links und rechts stehen.\
 Die KLasse Grammatik ist serialisierbar.
 
 
+## Möglichkeite mit den Grammatikregeln für '+' und '*' nach Art eines regulären Ausdrucks
+
+Möglichkeit für '+':
+Beispiel für '+' nicht am Ende einer Regel:
+R -> A+ B C entspricht R -> A Z C
+Z -> A Z
+Z -> A B
+Beispiel für '+' am Ende einer Regel:
+R -> B A+ entspricht R -> B Z
+Z -> B A
+Z -> B Z
+
+Möglichkeit für '*':
+Beispiel für '*' nicht am Ende einer Regel:
+A* B C -> Z C
+Z -> A B
+Z -> B
+Beispiel für '*' am Ende einer Regel:
+B A* -> Z
+Z -> B
+Z -> B A
+
+
 ## Der Parser
 
 Der Parser ist ein Text zeichenweise einzulesen.
@@ -141,7 +164,9 @@ bei denen Daten in menschenlesbarer Form vorliegen sollen.
 Auch kann er für Non-SQL Datenbanken verwendet werden.
 Hierbei kann jede Datenentität durch eine Menge von Grammatikregeln dargestellt werden.
 
+
 ## Anwendungshilfe
+
 
 ### Klassengenerierung
 
@@ -168,12 +193,12 @@ Beispiel für die Klassengenerierung mit einem Datentyp eines Konstruktorparamet
 Hierbei werden die Symbolregeln, welche zu Datenwerten führen mit einem Typ versehen (z.B. public record S2(Integer value){}).
 In der Enumeration Datentyp sind die möglichen Datentypen aufgeführt.
 
-
 Zur Methode generiere() der Klasse Klassengenerierung:\
 Der Parameter ist der Paketname, in dem die erzeugten Records und Methoden zusammengefasst sind.
 Als Ergebnis erhält man eine Menge an erzeugten Records und Klassen in Textform mit dem jeweils zugehörigem Namen der Regel,
 welche auch dem Namen des Records oder der Klasse entspricht.
 Diese Records und Klassen könne in einem weiteren Schritt abgespeichert werden.
+
 
 ### Klassenablage
 
@@ -183,6 +208,7 @@ Um die generierten Klassen entsprechend der Verzeichnisstruktur von Paketnamen a
     Klassenablage klassenablage = new Klassenablage(resourcenbehandlung);
     ablegen(final Set<PaketNameInhalt> generierteKlassen, final String ablageverzeichnis);
 </pre>
+
 
 ### Maven Plugin für Klassengenerierung mit der Klassenablage
 
@@ -297,6 +323,32 @@ a symbol of a rule must not be on the left and on the right of the same rule.\
 The class Grammatik ist serializable.
 
 
+## Keine Regel der Art "Mindestes 1" (A+) wie bei regulären Ausdrücken
+
+Diese Möglichkeit kann durch Grammatikregeln erreicht werden.
+Beispiel für A+ nicht am Ende einer Regel:
+A+ B C -> A Z C
+Z -> A Z
+Z -> A B
+Beispiel für A+ am Ende einer Regel:
+B A+ -> B Z
+Z -> B A
+Z -> B Z
+
+
+## Keine Regel der Art "Keines oder 1" (A*) wie bei regulären Ausdrücken
+
+Diese Möglichkeit kann durch Grammatikregeln erreicht werden.
+Beispiel für A* nicht am Ende einer Regel:
+A* B C -> Z C
+Z -> A B
+Z -> B
+Beispiel für A* am Ende einer Regel:
+B A* -> Z
+Z -> B
+Z -> B A
+
+
 ## The parser
 
 The parser is to read in a text character by character.
@@ -361,7 +413,9 @@ where data should be available in human-readable form.
 It can also be used for non-SQL databases.
 Here, each data entity can be represented by a set of grammar rules.
 
+
 ## Application aid
+
 
 ### Class generation
 
@@ -394,6 +448,7 @@ The result is a set of generated records and classes in text form with the corre
 which also corresponds to the name of the record or class.
 These records and classes can be saved in a further step.
 
+
 ### Class storage
 
 To store the generated classes according to the directory structure of package names, there is the option of storing classes using the “store” method:
@@ -402,6 +457,7 @@ To store the generated classes according to the directory structure of package n
     Klassenablage klassenablage = new Klassenablage(resourcenbehandlung);
     ablegen(final Set<PaketNameInhalt> generierteKlassen, final String ablageverzeichnis);
 </pre>
+
 
 ### Maven plugin for class generation and storage of generated classes
 
