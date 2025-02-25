@@ -77,7 +77,7 @@ ein Symbbol einer Regel darf nicht bei derselben Regel links und rechts stehen.\
 Die KLasse Grammatik ist serialisierbar.
 
 
-## Möglichkeite mit den Grammatikregeln für '+' und '*' nach Art eines regulären Ausdrucks
+## Alternative Möglichkeiten mit den Grammatikregeln für '+' und '*' nach Art eines regulären Ausdrucks
 
 Möglichkeit für '+':
 Beispiel für '+' nicht am Ende einer Regel:
@@ -323,27 +323,24 @@ a symbol of a rule must not be on the left and on the right of the same rule.\
 The class Grammatik ist serializable.
 
 
-## Keine Regel der Art "Mindestes 1" (A+) wie bei regulären Ausdrücken
+## Alternative possibilities with the grammar rules for '+' and '*' in the manner of a regular expression
 
-Diese Möglichkeit kann durch Grammatikregeln erreicht werden.
-Beispiel für A+ nicht am Ende einer Regel:
-A+ B C -> A Z C
+Possibility for '+':
+Example for '+' not at the end of a rule:
+R -> A+ B C corresponds to R -> A Z C
 Z -> A Z
 Z -> A B
-Beispiel für A+ am Ende einer Regel:
-B A+ -> B Z
+Example for '+' at the end of a rule:
+R -> B A+ corresponds to R -> B Z
 Z -> B A
 Z -> B Z
 
-
-## Keine Regel der Art "Keines oder 1" (A*) wie bei regulären Ausdrücken
-
-Diese Möglichkeit kann durch Grammatikregeln erreicht werden.
-Beispiel für A* nicht am Ende einer Regel:
+Possibility for '*':
+Example for '*' not at the end of a rule:
 A* B C -> Z C
 Z -> A B
 Z -> B
-Beispiel für A* am Ende einer Regel:
+Example for '*' at the end of a rule:
 B A* -> Z
 Z -> B
 Z -> B A
